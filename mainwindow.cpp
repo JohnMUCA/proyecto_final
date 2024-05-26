@@ -1,10 +1,10 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-void MainWindow::keyPressEvent(QKeyEvent *i)
+void MainWindow::keyPressEvent(QKeyEvent *event)
 {
 
-        if((i->key() == Qt::Key_D) && prota->x() <= 403 * gameScaleFactor)
+        /*if((i->key() == Qt::Key_D) && prota->x() <= 403 * gameScaleFactor)
         {
             prota->move(Qt::Key_D, 1);
         }
@@ -21,6 +21,8 @@ void MainWindow::keyPressEvent(QKeyEvent *i)
             prota->move(Qt::Key_S, 1);
         }
     if(prota->y()<(700) || prota->y()>(30)) set_focus_element(prota,16, 16 * 4);
+    */
+    nivelActual->key_event(event);
 }
 
 
@@ -29,53 +31,98 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    setup_nivel();
+    /*------------------------------------------Creacion escena-----------------------------------------------
     escena = new QGraphicsScene;
+    ui->graphicsView->setGeometry(0, 0, 1000, 700);
+    escena->setSceneRect(0,0,ui->graphicsView->width() - 2,ui->graphicsView->height() - 2);
+    ui->graphicsView->setScene(escena);
+    ----------------------------------------------------------------------------------------------
+    */
+
+    /*------------------------------------------KEYS-----------------------------------------------
     keys = new unsigned int[4];
     keys[0] = Qt::Key_A;
     keys[1] = Qt::Key_D;
     keys[2] = Qt::Key_W;
     keys[3] = Qt::Key_S;
+    ----------------------------------------------------------------------------------------------
+    */
+
     //animationsProta = new QVector();
+
+    /*------------------------------------------NUMS FOTOGRAMAS prota-----------------------------------------------
     numsFotogramasProta = new unsigned int[4];
     numsFotogramasProta[0] = 3;
     numsFotogramasProta[1] = 3;
     numsFotogramasProta[2] = 3;
     numsFotogramasProta[3] = 3;
+    ----------------------------------------------------------------------------------------------
+    */
 
+    /*------------------------------------------creacion prota-----------------------------------------------
     prota = new player(completeAnimationsProta(), numsFotogramasProta ,keys, ":/imagenes/caveMan.png", 16, 16, 4);
+    escena->addItem(prota);
+    set_focus_element(prota,16 * 4, 16 * 4);
+    ----------------------------------------------------------------------------------------------
+    */
+
+    /*------------------------------------------creacion fondoCompleto-----------------------------------------------
     fondoCompleto = new QPixmap();
+    fondoCompleto->load(":/imagenes/caves.png");
+    ----------------------------------------------------------------------------------------------
+    */
+
+
+
     //centroFocus = new QPointF(25 * 16 * 4, 15 * 16 * 4);
     //gradiante = new QRadialGradient();
     //gradiante->setCenter(25 * 16 * gameScaleFactor, 15 * 16 * gameScaleFactor);
     //gradiante->setRadius(32);
-    brocha = new QBrush();
 
-    fondoCompleto->load(":/imagenes/caves.png");
+
+
+
+    /*------------------------------------------creacion brocha-----------------------------------------------
+    brocha = new QBrush();
     brocha->setTexture(fondoCompleto->copy(0, 0, 468, 800).scaled(468 * gameScaleFactor, 800 * gameScaleFactor));
+    ----------------------------------------------------------------------------------------------
+    */
+
+    /*-----------------------------------------------poner fondo---------------------------------------------
+    escena->setBackgroundBrush(*brocha);
+    ---------------------------------------------------------------------------------------------------------
+    */
 
     //brocha->setTexture(fondoCompleto->scaled(2387 * gameScaleFactor, 982 * gameScaleFactor));
     //brocha->setStyle(Qt::LinearGradientPattern);
 
-    ui->graphicsView->setGeometry(0, 0, 1000, 700);
-    escena->setSceneRect(0,0,ui->graphicsView->width() - 2,ui->graphicsView->height() - 2);
-    escena->addItem(prota);
-    set_focus_element(prota,16 * 4, 16 * 4);
-    ui->graphicsView->setScene(escena);
-    escena->setBackgroundBrush(*brocha);
+
+
+
+
+
 
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
-    delete escena;
-    delete prota;
-    delete[] keys;
-    delete fondoCompleto;
-    delete brocha;
-    delete[] numsFotogramasProta;
+    delete nivelActual;
+    //delete escena;
+    //delete prota;
+    //delete[] keys;
+    //delete fondoCompleto;
+    //delete brocha;
+    //delete[] numsFotogramasProta;
 }
 
+void MainWindow::setup_nivel()
+{
+    nivelActual = new nivel(ui->graphicsView, ":/imagenes/savannah.png");
+}
+
+/*------------------------------------------Set Focus-----------------------------------------------
 void MainWindow::set_focus_element(QGraphicsPixmapItem *item, unsigned int scalex, unsigned int scaley)
 {
     escena->setSceneRect(item->x() + (scalex / 2) - (escena->width() / 2),
@@ -83,7 +130,10 @@ void MainWindow::set_focus_element(QGraphicsPixmapItem *item, unsigned int scale
                          escena->width(),
                          escena->height());
 }
+----------------------------------------------------------------------------------------------
+*/
 
+/*------------------------------------------seteo animaciones prota-----------------------------------------------
 QVector<QRect> MainWindow::completeAnimationsProta()
 {
     QVector<QRect> animations;
@@ -118,3 +168,5 @@ QVector<QRect> MainWindow::completeAnimationsProta()
     animations.push_back(dimDown);
     return animations;
 }
+----------------------------------------------------------------------------------------------
+*/

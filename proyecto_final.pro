@@ -12,6 +12,7 @@ SOURCES += \
     entidad.cpp \
     main.cpp \
     mainwindow.cpp \
+    nivel.cpp \
     player.cpp \
     sprites.cpp \
     objetos.cpp
@@ -19,6 +20,7 @@ SOURCES += \
 HEADERS += \
     entidad.h \
     mainwindow.h \
+    nivel.h \
     player.h \
     sprites.h \
     objetos.h

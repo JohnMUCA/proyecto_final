@@ -1,6 +1,6 @@
 #include "entidad.h"
 
-Entidad::Entidad(QVector<QRect> rectangulosAnimaciones, unsigned int *numsFotogramas, unsigned int *keys, QString name, unsigned int ancho, unsigned int alto, unsigned int scale)
+Entidad::Entidad(QVector<QRect> rectangulosAnimaciones, unsigned int *numsFotogramas, QString name, unsigned int ancho, unsigned int alto, unsigned int scale)
 {
     width = ancho;
     height = alto;
@@ -12,7 +12,6 @@ Entidad::Entidad(QVector<QRect> rectangulosAnimaciones, unsigned int *numsFotogr
     setY(14 * height * scale);
     setAnimations(rectangulosAnimaciones, numsFotogramas);
     setPixmap(mainPixmap->get_current_pixmap(3));
-    setKeys(keys);
 
 }
 
@@ -34,6 +33,8 @@ void Entidad::move(unsigned int key, bool is_valid)
         setPixmap(mainPixmap->get_current_pixmap(3));
         if(is_valid) setY(y() + entidadSpeed);
     }
+
+
 }
 
 void Entidad::setAnimations(QVector<QRect> rectangulosAnimaciones, unsigned int *numsFotogramas)
@@ -42,6 +43,11 @@ void Entidad::setAnimations(QVector<QRect> rectangulosAnimaciones, unsigned int 
     {
         mainPixmap->add_new_animation(rectangulosAnimaciones[i], numsFotogramas[i]);
     }
+}
+
+void Entidad::setKeys(unsigned int *Keys)
+{
+    for(unsigned int i=0;i<4;i++) this->keys[i] = Keys[i];
 }
 
 /*void Entidad::agregarAnimacion(QRect rentanguloAnimacion, unsigned int numFotogramas)
@@ -54,10 +60,6 @@ Entidad::~Entidad()
     delete mainPixmap;
 }
 
-void Entidad::setKeys(unsigned int *Keys)
-{
-    for(unsigned int i=0;i<4;i++) this->keys[i] = Keys[i];
-}
 
 QRect Entidad::setCompleteSprites()
 {

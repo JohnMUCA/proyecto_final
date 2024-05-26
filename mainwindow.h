@@ -7,10 +7,12 @@
 #include <objetos.h>
 #include <QKeyEvent>
 #include <QTimer>
-#include "player.h"
 #include <QVector>
 
-#define gameScaleFactor 8
+#include "player.h"
+#include "nivel.h"
+
+#define gameScaleFactor 4
 #define alturaProta 16
 #define anchoProta 16
 
@@ -25,7 +27,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    void keyPressEvent(QKeyEvent* i);
+    void keyPressEvent(QKeyEvent* event);
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
@@ -37,16 +39,19 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    QGraphicsScene* escena;
-    player* prota;
-    unsigned int* keys;
-    QBrush *brocha;
-    QPixmap *fondoCompleto;
+    nivel *nivelActual;
+    //QGraphicsScene* escena;
+    //player* prota;
+    //unsigned int* keys;
+    //QBrush *brocha;
+    //QPixmap *fondoCompleto;
+    //unsigned int* numsFotogramasProta;
     //QPointF* centroFocus;
     //QRadialGradient* gradiante;
-    void set_focus_element(QGraphicsPixmapItem *item, unsigned int scalex, unsigned int scaley);
-    QVector<QRect> completeAnimationsProta();
-    unsigned int* numsFotogramasProta;
+
+    //void set_focus_element(QGraphicsPixmapItem *item, unsigned int scalex, unsigned int scaley);
+    //QVector<QRect> completeAnimationsProta();
+    void setup_nivel();
 
 };
 #endif // MAINWINDOW_H

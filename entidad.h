@@ -13,13 +13,14 @@ class Entidad : public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
 public:
-    Entidad(QVector<QRect> rectangulosAnimaciones, unsigned int* numsFotogramas,unsigned int* keys, QString name, unsigned int ancho, unsigned int alto, unsigned int scale);
+    Entidad(QVector<QRect> rectangulosAnimaciones, unsigned int* numsFotogramas, QString name, unsigned int ancho, unsigned int alto, unsigned int scale);
     void move(unsigned int key, bool is_valid);
     void recibir_daño();
     //void establecer_posicion(Qpoint punto);
     void setAnimations(QVector<QRect> rectangulosAnimaciones, unsigned int* numsFotogramas);
     //void agregarAnimacion(QRect rentanguloAnimacion, unsigned int numFotogramas);
     void hacer_dagno();
+    void setKeys(unsigned int* Keys);
     ~Entidad();
 
 private:
@@ -32,7 +33,7 @@ private:
     unsigned int scale;
     unsigned int keys[4];
     //recurso drop;
-    void setKeys(unsigned int* Keys);
+
     QRect setCompleteSprites();
 };
 

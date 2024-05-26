@@ -13,7 +13,7 @@ class objetos : public QObject, public QGraphicsPixmapItem
 public:
     objetos(QString name, unsigned int ancho, unsigned int alto, unsigned int scale);
     QRect set_complete_sprites();
-    move(unsigned int key, bool is_valid);
+    void move(unsigned int key, bool is_valid);
     void set_keys(unsigned int *keys);
 private:
     void set_animations();

@@ -5,27 +5,35 @@
 #include <QGraphicsPixmapItem>
 #include "sprites.h"
 #include <QRect>
+#include <QVector>
+
+#define entidadSpeed 15
 
 class Entidad : public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
 public:
-    Entidad(QString name, unsigned int ancho, unsigned int alto, unsigned int scale);
+    Entidad(QVector<QRect> rectangulosAnimaciones, unsigned int* numsFotogramas,unsigned int* keys, QString name, unsigned int ancho, unsigned int alto, unsigned int scale);
+    void move(unsigned int key, bool is_valid);
     void recibir_daño();
     //void establecer_posicion(Qpoint punto);
-    void set_left_animation(QRect rentanguloAnimacion);
-    void set_right_animation(QRect rentanguloAnimacion);
-    void set_down_animation(QRect rentanguloAnimacion);
-    void set_death_animation(QRect rentanguloAnimacion);
+    void setAnimations(QVector<QRect> rectangulosAnimaciones, unsigned int* numsFotogramas);
+    //void agregarAnimacion(QRect rentanguloAnimacion, unsigned int numFotogramas);
+    void hacer_dagno();
+    ~Entidad();
 
 private:
     unsigned int velocidad;
     int salud;
-    sprites mainPixmap;
+    sprites* mainPixmap;
     unsigned int width;
     unsigned int height;
     unsigned int dagno;
+    unsigned int scale;
+    unsigned int keys[4];
     //recurso drop;
+    void setKeys(unsigned int* Keys);
+    QRect setCompleteSprites();
 };
 
 #endif // ENTIDAD_H

@@ -12,12 +12,14 @@ SOURCES += \
     entidad.cpp \
     main.cpp \
     mainwindow.cpp \
+    player.cpp \
     sprites.cpp \
     objetos.cpp
 
 HEADERS += \
     entidad.h \
     mainwindow.h \
+    player.h \
     sprites.h \
     objetos.h
 

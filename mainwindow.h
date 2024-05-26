@@ -7,8 +7,12 @@
 #include <objetos.h>
 #include <QKeyEvent>
 #include <QTimer>
+#include "player.h"
+#include <QVector>
 
-#define gameScaleFactor 4
+#define gameScaleFactor 8
+#define alturaProta 16
+#define anchoProta 16
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -34,13 +38,15 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QGraphicsScene* escena;
-    objetos* prota;
+    player* prota;
     unsigned int* keys;
     QBrush *brocha;
     QPixmap *fondoCompleto;
     //QPointF* centroFocus;
-    QRadialGradient* gradiante;
-    void set_focus_element(QGraphicsPixmapItem *item, unsigned int scalex, unsigned int scaley, unsigned int x, unsigned int y);
+    //QRadialGradient* gradiante;
+    void set_focus_element(QGraphicsPixmapItem *item, unsigned int scalex, unsigned int scaley);
+    QVector<QRect> completeAnimationsProta();
+    unsigned int* numsFotogramasProta;
 
 };
 #endif // MAINWINDOW_H

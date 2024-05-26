@@ -9,8 +9,8 @@ objetos::objetos(QString name, unsigned int ancho, unsigned int alto, unsigned i
     mainPixmap->cut_character_pixmap(set_complete_sprites());
     //setPixmap(QPixmap(name).scaled(width,height));
     set_animations();
-    setX(25 * width * scale);
-    setY(15 * height * scale);
+    setX(28 * width * scale);
+    setY(14 * height * scale);
     setPixmap(mainPixmap->get_current_pixmap(3));
 }
 
@@ -26,7 +26,7 @@ QRect objetos::set_complete_sprites()
     return dim;
 }
 
-objetos::move(unsigned int key, bool is_valid)
+void objetos::move(unsigned int key, bool is_valid)
 {
     if(key == keys[0]){
         setPixmap(mainPixmap->get_current_pixmap(0));

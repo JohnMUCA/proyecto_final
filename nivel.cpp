@@ -4,7 +4,7 @@ nivel::nivel(QGraphicsView *graphicsV, QString imageBackground)
 {
     graph = graphicsV;
     setup_scene(imageBackground);
-    setup_player();
+    setup_prota();
 }
 
 nivel::~nivel()
@@ -26,7 +26,6 @@ void nivel::key_event(QKeyEvent *event)
 
 void nivel::setProta_keys()
 {
-    prota_keys;
     prota_keys[0] = Qt::Key_A;
     prota_keys[1] = Qt::Key_D;
     prota_keys[2] = Qt::Key_W;
@@ -65,7 +64,7 @@ void nivel::setup_scene(QString image_Background)
 
 }
 
-void nivel::setup_player()
+void nivel::setup_prota()
 {
     setProta_keys();
     setNumsFotogramasProta();

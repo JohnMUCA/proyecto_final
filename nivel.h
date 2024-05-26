@@ -32,7 +32,7 @@ private:
     void setNumsFotogramasProta();
 
     void setup_scene(QString image_Background);
-    void setup_player();
+    void setup_prota();
     bool left_movement_is_valid(QGraphicsPixmapItem *item);
     bool right_movement_is_valid(QGraphicsPixmapItem *item);
     bool up_movement_is_valid(QGraphicsPixmapItem *item);

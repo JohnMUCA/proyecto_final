@@ -119,7 +119,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::setup_nivel()
 {
-    nivelActual = new nivel(ui->graphicsView, ":/imagenes/savannah.png");
+    nivelActual = new nivel(ui->graphicsView, ":/imagenes/caves.png");
 }
 
 /*------------------------------------------Set Focus-----------------------------------------------

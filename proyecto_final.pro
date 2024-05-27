@@ -10,8 +10,10 @@ CONFIG += c++17
 
 SOURCES += \
     entidad.cpp \
+    fisicas.cpp \
     main.cpp \
     mainwindow.cpp \
+    murcielago.cpp \
     nivel.cpp \
     player.cpp \
     sprites.cpp \
@@ -19,7 +21,9 @@ SOURCES += \
 
 HEADERS += \
     entidad.h \
+    fisicas.h \
     mainwindow.h \
+    murcielago.h \
     nivel.h \
     player.h \
     sprites.h \

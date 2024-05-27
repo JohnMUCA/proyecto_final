@@ -6,6 +6,9 @@
 #include "sprites.h"
 #include <QRect>
 #include <QVector>
+#include <QString>
+#include <QPoint>
+#include <qvector2d.h>
 
 #define entidadSpeed 15
 
@@ -14,16 +17,27 @@ class Entidad : public QObject, public QGraphicsPixmapItem
     Q_OBJECT
 public:
     Entidad(QVector<QRect> rectangulosAnimaciones, unsigned int* numsFotogramas, QString name, unsigned int ancho, unsigned int alto, unsigned int scale);
-    void move(unsigned int key, bool is_valid);
-    void recibir_daño();
-    //void establecer_posicion(Qpoint punto);
-    void setAnimations(QVector<QRect> rectangulosAnimaciones, unsigned int* numsFotogramas);
-    //void agregarAnimacion(QRect rentanguloAnimacion, unsigned int numFotogramas);
-    void hacer_dagno();
-    void setKeys(unsigned int* Keys);
     ~Entidad();
 
+    void move(unsigned int key, bool is_valid);
+    void setAnimations(QVector<QRect> rectangulosAnimaciones, unsigned int* numsFotogramas);
+    void setKeys(unsigned int* Keys);
+
+    void recibir_dagno(int cantidad);
+    void hacer_dagno(Entidad* otraEntidad);
+    //void establecer_posicion(Qpoint punto);
+    //void agregarAnimacion(QRect rentanguloAnimacion, unsigned int numFotogramas);
+
+    void establecer_posicion(QPoint punto);
+    QPoint obtenerPosicion() const;
+
+    void establecerVelocidad(QVector2D nuevaVelocidad);
+    QVector2D obtenerVelocidad() const;
+    QRect obtenerRectangulo() const;
+
+
 private:
+    QString name;
     unsigned int velocidad;
     int salud;
     sprites* mainPixmap;
@@ -32,6 +46,8 @@ private:
     unsigned int dagno;
     unsigned int scale;
     unsigned int keys[4];
+    QPoint posicion;
+    QVector2D velocidadVector;
     //recurso drop;
 
     QRect setCompleteSprites();

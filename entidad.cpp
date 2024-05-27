@@ -45,6 +45,7 @@ void Entidad::setAnimations(QVector<QRect> rectangulosAnimaciones, unsigned int 
     }
 }
 
+
 void Entidad::setKeys(unsigned int *Keys)
 {
     for(unsigned int i=0;i<4;i++) this->keys[i] = Keys[i];
@@ -71,4 +72,32 @@ QRect Entidad::setCompleteSprites()
     dim.setWidth(6 * width);
 
     return dim;
+}
+void Entidad::recibir_dagno(int cantidad) {
+    salud -= cantidad;
+    if (salud < 0) salud = 0;
+}
+
+void Entidad::hacer_dagno(Entidad* otraEntidad) {
+    otraEntidad->recibir_dagno(dagno);
+}
+
+void Entidad::establecer_posicion(QPoint punto) {
+    posicion = punto;
+}
+
+QPoint Entidad::obtenerPosicion() const {
+    return posicion;
+}
+
+void Entidad::establecerVelocidad(QVector2D nuevaVelocidad) {
+    velocidadVector = nuevaVelocidad;
+}
+
+QVector2D Entidad::obtenerVelocidad() const {
+    return velocidadVector;
+}
+
+QRect Entidad::obtenerRectangulo() const {
+    return QRect(posicion.x(), posicion.y(), width * scale, height * scale);
 }

@@ -4,7 +4,7 @@
 #include "entidad.h"
 #include "fisicas.h"
 
-class Murcielago : public Entidad {
+class Murcielago : public Entidad , public Fisicas {
 public:
     Murcielago(QVector<QRect> rectangulosAnimaciones, unsigned int *numsFotogramas, QString name, unsigned int ancho, unsigned int alto, unsigned int scale);
 

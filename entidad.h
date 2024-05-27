@@ -50,7 +50,8 @@ private:
     QVector2D velocidadVector;
     //recurso drop;
 
-    QRect setCompleteSprites();
+    QRect setCompleteSpritesProta();
+    QRect setCompleteSpritesMurcielago();
 };
 
 #endif // ENTIDAD_H

@@ -1,9 +1,13 @@
 #include "Fisicas.h"
 
-using namespace std;
+
+Fisicas::Fisicas()
+{
+    angulo = 0.0f;
+}
 
 void Fisicas::aplicarMovimientoCircularUniforme(Entidad* entidad, float centroX, float centroY, float radio, float velocidadAngular, float deltaTiempo) {
-    int pasos = 10;
+    int pasos = 100;
     float deltaT = deltaTiempo / pasos;
 
     for (int i = 0; i < pasos; ++i) {

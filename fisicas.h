@@ -5,13 +5,14 @@
 #include <QPoint>
 #include <cmath>
 
-using namespace std;
+//using namespace std;
 
 class Fisicas {
 private:
-    float angulo = 0.0f;
+    float angulo;
 
 public:
+    Fisicas();
     void aplicarMovimientoCircularUniforme(Entidad* entidad, float centroX, float centroY, float radio, float velocidadAngular, float deltaTiempo);
     void aplicarMovimientoLinealUniforme(Entidad* entidad, QVector2D direccion, float velocidad, float deltaTiempo);
     void aplicarMovimientoConAceleracion(Entidad* entidad, QVector2D direccion, float velocidad, float aceleracion, float deltaTiempo);

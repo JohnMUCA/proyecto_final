@@ -9,7 +9,6 @@
 #include <QTimer>
 #include <QVector>
 
-#include "player.h"
 #include "nivel.h"
 
 #define gameScaleFactor 4

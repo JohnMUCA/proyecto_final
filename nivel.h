@@ -6,9 +6,7 @@
 #include <QKeyEvent>
 #include <QVector>
 
-#include "player.h"
 #include "entidad.h"
-#include "murcielago.h"
 #include "enemigo.h"
 
 #define alturaProta 16

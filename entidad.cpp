@@ -100,9 +100,9 @@ void Entidad::recibir_dagno(int cantidad) {
     if (salud < 0) salud = 0;
 }
 
-void Entidad::hacer_dagno(Entidad* otraEntidad) {
+/*void Entidad::hacer_dagno(Entidad* otraEntidad) {
     otraEntidad->recibir_dagno(dagno);
-}
+}*/
 
 void Entidad::establecer_posicion(QPoint punto) {
     this->setPos(punto);
@@ -123,3 +123,4 @@ QVector2D Entidad::obtenerVelocidad() const {
 QRect Entidad::obtenerRectangulo() const {
     return QRect(posicion.x(), posicion.y(), width * scale, height * scale);
 }
+

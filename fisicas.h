@@ -1,7 +1,7 @@
 #ifndef FISICAS_H
 #define FISICAS_H
 
-#include "Entidad.h"
+#include "entidad.h"
 #include <QPoint>
 #include <cmath>
 

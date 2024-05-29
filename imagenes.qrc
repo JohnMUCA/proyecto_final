@@ -7,7 +7,6 @@
         <file>imagenes/farming.png</file>
         <file>imagenes/fire.png</file>
         <file>imagenes/food.png</file>
-        <file>imagenes/mamut.png</file>
         <file>imagenes/monkey.png</file>
         <file>imagenes/savannah.png</file>
         <file>imagenes/snowMap1.png</file>
@@ -15,5 +14,7 @@
         <file>imagenes/snowMap3.png</file>
         <file>imagenes/Yermo.jpeg</file>
         <file>imagenes/murcielago.png</file>
+        <file>imagenes/darknnesSF.png</file>
+        <file>imagenes/mamut.png</file>
     </qresource>
 </RCC>

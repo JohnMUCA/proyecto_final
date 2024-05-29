@@ -24,7 +24,7 @@ public:
     void setKeys(unsigned int* Keys);
 
     void recibir_dagno(int cantidad);
-    void hacer_dagno(Entidad* otraEntidad);
+    //void hacer_dagno(Entidad* otraEntidad);
     //void establecer_posicion(Qpoint punto);
     //void agregarAnimacion(QRect rentanguloAnimacion, unsigned int numFotogramas);
 
@@ -36,8 +36,9 @@ public:
     QRect obtenerRectangulo() const;
 
 
+
+
 private:
-    QString name;
     unsigned int velocidad;
     int salud;
     sprites* mainPixmap;

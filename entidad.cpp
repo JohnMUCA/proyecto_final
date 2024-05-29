@@ -124,3 +124,8 @@ QRect Entidad::obtenerRectangulo() const {
     return QRect(posicion.x(), posicion.y(), width * scale, height * scale);
 }
 
+unsigned int Entidad::getVelocidad()
+{
+    return velocidad;
+}
+

@@ -13,19 +13,33 @@ nivel::~nivel()
     delete graph;
     delete escena;
     delete prota;
+    delete murcielago;
+    delete Mamut;
     delete numsFotogramasProta;
+    delete numsFotogramasMurcielago;
+    delete numsFotogramasMamut;
     delete fondoCompleto;
     delete brocha;
+    delete fondoReferencia;
+    delete colorTope;
 
 }
 
 void nivel::key_event(QKeyEvent *event)
 {
-    prota->move(event->key(), 1);
+    bool isValid = 1;
+
+    if(unsigned(event->key()) == prota_keys[0]) isValid = left_movement_is_valid(prota);
+    else if(unsigned(event->key()) == prota_keys[1]) isValid = right_movement_is_valid(prota);
+    else if(unsigned(event->key()) == prota_keys[2]) isValid = up_movement_is_valid(prota);
+    else if(unsigned(event->key()) == prota_keys[3]) isValid = down_movement_is_valid(prota);
+
+    prota->move(event->key(), isValid);
     if(prota->y()<(700) || prota->y()>(30)) set_focus_element(prota,16, 16 * 4);
-    //if(event->key() == Qt::Key_Z)
+
+    //if (fondoReferencia->pixelColor(prota->x(), prota->y()) == *colorTope)
     //{
-        //murcielago->realizarMovimientoCircular(murcielago->x(),murcielago->y());
+    //    murcielago->set_mov_circular_parametros(100, 1, 1, prota->x(), prota->y());
     //}
 }
 
@@ -81,6 +95,15 @@ void nivel::setup_scene(QString image_Background)
     brocha->setTexture(fondoCompleto->copy(0, 0, 468, 800).scaled(468 * gameScaleFactor, 800 * gameScaleFactor));
     //----------------------------------------------------------------------------------------------
 
+    //------------------------------------------creacion fondoReferencia -----------------------------------------------
+    fondoReferencia = new QImage;
+    fondoReferencia->load(":/imagenes/caves_reference.png");
+    *fondoReferencia = fondoReferencia->copy(0, 0, 468, 800).scaled(468 * gameScaleFactor, 800 * gameScaleFactor);
+    //------------------------------------------------------------------------------------------------------------------
+
+    //-------------------------------------------creacion colorTope-----------------------------------------------------
+    colorTope = new QColor("white");
+    //------------------------------------------------------------------------------------------------------------------
     escena->setBackgroundBrush(*brocha);
 
 }
@@ -107,6 +130,71 @@ void nivel::setup_Mamut()
 {
     setNumsFotogramasMamut();
     //Mamut = new Enemigo(completeAnimationsMamut(), numsFotogramasMamut, ":/imagenes/mamut.png", )
+}
+
+bool nivel::left_movement_is_valid(Entidad *item)
+{
+    int xf1,yf1,xf2,yf2;
+    bool is_valid1, is_valid2;
+
+    xf1 = item->x()-item->getVelocidad();
+    yf1 = item->y();
+    xf2 = item->x()-item->getVelocidad();
+    yf2 = item->y()+(alturaProta*scaleProta)-1;
+
+    is_valid1 = fondoReferencia->pixelColor(xf1, yf1) != *colorTope;
+    is_valid2 = fondoReferencia->pixelColor(xf2, yf2) != *colorTope;
+
+    return is_valid2 && is_valid1;
+}
+
+bool nivel::right_movement_is_valid(Entidad *item)
+{
+    int xf1,yf1,xf2,yf2;
+    bool is_valid1, is_valid2;
+
+    xf1 = item->x()+(anchoProta * scaleProta) - 1 + item->getVelocidad();
+    yf1 = item->y();
+    xf2 = item->x()+(anchoProta * scaleProta) - 1 + item->getVelocidad();
+    yf2 = item->y()+(alturaProta * scaleProta) - 1;
+
+    is_valid1 = fondoReferencia->pixelColor(xf1, yf1) != *colorTope;
+    is_valid2 = fondoReferencia->pixelColor(xf2, yf2) != *colorTope;
+
+
+    return is_valid2 && is_valid1;
+}
+
+bool nivel::up_movement_is_valid(Entidad *item)
+{
+    int xf1,yf1,xf2,yf2;
+    bool is_valid1, is_valid2;
+
+    xf1 = item->x();
+    yf1 = item->y() - item->getVelocidad();
+    xf2 = item->x() + (anchoProta * scaleProta) - 1;
+    yf2 = item->y() - item->getVelocidad();
+
+    is_valid1 = fondoReferencia->pixelColor(xf1, yf1) != *colorTope;
+    is_valid2 = fondoReferencia->pixelColor(xf2, yf2) != *colorTope;
+
+    return is_valid2 && is_valid1;
+}
+
+bool nivel::down_movement_is_valid(Entidad *item)
+{
+    int xf1,yf1,xf2,yf2;
+    bool is_valid1, is_valid2;
+
+    xf1 = item->x();
+    yf1 = item->y() + item->getVelocidad() + (alturaProta * scaleProta) - 1;
+    xf2 = item->x() + (anchoProta * scaleProta) - 1;
+    yf2 = item->y() + (alturaProta * scaleProta) - 1 + item->getVelocidad();
+
+    is_valid1 = fondoReferencia->pixelColor(xf1, yf1) != *colorTope;
+    is_valid2 = fondoReferencia->pixelColor(xf2, yf2) != *colorTope;
+
+    return is_valid2 && is_valid1;
 }
 
 void nivel::set_focus_element(QGraphicsPixmapItem *item, unsigned int scalex, unsigned int scaley)

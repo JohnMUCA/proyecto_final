@@ -5,7 +5,7 @@ Enemigo::Enemigo(QVector<QRect> rectangulosAnimaciones, unsigned int *numsFotogr
 {
     time = new QTimer;
     connect(time,SIGNAL(timeout()),this,SLOT(realizarMovimientoCircular()));
-    time->start(100);
+    time->start(200);
 
     radio = 1;
     velocidadAngular = 1;

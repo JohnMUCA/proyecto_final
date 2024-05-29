@@ -16,5 +16,6 @@
         <file>imagenes/murcielago.png</file>
         <file>imagenes/darknnesSF.png</file>
         <file>imagenes/mamut.png</file>
+        <file>imagenes/caves_reference.png</file>
     </qresource>
 </RCC>

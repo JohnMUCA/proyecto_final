@@ -35,6 +35,8 @@ public:
     QVector2D obtenerVelocidad() const;
     QRect obtenerRectangulo() const;
 
+    unsigned int getVelocidad();
+
 
 
 

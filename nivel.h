@@ -44,6 +44,8 @@ private:
     unsigned int* numsFotogramasMamut;
     QBrush *brocha;
     QPixmap *fondoCompleto;
+    QImage *fondoReferencia;
+    QColor *colorTope;
 
     void setProta_keys();
     void setNumsFotogramasProta();
@@ -55,10 +57,10 @@ private:
     void setup_murcielago();
     void setup_Mamut();
 
-    bool left_movement_is_valid(QGraphicsPixmapItem *item);
-    bool right_movement_is_valid(QGraphicsPixmapItem *item);
-    bool up_movement_is_valid(QGraphicsPixmapItem *item);
-    bool down_movement_is_valid(QGraphicsPixmapItem *item);
+    bool left_movement_is_valid(Entidad *item);
+    bool right_movement_is_valid(Entidad *item);
+    bool up_movement_is_valid(Entidad *item);
+    bool down_movement_is_valid(Entidad *item);
     void set_focus_element(QGraphicsPixmapItem *item, unsigned int scalex, unsigned int scaley);
     QVector<QRect> completeAnimationsProta();
     QVector<QRect> completeAnimationsMurcielago();

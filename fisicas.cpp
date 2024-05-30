@@ -31,19 +31,28 @@ void Fisicas::aplicarMovimientoLinealUniforme(Entidad* entidad, QVector2D direcc
     }
 }
 
-void Fisicas::aplicarMovimientoConAceleracion(Entidad* entidad, QVector2D direccion, float velocidad, float aceleracion, float deltaTiempo) {
-    int pasos = 10;
+void Fisicas::aplicarMovimientoConAceleracion(Entidad *entidad, float direccionX, float direccionY, float velocidad, float aceleracion, float deltaTiempo)
+{
+    int pasos = 100;
     float deltaT = deltaTiempo / pasos;
 
-    direccion.normalize();
+    float magnitud = 1;
+    //if (magnitud == 0) return;
+    float dirX = direccionX / magnitud;
+    float dirY = direccionY / magnitud;
 
     for (int i = 0; i < pasos; ++i) {
         velocidad += aceleracion * deltaT;
-        QVector2D desplazamiento = direccion * velocidad * deltaT;
-        QPoint nuevaPos = entidad->obtenerPosicion() + desplazamiento.toPoint();
-        entidad->establecer_posicion(nuevaPos);
+        float desplazamientoX = dirX * velocidad * deltaT;
+        float desplazamientoY = dirY * velocidad * deltaT;
+
+        QPointF posActual = entidad->pos();
+        float nuevaX = posActual.x() + desplazamientoX;
+        float nuevaY = posActual.y() + desplazamientoY;
+        entidad->establecer_posicion(QPoint(nuevaX, nuevaY));
     }
 }
+
 
 void Fisicas::aplicarGravedad(Entidad* entidad, float gravedad, float deltaTiempo) {
     int pasos = 10;
@@ -82,4 +91,32 @@ void Fisicas::aplicarFuerza(Entidad* entidad, QVector2D fuerza, float masa, floa
         QPoint nuevaPos = entidad->obtenerPosicion() + desplazamiento.toPoint();
         entidad->establecer_posicion(nuevaPos);
     }
+}
+
+void Fisicas::perseguirObjetivo(Entidad *entidad, Entidad *objetivo, float velocidad, float deltaTiempo)
+{
+
+    // Calcula la dirección hacia el objetivo
+    QPointF direccion = objetivo->pos() - entidad->pos();
+
+
+    // Normaliza la dirección
+    float magnitud = sqrt(direccion.x() * direccion.x() + direccion.y() * direccion.y());
+    if (magnitud != 0) {
+        direccion /= magnitud;
+    } else {
+        // Manejar el caso cuando el objetivo y la entidad están en la misma posición
+        // Para evitar división por cero
+        direccion = QPointF(0, 0);
+    }
+    // Calcula el desplazamiento con interpolación
+
+        QPointF desplazamiento = direccion * velocidad * deltaTiempo;
+
+
+        // Aplica el desplazamiento a la posición actual con interpolación
+        QPointF nuevaPosicion = entidad->pos() + desplazamiento;
+
+        // Establece la nueva posición
+        entidad->establecer_posicion(nuevaPosicion.toPoint());
 }

@@ -113,3 +113,4 @@ void Fisicas::aplicarFuerza(Entidad* entidad, QVector2D fuerza, float masa, floa
         entidad->establecer_posicion(nuevaPos);
     }
 }
+*/

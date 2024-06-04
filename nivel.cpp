@@ -99,10 +99,11 @@ void nivel::setup_murcielago()
 {
     setNumsFotogramasMurcielago();
     murcielago = new Enemigo(completeAnimationsMurcielago(), numsFotogramasMurcielago, ":/imagenes/murcielago.png", anchoMurcielago, alturaMurcielago, scaleMurcielago);
-    murcielago->set_mov_circular_parametros(100, 1, 1, murcielago->x(), murcielago->y());
+    murcielago->set_mov_acelerado(murcielago->x(),murcielago->y(),3,-7,-3,0.1);
+    murcielago->set_perseguir(prota,100,0.1);
+    murcielago->set_mov_circular_parametros(80, 3 , 0.1, murcielago->x(), murcielago->y());
     escena->addItem(murcielago);
 }
-
 void nivel::setup_Mamut()
 {
     setNumsFotogramasMamut();

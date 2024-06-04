@@ -5,7 +5,7 @@ Enemigo::Enemigo(QVector<QRect> rectangulosAnimaciones, unsigned int *numsFotogr
     Entidad(rectangulosAnimaciones, numsFotogramas, name, ancho, alto, scale), Fisicas()
 {
     time = new QTimer;
-    connect(time,SIGNAL(timeout()),this,SLOT(realizarMovimientoAcelerado()));
+    connect(time,SIGNAL(timeout()),this,SLOT(realizarMovimientoCircular()));
     time->start(100);
 
 

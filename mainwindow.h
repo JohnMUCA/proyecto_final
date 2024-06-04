@@ -4,7 +4,6 @@
 #include <QMainWindow>
 #include <QString>
 #include <QGraphicsScene>
-#include <objetos.h>
 #include <QKeyEvent>
 #include <QTimer>
 #include <QVector>

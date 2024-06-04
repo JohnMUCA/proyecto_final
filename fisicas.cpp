@@ -35,6 +35,7 @@ void Fisicas::aplicarMovimientoLinealUniforme(Entidad* entidad, QVector2D direcc
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void Fisicas::aplicarMovimientoConAceleracion(Entidad* entidad, float direccionX, float direccionY, float velocidadInicial, float aceleracionX, float aceleracionY, float deltaTiempo) {
 
+
     float deltaT = deltaTiempo*n;
 
     float desplazamientoX = direccionX + velocidadInicial * deltaT +0.5 * aceleracionX *deltaT *deltaT;
@@ -46,6 +47,7 @@ void Fisicas::aplicarMovimientoConAceleracion(Entidad* entidad, float direccionX
     n++;
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 void Fisicas::aplicarGravedad(Entidad* entidad, float gravedad, float deltaTiempo) {
     int pasos = 10;
     float deltaT = deltaTiempo / pasos;
@@ -111,4 +113,3 @@ void Fisicas::aplicarFuerza(Entidad* entidad, QVector2D fuerza, float masa, floa
         entidad->establecer_posicion(nuevaPos);
     }
 }
-*/

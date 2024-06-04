@@ -8,6 +8,7 @@ Enemigo::Enemigo(QVector<QRect> rectangulosAnimaciones, unsigned int *numsFotogr
     connect(time,SIGNAL(timeout()),this,SLOT(realizarMovimientoAcelerado()));
     time->start(100);
 
+
     radio = 1;
     velocidadAngular = 1;
     deltaTiempo = 1;
@@ -38,13 +39,10 @@ void Enemigo::realizarMovimientoAcelerado()
     this->aplicarMovimientoConAceleracion(this,direccionX,direccionY,velocidad_Inicial,aceleracionX,aceleracionY,deltaTiempo);
 }
 
-
 void Enemigo::realizarPerseguir()
 {
     this->perseguirObjetivo(this, objetivo, velocidad,deltaTiempo);
 }
-
-
 
 void Enemigo::set_mov_circular_parametros(float radio, float velocidadAngular, float deltaTiempo, float centrox, float centroy)
 {
@@ -54,6 +52,7 @@ void Enemigo::set_mov_circular_parametros(float radio, float velocidadAngular, f
     this->centroX = centrox;
     this->centroY = centroy;
 }
+
 
 void Enemigo::set_mov_acelerado(float direccionX, float direccionY, float velocidad_Inicial, float aceleracionX, float aceleracionY, float deltaTiempo)
 {

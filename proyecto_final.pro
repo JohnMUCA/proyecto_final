@@ -16,7 +16,6 @@ SOURCES += \
     mainwindow.cpp \
     nivel.cpp \
     sprites.cpp \
-    objetos.cpp
 
 HEADERS += \
     enemigo.h \
@@ -25,7 +24,6 @@ HEADERS += \
     mainwindow.h \
     nivel.h \
     sprites.h \
-    objetos.h
 
 FORMS += \
     mainwindow.ui

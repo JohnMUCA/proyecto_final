@@ -1,5 +1,4 @@
 #include "enemigo.h"
-#include "entidad.h"
 
 Enemigo::Enemigo(QVector<QRect> rectangulosAnimaciones, unsigned int *numsFotogramas, QString name, unsigned int ancho, unsigned int alto, unsigned int scale) :
     Entidad(rectangulosAnimaciones, numsFotogramas, name, ancho, alto, scale), Fisicas()

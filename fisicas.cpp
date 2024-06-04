@@ -4,20 +4,22 @@
 Fisicas::Fisicas()
 {
     angulo = 0.0f;
+    n=0;
 }
 
 void Fisicas::aplicarMovimientoCircularUniforme(Entidad* entidad, float centroX, float centroY, float radio, float velocidadAngular, float deltaTiempo) {
-    int pasos = 100;
-    float deltaT = deltaTiempo / pasos;
+    float deltaT = deltaTiempo*n;
 
-    for (int i = 0; i < pasos; ++i) {
-        angulo += velocidadAngular * deltaT;
-        float nuevaX = centroX + radio * cos(angulo);
-        float nuevaY = centroY + radio * sin(angulo);
-        entidad->establecer_posicion(QPoint(nuevaX, nuevaY));
-    }
+
+    angulo = velocidadAngular * deltaT;
+
+    float nuevaX = centroX + radio * cos(angulo);
+    float nuevaY = centroY + radio * sin(angulo);
+    entidad->establecer_posicion(QPoint(nuevaX, nuevaY));
+    n++;
+
 }
-
+//-------------------------------------------------------------------------------------------------------------------
 void Fisicas::aplicarMovimientoLinealUniforme(Entidad* entidad, QVector2D direccion, float velocidad, float deltaTiempo) {
     int pasos = 10;
     float deltaT = deltaTiempo / pasos;
@@ -30,29 +32,21 @@ void Fisicas::aplicarMovimientoLinealUniforme(Entidad* entidad, QVector2D direcc
         entidad->establecer_posicion(nuevaPos);
     }
 }
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void Fisicas::aplicarMovimientoConAceleracion(Entidad* entidad, float direccionX, float direccionY, float velocidadInicial, float aceleracionX, float aceleracionY, float deltaTiempo) {
 
-void Fisicas::aplicarMovimientoConAceleracion(Entidad *entidad, float direccionX, float direccionY, float velocidad, float aceleracion, float deltaTiempo)
-{
-    int pasos = 100;
-    float deltaT = deltaTiempo / pasos;
 
-    float magnitud = 1;
-    //if (magnitud == 0) return;
-    float dirX = direccionX / magnitud;
-    float dirY = direccionY / magnitud;
+    float deltaT = deltaTiempo*n;
 
-    for (int i = 0; i < pasos; ++i) {
-        velocidad += aceleracion * deltaT;
-        float desplazamientoX = dirX * velocidad * deltaT;
-        float desplazamientoY = dirY * velocidad * deltaT;
+    float desplazamientoX = direccionX + velocidadInicial * deltaT +0.5 * aceleracionX *deltaT *deltaT;
+    float desplazamientoY = direccionY + velocidadInicial * deltaT +0.5 * aceleracionY *deltaT *deltaT;
 
-        QPointF posActual = entidad->pos();
-        float nuevaX = posActual.x() + desplazamientoX;
-        float nuevaY = posActual.y() + desplazamientoY;
-        entidad->establecer_posicion(QPoint(nuevaX, nuevaY));
-    }
+    float nuevaX = desplazamientoX;
+    float nuevaY = desplazamientoY;
+    entidad->establecer_posicion(QPoint(nuevaX, nuevaY));
+    n++;
 }
-
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 void Fisicas::aplicarGravedad(Entidad* entidad, float gravedad, float deltaTiempo) {
     int pasos = 10;
@@ -65,19 +59,46 @@ void Fisicas::aplicarGravedad(Entidad* entidad, float gravedad, float deltaTiemp
         entidad->establecer_posicion(nuevaPos);
     }
 }
-
+//-----------------------------------------------------------------------------------------------------------
 bool Fisicas::detectarColision(Entidad* entidad1, Entidad* entidad2) {
     QRect rect1 = entidad1->obtenerRectangulo();
     QRect rect2 = entidad2->obtenerRectangulo();
     return rect1.intersects(rect2);
 }
-
+//----------------------------------------------------------------------------------------------------------------------------------------------
 void Fisicas::aplicarRebote(Entidad* entidad, QVector2D normal) {
     QVector2D velocidad = entidad->obtenerVelocidad();
     QVector2D nuevaVelocidad = velocidad - 2 * QVector2D::dotProduct(velocidad, normal) * normal;
     entidad->establecerVelocidad(nuevaVelocidad);
 }
 
+void Fisicas::perseguirObjetivo(Entidad *entidad, Entidad *objetivo,  float velocidad, float deltaTiempo)
+{
+    // Calcula la dirección hacia el objetivo
+    QPointF direccion = objetivo->pos() - entidad->pos();
+
+    // Normaliza la dirección
+    float magnitud = sqrt(direccion.x() * direccion.x() + direccion.y() * direccion.y());
+    if (magnitud != 0) {
+        direccion /= magnitud;
+    } else {
+        // Manejar el caso cuando el objetivo y la entidad están en la misma posición
+        // aca es donde se quiere implantat una subfisica llamada detectar colision
+        // Para evitar división por cero
+        direccion = QPointF(0, 0);
+    }
+    // Calcula el desplazamiento con interpolación
+    QPointF desplazamiento = direccion * velocidad * deltaTiempo;
+
+    // Aplica el desplazamiento a la posición actual con interpolación
+    QPointF nuevaPosicion = entidad->pos() + desplazamiento;
+
+    // Establece la nueva posición
+    entidad->establecer_posicion(nuevaPosicion.toPoint());
+}
+
+
+/*
 void Fisicas::aplicarFuerza(Entidad* entidad, QVector2D fuerza, float masa, float deltaTiempo) {
     int pasos = 10;
     float deltaT = deltaTiempo / pasos;
@@ -91,32 +112,4 @@ void Fisicas::aplicarFuerza(Entidad* entidad, QVector2D fuerza, float masa, floa
         QPoint nuevaPos = entidad->obtenerPosicion() + desplazamiento.toPoint();
         entidad->establecer_posicion(nuevaPos);
     }
-}
-
-void Fisicas::perseguirObjetivo(Entidad *entidad, Entidad *objetivo, float velocidad, float deltaTiempo)
-{
-
-    // Calcula la dirección hacia el objetivo
-    QPointF direccion = objetivo->pos() - entidad->pos();
-
-
-    // Normaliza la dirección
-    float magnitud = sqrt(direccion.x() * direccion.x() + direccion.y() * direccion.y());
-    if (magnitud != 0) {
-        direccion /= magnitud;
-    } else {
-        // Manejar el caso cuando el objetivo y la entidad están en la misma posición
-        // Para evitar división por cero
-        direccion = QPointF(0, 0);
-    }
-    // Calcula el desplazamiento con interpolación
-
-        QPointF desplazamiento = direccion * velocidad * deltaTiempo;
-
-
-        // Aplica el desplazamiento a la posición actual con interpolación
-        QPointF nuevaPosicion = entidad->pos() + desplazamiento;
-
-        // Establece la nueva posición
-        entidad->establecer_posicion(nuevaPosicion.toPoint());
 }

@@ -105,11 +105,12 @@ void Entidad::recibir_dagno(int cantidad) {
 }*/
 
 void Entidad::establecer_posicion(QPoint punto) {
-    this->setPos(punto);
+    this->setPos(punto); // Asegurarse de actualizar `posicion`
 }
 
+
 QPoint Entidad::obtenerPosicion() const {
-    return posicion;
+    return this->posicion; // Devolver la posición almacenada
 }
 
 void Entidad::establecerVelocidad(QVector2D nuevaVelocidad) {

@@ -20,17 +20,19 @@ void Fisicas::aplicarMovimientoCircularUniforme(Entidad* entidad, float centroX,
 
 }
 //-------------------------------------------------------------------------------------------------------------------
-void Fisicas::aplicarMovimientoLinealUniforme(Entidad* entidad, QVector2D direccion, float velocidad, float deltaTiempo) {
-    int pasos = 10;
-    float deltaT = deltaTiempo / pasos;
+void Fisicas::aplicarMovimientoLinealUniforme(Entidad* entidad, float direccionX, float direccionY, float velocidad, float deltaTiempo) {
 
-    direccion.normalize();
-    QVector2D desplazamiento = direccion * velocidad * deltaT;
+    float deltaT = deltaTiempo*n;
 
-    for (int i = 0; i < pasos; ++i) {
-        QPoint nuevaPos = entidad->obtenerPosicion() + desplazamiento.toPoint();
-        entidad->establecer_posicion(nuevaPos);
-    }
+    // Calculamos el desplazamiento total usando la fórmula X = X_0 + VT
+    float desplazamientoX = direccionX + velocidad * deltaT;
+    float desplazamientoY = direccionY + velocidad * deltaT;
+
+    float nuevaX = desplazamientoX;
+    float nuevaY = desplazamientoY;
+
+    entidad->establecer_posicion(QPoint(nuevaX, nuevaY));
+    n++;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void Fisicas::aplicarMovimientoConAceleracion(Entidad* entidad, float direccionX, float direccionY, float velocidadInicial, float aceleracionX, float aceleracionY, float deltaTiempo) {

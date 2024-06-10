@@ -9,6 +9,12 @@ sprites::sprites(QString main_pixmap, unsigned int scale)
     this->scale = scale;
 }
 
+sprites::~sprites()
+{
+    delete main_pixmap;
+    delete character_pixmap;
+}
+
 void sprites::set_design_size(unsigned int x, unsigned int y)
 {
     height = y;

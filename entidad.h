@@ -35,13 +35,12 @@ public:
     QVector2D obtenerVelocidad() const;
     QRect obtenerRectangulo() const;
 
-    unsigned int getVelocidad();
+    int getVelocidad();
 
 
 
 
 private:
-    unsigned int velocidad;
     int salud;
     sprites* mainPixmap;
     unsigned int width;

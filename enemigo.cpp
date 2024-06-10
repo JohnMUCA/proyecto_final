@@ -1,10 +1,10 @@
-#include "enemigo.h"
+    #include "enemigo.h"
 
 Enemigo::Enemigo(QVector<QRect> rectangulosAnimaciones, unsigned int *numsFotogramas, QString name, unsigned int ancho, unsigned int alto, unsigned int scale) :
     Entidad(rectangulosAnimaciones, numsFotogramas, name, ancho, alto, scale), Fisicas()
 {
     time = new QTimer;
-    connect(time,SIGNAL(timeout()),this,SLOT(realizarMovimientoCircular()));
+    connect(time,SIGNAL(timeout()),this,SLOT(realizarPerseguir()));
     time->start(100);
 
 
@@ -40,6 +40,7 @@ void Enemigo::realizarMovimientoAcelerado()
 
 void Enemigo::realizarPerseguir()
 {
+
     this->perseguirObjetivo(this, objetivo, velocidad,deltaTiempo);
 }
 

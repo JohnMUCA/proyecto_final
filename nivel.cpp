@@ -1,28 +1,34 @@
 #include "nivel.h"
 
-nivel::nivel(QGraphicsView *graphicsV, QString imageBackground)
+nivel::nivel(QGraphicsView *graphicsV, QString imageBackground, QString imageReference, float nivelScale,
+             unsigned int heightMap, unsigned int widthMap, unsigned int x, unsigned int y, unsigned short numNivel,
+             bool setFocus)
 {
+    focus = setFocus;
     graph = graphicsV;
-    setup_scene(imageBackground);
-    setup_prota();
-    setup_murcielago();
+    setup_scene(imageBackground, imageReference, nivelScale, heightMap, widthMap, x, y);
+    setup_prota(numNivel);
+    setup_murcielago(numNivel);
+    setup_Mamut();
+    colision = 0;
+    //connect(timeChoque, SIGNAL(timeout()), this, SLOT(verificarColision()));
+    //timeChoque->start(500);
 }
 
 nivel::~nivel()
 {
-    delete graph;
-    delete escena;
     delete prota;
     delete murcielago;
-    delete Mamut;
-    delete numsFotogramasProta;
-    delete numsFotogramasMurcielago;
-    delete numsFotogramasMamut;
+    //delete Mamut;
+    delete[] numsFotogramasProta;
+    delete[] numsFotogramasMurcielago;
+    delete[] numsFotogramasMamut;
     delete fondoCompleto;
     delete brocha;
     delete fondoReferencia;
     delete colorTope;
-
+    delete escena;
+    //delete timeChoque;
 }
 
 void nivel::key_event(QKeyEvent *event)
@@ -34,13 +40,14 @@ void nivel::key_event(QKeyEvent *event)
     else if(unsigned(event->key()) == prota_keys[2]) isValid = up_movement_is_valid(prota);
     else if(unsigned(event->key()) == prota_keys[3]) isValid = down_movement_is_valid(prota);
 
-    prota->move(event->key(), isValid);
-    if(prota->y()<(700) || prota->y()>(30)) set_focus_element(prota,16, 16 * 4);
+    if (prota->obtenerRectangulo().intersects(murcielago->obtenerRectangulo()))
+    {
+        prota->setPos(prota->x()+ 30, prota->y()+ 30);
+    }
 
-    //if (fondoReferencia->pixelColor(prota->x(), prota->y()) == *colorTope)
-    //{
-    //    murcielago->set_mov_circular_parametros(100, 1, 1, prota->x(), prota->y());
-    //}
+    prota->move(event->key(), isValid);
+
+    if(focus && (prota->y()<(700) || prota->y()>(30))) set_focus_element(prota,16, 16 * 4);
 }
 
 void nivel::setProta_keys()
@@ -76,12 +83,13 @@ void nivel::setNumsFotogramasMamut()
     numsFotogramasMamut[3] = 8;
 }
 
-void nivel::setup_scene(QString image_Background)
+void nivel::setup_scene(QString image_Background, QString image_Reference, float nivel_Scale, unsigned int _heightMap,
+                        unsigned int _widthMap, unsigned int _x, unsigned int _y)
 {
     //------------------------------------------Creacion escena-----------------------------------------------
-    graph->setGeometry(0, 0, 1000, 700);
+    graph->setGeometry(0, 0, 1500, 800);
     escena = new QGraphicsScene;
-    escena->setSceneRect(0,0,graph->width() - 2,graph->height() - 2);
+    escena->setSceneRect(0, 0, graph->width() - 2, graph->height() - 2);
     graph->setScene(escena);
     //----------------------------------------------------------------------------------------------
 
@@ -92,13 +100,13 @@ void nivel::setup_scene(QString image_Background)
 
     //------------------------------------------creacion brocha-----------------------------------------------
     brocha = new QBrush();
-    brocha->setTexture(fondoCompleto->copy(0, 0, 468, 800).scaled(468 * gameScaleFactor, 800 * gameScaleFactor));
+    brocha->setTexture(fondoCompleto->copy(_x, _y, _widthMap, _heightMap).scaled(_widthMap * nivel_Scale, _heightMap * nivel_Scale));
     //----------------------------------------------------------------------------------------------
 
     //------------------------------------------creacion fondoReferencia -----------------------------------------------
     fondoReferencia = new QImage;
-    fondoReferencia->load(":/imagenes/caves_reference.png");
-    *fondoReferencia = fondoReferencia->copy(0, 0, 468, 800).scaled(468 * gameScaleFactor, 800 * gameScaleFactor);
+    fondoReferencia->load(image_Reference);
+    *fondoReferencia = fondoReferencia->copy(_x, _y, _widthMap, _heightMap).scaled(_widthMap * nivel_Scale, _heightMap * nivel_Scale);
     //------------------------------------------------------------------------------------------------------------------
 
     //-------------------------------------------creacion colorTope-----------------------------------------------------
@@ -108,20 +116,53 @@ void nivel::setup_scene(QString image_Background)
 
 }
 
-void nivel::setup_prota()
+void nivel::setup_prota(unsigned short _numNivel)
 {
     setProta_keys();
     setNumsFotogramasProta();
     prota = new Entidad(completeAnimationsProta(), numsFotogramasProta, ":/imagenes/caveMan.png", anchoProta, alturaProta, scaleProta);
+    if (_numNivel == 1)
+    {
+        prota->setX(28 * anchoProta * scaleProta);
+        prota->setY(14 * alturaProta * scaleProta);
+    }
+    else if(_numNivel == 2)
+    {
+        prota->setX(2 * anchoProta * scaleProta);
+        prota->setY(2 * alturaProta * scaleProta);
+    }
+    else if(_numNivel == 3)
+    {
+        prota->setX(8 * anchoProta * scaleProta);
+        prota->setY(8 * alturaProta * scaleProta);
+    }
     prota->setKeys(prota_keys);
     escena->addItem(prota);
-    set_focus_element(prota, anchoProta * scaleProta, alturaProta * scaleProta);
+    if (focus) set_focus_element(prota, anchoProta * scaleProta, alturaProta * scaleProta);
+
 }
 
-void nivel::setup_murcielago()
+void nivel::setup_murcielago(unsigned short _numNivel)
 {
     setNumsFotogramasMurcielago();
     murcielago = new Enemigo(completeAnimationsMurcielago(), numsFotogramasMurcielago, ":/imagenes/murcielago.png", anchoMurcielago, alturaMurcielago, scaleMurcielago);
+
+    if(_numNivel == 1)
+    {
+        murcielago->setX(18.5 * anchoMurcielago * scaleMurcielago);
+        murcielago->setY(15 * alturaMurcielago * scaleMurcielago);
+    }
+    else if(_numNivel == 2)
+    {
+        murcielago->setX(2 * anchoMurcielago * scaleMurcielago);
+        murcielago->setY(2 * alturaMurcielago * scaleMurcielago);
+    }
+    else if(_numNivel == 3)
+    {
+        murcielago->setX(8 * anchoMurcielago * scaleMurcielago);
+        murcielago->setY(8 * alturaMurcielago * scaleMurcielago);
+    }
+
     murcielago->set_mov_acelerado(murcielago->x(),murcielago->y(),3,-7,-3,0.1);
     murcielago->set_perseguir(prota,100,0.1);
     murcielago->set_mov_circular_parametros(80, 3 , 0.1, murcielago->x(), murcielago->y());
@@ -132,6 +173,11 @@ void nivel::setup_Mamut()
 {
     setNumsFotogramasMamut();
     //Mamut = new Enemigo(completeAnimationsMamut(), numsFotogramasMamut, ":/imagenes/mamut.png", )
+}
+
+void nivel::verificarColision()
+{
+    colision = (prota->obtenerRectangulo().intersects(murcielago->obtenerRectangulo()));
 }
 
 bool nivel::left_movement_is_valid(Entidad *item)
@@ -159,6 +205,8 @@ bool nivel::right_movement_is_valid(Entidad *item)
     yf1 = item->y();
     xf2 = item->x()+(anchoProta * scaleProta) - 1 + item->getVelocidad();
     yf2 = item->y()+(alturaProta * scaleProta) - 1;
+
+
 
     is_valid1 = fondoReferencia->pixelColor(xf1, yf1) != *colorTope;
     is_valid2 = fondoReferencia->pixelColor(xf2, yf2) != *colorTope;

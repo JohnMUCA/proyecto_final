@@ -9,6 +9,7 @@ class sprites
 {
 public:
     sprites(QString main_pixmap, unsigned int scale);
+    ~sprites();
     void set_design_size(unsigned int x, unsigned int y);
     void cut_character_pixmap(QRect size);
     void add_new_animation(QRect size, unsigned int number);

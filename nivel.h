@@ -5,6 +5,7 @@
 #include <QGraphicsScene>
 #include <QKeyEvent>
 #include <QVector>
+#include <QTimer>
 
 #include "entidad.h"
 #include "enemigo.h"
@@ -24,12 +25,13 @@
 
 #define scaleMurcielago 3
 #define scaleProta 4
-#define gameScaleFactor 8
+//#define gameScaleFactor 8
 
 class nivel
 {
+    //Q_OBJECT
 public:
-    nivel(QGraphicsView *graphicsV, QString imageBackground);
+    nivel(QGraphicsView *graphicsV, QString imageBackground, QString imageReference, float nivelScale, unsigned int height, unsigned int width, unsigned int x, unsigned int y, unsigned short numNivel, bool setFocus);
     ~nivel();
     void key_event(QKeyEvent *event);
 private:
@@ -37,7 +39,7 @@ private:
     QGraphicsScene *escena;
     Entidad *prota;
     Enemigo *murcielago;
-    Enemigo *Mamut;
+    //Enemigo *Mamut;
     unsigned int prota_keys[4];
     unsigned int* numsFotogramasProta;
     unsigned int* numsFotogramasMurcielago;
@@ -46,16 +48,21 @@ private:
     QPixmap *fondoCompleto;
     QImage *fondoReferencia;
     QColor *colorTope;
+    bool focus;
+    //QTimer *timeChoque;
+    bool colision;
 
     void setProta_keys();
     void setNumsFotogramasProta();
     void setNumsFotogramasMurcielago();
     void setNumsFotogramasMamut();
 
-    void setup_scene(QString image_Background);
-    void setup_prota();
-    void setup_murcielago();
+    void setup_scene(QString image_Background, QString image_Reference, float nivel_Scale, unsigned int _heightMap, unsigned int _widthMap, unsigned int _x, unsigned int _y);
+    void setup_prota(unsigned short _numNivel);
+    void setup_murcielago(unsigned short _numNivel);
     void setup_Mamut();
+
+    void verificarColision();
 
     bool left_movement_is_valid(Entidad *item);
     bool right_movement_is_valid(Entidad *item);

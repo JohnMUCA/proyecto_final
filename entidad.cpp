@@ -7,19 +7,18 @@ Entidad::Entidad(QVector<QRect> rectangulosAnimaciones, unsigned int *numsFotogr
     this->scale = scale;
     mainPixmap = new sprites(name, scale);
     mainPixmap->set_design_size(width, height);
+
     if (name == ":/imagenes/caveMan.png")
     {
        mainPixmap->cut_character_pixmap(setCompleteSpritesProta());
-        setX(28 * width * scale);
-        setY(14 * height * scale);
     }
     else if(name == ":/imagenes/murcielago.png")
     {
         mainPixmap->cut_character_pixmap(setCompleteSpritesMurcielago());
-        setX(18.5 * width * scale);
-        setY(15 * height * scale);
     }
 
+    setX(0 * width * scale);
+    setY(0 * height * scale);
     setAnimations(rectangulosAnimaciones, numsFotogramas);
     setPixmap(mainPixmap->get_current_pixmap(0));
 
@@ -122,11 +121,11 @@ QVector2D Entidad::obtenerVelocidad() const {
 }
 
 QRect Entidad::obtenerRectangulo() const {
-    return QRect(posicion.x(), posicion.y(), width * scale, height * scale);
+    return QRect(this->x(), this->y(), width * scale, height * scale);
 }
 
-unsigned int Entidad::getVelocidad()
+int Entidad::getVelocidad()
 {
-    return velocidad;
+    return entidadSpeed;
 }
 

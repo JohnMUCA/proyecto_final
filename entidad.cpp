@@ -4,6 +4,8 @@ Entidad::Entidad(QVector<QRect> rectangulosAnimaciones, unsigned int *numsFotogr
 {
     width = ancho;
     height = alto;
+    salud = 100;
+    ultimaTecla = Qt::Key_A;
     this->scale = scale;
     mainPixmap = new sprites(name, scale);
     mainPixmap->set_design_size(width, height);
@@ -43,6 +45,7 @@ void Entidad::move(unsigned int key, bool is_valid)
         if(is_valid) setY(y() + entidadSpeed);
     }
 
+    ultimaTecla = key;
 
 }
 
@@ -122,6 +125,17 @@ QVector2D Entidad::obtenerVelocidad() const {
 
 QRect Entidad::obtenerRectangulo() const {
     return QRect(this->x(), this->y(), width * scale, height * scale);
+}
+
+QString Entidad::obtenerSalud() const
+{
+    QString saludT;
+    return saludT.setNum(salud);
+}
+
+unsigned int Entidad::obtenerUltimaTecla() const
+{
+    return ultimaTecla;
 }
 
 int Entidad::getVelocidad()

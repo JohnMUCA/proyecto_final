@@ -7,7 +7,8 @@ Fisicas::Fisicas()
     n=0;
 }
 //--------------------------------------------------------------------------------------------------------------------------------------------------------
-void Fisicas::aplicarMovimientoCircularUniforme(Entidad* entidad, float centroX, float centroY, float radio, float velocidadAngular, float deltaTiempo) {
+void Fisicas::aplicarMovimientoCircularUniforme(Entidad* entidad, float centroX, float centroY, float radio,
+                                                float velocidadAngular, float deltaTiempo) {
     float deltaT = deltaTiempo*n;
 
 
@@ -15,12 +16,13 @@ void Fisicas::aplicarMovimientoCircularUniforme(Entidad* entidad, float centroX,
 
     float nuevaX = centroX + radio * cos(angulo);
     float nuevaY = centroY + radio * sin(angulo);
-    entidad->establecer_posicion(QPoint(nuevaX, nuevaY));
+    entidad->setPos(QPoint(nuevaX, nuevaY));
     n++;
 
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-void Fisicas::aplicarMovimientoConAceleracion(Entidad* entidad, float direccionX, float direccionY, float velocidadInicial, float aceleracionX, float aceleracionY, float deltaTiempo) {
+void Fisicas::aplicarMovimientoConAceleracion(Entidad* entidad, float direccionX, float direccionY, float velocidadInicial,
+                                              float aceleracionX, float aceleracionY, float deltaTiempo) {
 
 
     float deltaT = deltaTiempo*n;
@@ -30,7 +32,7 @@ void Fisicas::aplicarMovimientoConAceleracion(Entidad* entidad, float direccionX
 
     float nuevaX = desplazamientoX;
     float nuevaY = desplazamientoY;
-    entidad->establecer_posicion(QPoint(nuevaX, nuevaY));
+    entidad->setPos(QPoint(nuevaX, nuevaY));
     n++;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------
@@ -56,6 +58,6 @@ void Fisicas::perseguirObjetivo(Entidad* entidad, Entidad *objetivo,  float velo
     QPointF nuevaPosicion = entidad->pos() + desplazamiento;
 
     // Establece la nueva posición
-    entidad->establecer_posicion(nuevaPosicion.toPoint());
+    entidad->setPos(nuevaPosicion.toPoint());
 }
 //--------------------------------------------------------------------------------------------------------------------------------------------------------

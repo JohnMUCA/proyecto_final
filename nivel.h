@@ -20,14 +20,12 @@
 #define anchoTigre 32
 #define alturaLobo 32
 #define anchoLobo 32
-#define alturaMamutdFrente 65
-#define anchoMamutdFrente 65
-#define alturaMamutdLado 66
-#define anchoMamutdLado 89
+#define alturaMamut 65
+#define anchoMamut 65
+
 
 #define scaleMurcielago 3
 #define scaleProta 4
-//#define gameScaleFactor 8
 
 class nivel : public QObject
 {
@@ -44,11 +42,13 @@ private:
     QGraphicsScene *escena;
     Entidad *prota;
     Enemigo *murcielago;
+
     //Enemigo *Mamut;
     unsigned int prota_keys[4];
     unsigned int* numsFotogramasProta;
     unsigned int* numsFotogramasMurcielago;
     unsigned int* numsFotogramasMamut;
+
     QBrush *brocha;
     QPixmap *fondoCompleto;
     QImage *fondoReferencia;
@@ -68,11 +68,11 @@ private:
     void setup_murcielago(unsigned short _numNivel);
     void setup_Mamut();
 
-
     bool left_movement_is_valid(Entidad *item);
     bool right_movement_is_valid(Entidad *item);
     bool up_movement_is_valid(Entidad *item);
     bool down_movement_is_valid(Entidad *item);
+
     void set_focus_element(QGraphicsPixmapItem *item, unsigned int scalex, unsigned int scaley);
     QVector<QRect> completeAnimationsProta();
     QVector<QRect> completeAnimationsMurcielago();

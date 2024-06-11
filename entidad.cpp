@@ -1,30 +1,43 @@
 #include "entidad.h"
 
-Entidad::Entidad(QVector<QRect> rectangulosAnimaciones, unsigned int *numsFotogramas, QString name, unsigned int ancho, unsigned int alto, unsigned int scale)
+Entidad::Entidad(QVector<QRect> rectangulosAnimaciones, unsigned int *numsFotogramas, QString name,
+                 unsigned int ancho, unsigned int alto, unsigned int scale)
 {
+    salud = 100;
+    dagno = 20;
+    ultimaTecla = Qt::Key_A;
+
     width = ancho;
     height = alto;
-    salud = 100;
-    ultimaTecla = Qt::Key_A;
     this->scale = scale;
     mainPixmap = new sprites(name, scale);
     mainPixmap->set_design_size(width, height);
 
     if (name == ":/imagenes/caveMan.png")
     {
-       mainPixmap->cut_character_pixmap(setCompleteSpritesProta());
+       mainPixmap->cut_character_pixmap(getCompleteSpritesProta());
     }
     else if(name == ":/imagenes/murcielago.png")
     {
-        mainPixmap->cut_character_pixmap(setCompleteSpritesMurcielago());
+        mainPixmap->cut_character_pixmap(getCompleteSpritesMurcielago());
     }
 
     setX(0 * width * scale);
     setY(0 * height * scale);
+
     setAnimations(rectangulosAnimaciones, numsFotogramas);
     setPixmap(mainPixmap->get_current_pixmap(0));
 
 }
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Entidad::~Entidad()
+{
+    delete mainPixmap;
+}
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 void Entidad::move(unsigned int key, bool is_valid)
 {
@@ -49,6 +62,8 @@ void Entidad::move(unsigned int key, bool is_valid)
 
 }
 
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 void Entidad::setAnimations(QVector<QRect> rectangulosAnimaciones, unsigned int *numsFotogramas)
 {
     for (int i = 0; i < rectangulosAnimaciones.length(); i++)
@@ -57,24 +72,71 @@ void Entidad::setAnimations(QVector<QRect> rectangulosAnimaciones, unsigned int 
     }
 }
 
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 void Entidad::setKeys(unsigned int *Keys)
 {
     for(unsigned int i=0;i<4;i++) this->keys[i] = Keys[i];
 }
 
-/*void Entidad::agregarAnimacion(QRect rentanguloAnimacion, unsigned int numFotogramas)
-{
-    mainPixmap->add_new_animation(rentanguloAnimacion, numFotogramas);
-}*/
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Entidad::~Entidad()
+void Entidad::setDagno(short _dagno)
 {
-    delete mainPixmap;
+    dagno = _dagno;
 }
 
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-QRect Entidad::setCompleteSpritesProta()
+void Entidad::setSalud(int _salud)
+{
+    salud = _salud;
+}
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+void Entidad::recibir_dagno(short cantidad) {
+    salud -= cantidad;
+    if (salud < 0) salud = 0;
+}
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+QRect Entidad::obtenerRectangulo() const {
+    return QRect(this->x(), this->y(), width * scale, height * scale);
+}
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+int Entidad::obtenerSalud() const
+{
+    return salud;
+}
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+unsigned int Entidad::obtenerUltimaTecla() const
+{
+    return ultimaTecla;
+}
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+int Entidad::getVelocidad()
+{
+    return entidadSpeed;
+}
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+short Entidad::getdagno()
+{
+    return dagno;
+}
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+QRect Entidad::getCompleteSpritesProta()
 {
     QRect dim;
 
@@ -86,7 +148,9 @@ QRect Entidad::setCompleteSpritesProta()
     return dim;
 }
 
-QRect Entidad::setCompleteSpritesMurcielago()
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+QRect Entidad::getCompleteSpritesMurcielago()
 {
     QRect dim;
 
@@ -96,50 +160,5 @@ QRect Entidad::setCompleteSpritesMurcielago()
     dim.setWidth(3 * width);
 
     return dim;
-}
-void Entidad::recibir_dagno(int cantidad) {
-    salud -= cantidad;
-    if (salud < 0) salud = 0;
-}
-
-/*void Entidad::hacer_dagno(Entidad* otraEntidad) {
-    otraEntidad->recibir_dagno(dagno);
-}*/
-
-void Entidad::establecer_posicion(QPoint punto) {
-    this->setPos(punto); // Asegurarse de actualizar `posicion`
-}
-
-
-QPoint Entidad::obtenerPosicion() const {
-    return this->posicion; // Devolver la posición almacenada
-}
-
-void Entidad::establecerVelocidad(QVector2D nuevaVelocidad) {
-    velocidadVector = nuevaVelocidad;
-}
-
-QVector2D Entidad::obtenerVelocidad() const {
-    return velocidadVector;
-}
-
-QRect Entidad::obtenerRectangulo() const {
-    return QRect(this->x(), this->y(), width * scale, height * scale);
-}
-
-QString Entidad::obtenerSalud() const
-{
-    QString saludT;
-    return saludT.setNum(salud);
-}
-
-unsigned int Entidad::obtenerUltimaTecla() const
-{
-    return ultimaTecla;
-}
-
-int Entidad::getVelocidad()
-{
-    return entidadSpeed;
 }
 

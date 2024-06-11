@@ -18,6 +18,8 @@ nivel::nivel(QGraphicsView *graphicsV, QString imageBackground, QString imageRef
     timeColision->start(200);
 }
 
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 nivel::~nivel()
 {
     delete prota;
@@ -26,14 +28,16 @@ nivel::~nivel()
     delete[] numsFotogramasProta;
     delete[] numsFotogramasMurcielago;
     delete[] numsFotogramasMamut;
-    delete fondoCompleto;
     delete brocha;
     delete fondoReferencia;
+    delete fondoCompleto;
     delete colorTope;
-    delete escena;
     delete salud;
     delete timeColision;
+    delete escena;
 }
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 void nivel::key_event(QKeyEvent *event)
 {
@@ -46,15 +50,17 @@ void nivel::key_event(QKeyEvent *event)
 
     if(prota->y()>= 2000 && prota->y()<2100) murcielago->empezarPerseguir();
     prota->move(event->key(), isValid);
-    salud->setText(prota->obtenerSalud());
 
     if(focus && (prota->y()<(700) || prota->y()>(30))) set_focus_element(prota,16, 16 * 4);
 }
 
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 void nivel::detectarAtaque()
 {
+    salud->setText(QString::number(prota->obtenerSalud()));
     if (prota->obtenerRectangulo().intersects(murcielago->obtenerRectangulo())) {
-        prota->recibir_dagno(1);
+        prota->recibir_dagno(murcielago->getdagno());
 
         int diffX = prota->x() - murcielago->x();
         int diffY = prota->y() - murcielago->y();
@@ -62,12 +68,12 @@ void nivel::detectarAtaque()
         if (abs(diffX) > abs(diffY)) {
             // Rebote horizontal
             if (diffX > 0) {
-                for (int i = 0; i < 7; ++i) {
+                for (int i = 0; i < 9; ++i) {
                     prota->move(Qt::Key_D, up_movement_is_valid(prota));
                     set_focus_element(prota, 16, 16 * 4);
                 }
             } else {
-                for (int i = 0; i < 7; ++i) {
+                for (int i = 0; i < 9; ++i) {
                     prota->move(Qt::Key_A, up_movement_is_valid(prota));
                     set_focus_element(prota, 16, 16 * 4);
                 }
@@ -75,12 +81,12 @@ void nivel::detectarAtaque()
         } else {
             // Rebote vertical
             if (diffY > 0) {
-                for (int i = 0; i < 7; ++i) {
+                for (int i = 0; i < 9; ++i) {
                     prota->move(Qt::Key_S, up_movement_is_valid(prota));
                     set_focus_element(prota, 16, 16 * 4);
                 }
             } else {
-                for (int i = 0; i < 7; ++i) {
+                for (int i = 0; i < 9; ++i) {
                     prota->move(Qt::Key_W, up_movement_is_valid(prota));
                     set_focus_element(prota, 16, 16 * 4);
                 }
@@ -174,6 +180,8 @@ void nivel::setup_prota(unsigned short _numNivel)
         prota->setX(8 * anchoProta * scaleProta);
         prota->setY(8 * alturaProta * scaleProta);
     }
+    prota->setDagno(50);
+    prota->setSalud(100);
     prota->setKeys(prota_keys);
     escena->addItem(prota);
     if (focus) set_focus_element(prota, anchoProta * scaleProta, alturaProta * scaleProta);
@@ -183,7 +191,8 @@ void nivel::setup_prota(unsigned short _numNivel)
 void nivel::setup_murcielago(unsigned short _numNivel)
 {
     setNumsFotogramasMurcielago();
-    murcielago = new Enemigo(completeAnimationsMurcielago(), numsFotogramasMurcielago, ":/imagenes/murcielago.png", anchoMurcielago, alturaMurcielago, scaleMurcielago,0);
+    murcielago = new Enemigo(completeAnimationsMurcielago(), numsFotogramasMurcielago, ":/imagenes/murcielago.png",
+                             anchoMurcielago, alturaMurcielago, scaleMurcielago,1);
 
     if(_numNivel == 1)
     {
@@ -200,12 +209,11 @@ void nivel::setup_murcielago(unsigned short _numNivel)
         murcielago->setX(8 * anchoMurcielago * scaleMurcielago);
         murcielago->setY(8 * alturaMurcielago * scaleMurcielago);
     }
-
+    murcielago->setDagno(20);
+    murcielago->setSalud(60);
     murcielago->set_mov_acelerado(murcielago->x(),murcielago->y(),3,-7,-3,0.1);
     murcielago->set_perseguir(prota,100,0.1);
     murcielago->set_mov_circular_parametros(80, 3 , 0.1, murcielago->x(), murcielago->y());
-    murcielago->set_colision(prota);
-
     escena->addItem(murcielago);
 }
 void nivel::setup_Mamut()
@@ -419,24 +427,24 @@ QVector<QRect> nivel::completeAnimationsMamut()
     QRect dimDown;
 
     dimLeft.setX(0);
-    dimLeft.setY(2 * alturaMamutdLado);
-    dimLeft.setHeight(1 * alturaMamutdLado);
-    dimLeft.setWidth(8 * anchoMamutdLado);
+    dimLeft.setY(2 * alturaMamut);
+    dimLeft.setHeight(1 * alturaMamut);
+    dimLeft.setWidth(8 * anchoMamut);
 
     dimRight.setX(0);
-    dimRight.setY(4 * alturaMamutdLado);
-    dimRight.setHeight(1 * alturaMamutdLado);
-    dimRight.setWidth(8 * anchoMamutdLado);
+    dimRight.setY(4 * alturaMamut);
+    dimRight.setHeight(1 * alturaMamut);
+    dimRight.setWidth(8 * anchoMamut);
 
     dimUp.setX(0);
-    dimUp.setY(3 * alturaMamutdFrente);
-    dimUp.setHeight(1 * alturaMamutdFrente);
-    dimUp.setWidth(8 * anchoMamutdFrente);
+    dimUp.setY(3 * alturaMamut);
+    dimUp.setHeight(1 * alturaMamut);
+    dimUp.setWidth(8 * anchoMamut);
 
     dimDown.setX(0);
-    dimDown.setY(1 * alturaMamutdFrente);
-    dimDown.setHeight(1 * alturaMamutdFrente);
-    dimDown.setWidth(8 * anchoMamutdFrente);
+    dimDown.setY(1 * alturaMamut);
+    dimDown.setHeight(1 * alturaMamut);
+    dimDown.setWidth(8 * anchoMamut);
 
     animations.push_back(dimLeft);
     animations.push_back(dimRight);

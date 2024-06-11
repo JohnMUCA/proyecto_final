@@ -33,11 +33,8 @@ public slots:
 
 private slots:
 
-
-
-    void on_pushButton_clicked();
-
-    void on_pushButton_2_clicked();
+    void on_pushButton_released();
+    void on_pushButton_2_released();
 
 private:
     Ui::MainWindow *ui;

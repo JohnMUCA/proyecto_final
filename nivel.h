@@ -6,9 +6,11 @@
 #include <QKeyEvent>
 #include <QVector>
 #include <QTimer>
+#include <QObject>
 
 #include "entidad.h"
 #include "enemigo.h"
+#include "qlabel.h"
 
 #define alturaProta 16
 #define anchoProta 16
@@ -27,13 +29,16 @@
 #define scaleProta 4
 //#define gameScaleFactor 8
 
-class nivel
+class nivel : public QObject
 {
-    //Q_OBJECT
+    Q_OBJECT
 public:
-    nivel(QGraphicsView *graphicsV, QString imageBackground, QString imageReference, float nivelScale, unsigned int height, unsigned int width, unsigned int x, unsigned int y, unsigned short numNivel, bool setFocus);
+    nivel(QGraphicsView *graphicsV, QString imageBackground, QString imageReference, float nivelScale, unsigned int height, unsigned int width, unsigned int x, unsigned int y, unsigned short numNivel, bool setFocus, QLabel* salud);
     ~nivel();
     void key_event(QKeyEvent *event);
+
+public slots:
+    void detectarAtaque();
 private:
     QGraphicsView *graph;
     QGraphicsScene *escena;
@@ -49,8 +54,9 @@ private:
     QImage *fondoReferencia;
     QColor *colorTope;
     bool focus;
-    //QTimer *timeChoque;
     bool colision;
+    QLabel* salud;
+    QTimer* timeColision;
 
     void setProta_keys();
     void setNumsFotogramasProta();
@@ -62,7 +68,6 @@ private:
     void setup_murcielago(unsigned short _numNivel);
     void setup_Mamut();
 
-    void verificarColision();
 
     bool left_movement_is_valid(Entidad *item);
     bool right_movement_is_valid(Entidad *item);

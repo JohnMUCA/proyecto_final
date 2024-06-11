@@ -62,19 +62,26 @@ void Fisicas::aplicarGravedad(Entidad* entidad, float gravedad, float deltaTiemp
     }
 }
 //-----------------------------------------------------------------------------------------------------------
-bool Fisicas::detectarColision(Entidad* entidad1, Entidad* entidad2) {
-    QRect rect1 = entidad1->obtenerRectangulo();
-    QRect rect2 = entidad2->obtenerRectangulo();
-    return rect1.intersects(rect2);
+/*
+void Fisicas::detectarColision(Entidad* entidad1, Entidad* entidad2) {
+    if (entidad1->obtenerRectangulo().intersects(entidad2->obtenerRectangulo())) this->quitarvida(entidad2);
 }
+*/
 //----------------------------------------------------------------------------------------------------------------------------------------------
-void Fisicas::aplicarRebote(Entidad* entidad, QVector2D normal) {
-    QVector2D velocidad = entidad->obtenerVelocidad();
-    QVector2D nuevaVelocidad = velocidad - 2 * QVector2D::dotProduct(velocidad, normal) * normal;
-    entidad->establecerVelocidad(nuevaVelocidad);
-}
+void Fisicas::aplicarRebote(Entidad* entidad, float direccionX, float direccionY) {
 
-void Fisicas::perseguirObjetivo(Entidad *entidad, Entidad *objetivo,  float velocidad, float deltaTiempo)
+
+    // Calculamos el desplazamiento total usando la fórmula X = X_0 + VT
+    float desplazamientoX = direccionX;
+    float desplazamientoY = direccionY;
+
+
+    float rebote_protaX = desplazamientoX;
+    float rebote_protaY = desplazamientoY;
+    entidad->establecer_posicion(QPoint(rebote_protaX, rebote_protaY));
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------
+void Fisicas::perseguirObjetivo(Entidad* entidad, Entidad *objetivo,  float velocidad, float deltaTiempo)
 {
     // Calcula la dirección hacia el objetivo
     QPointF direccion = objetivo->pos() - entidad->pos();
@@ -98,8 +105,14 @@ void Fisicas::perseguirObjetivo(Entidad *entidad, Entidad *objetivo,  float velo
     // Establece la nueva posición
     entidad->establecer_posicion(nuevaPosicion.toPoint());
 }
+/*
+void Fisicas::quitarvida(Entidad* entidad)
+{
 
+    entidad->recibir_dagno(1);
 
+}
+*/
 /*
 void Fisicas::aplicarFuerza(Entidad* entidad, QVector2D fuerza, float masa, float deltaTiempo) {
     int pasos = 10;

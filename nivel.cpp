@@ -1,8 +1,9 @@
 #include "nivel.h"
+#include "qlabel.h"
 
 nivel::nivel(QGraphicsView *graphicsV, QString imageBackground, QString imageReference, float nivelScale,
              unsigned int heightMap, unsigned int widthMap, unsigned int x, unsigned int y, unsigned short numNivel,
-             bool setFocus)
+             bool setFocus, QLabel* salud)
 {
     focus = setFocus;
     graph = graphicsV;
@@ -11,8 +12,10 @@ nivel::nivel(QGraphicsView *graphicsV, QString imageBackground, QString imageRef
     setup_murcielago(numNivel);
     setup_Mamut();
     colision = 0;
-    //connect(timeChoque, SIGNAL(timeout()), this, SLOT(verificarColision()));
-    //timeChoque->start(500);
+    this->salud = salud;
+    timeColision = new QTimer;
+    QObject::connect(timeColision,SIGNAL(timeout()),this,SLOT(detectarAtaque()));
+    timeColision->start(200);
 }
 
 nivel::~nivel()
@@ -28,7 +31,8 @@ nivel::~nivel()
     delete fondoReferencia;
     delete colorTope;
     delete escena;
-    //delete timeChoque;
+    delete salud;
+    delete timeColision;
 }
 
 void nivel::key_event(QKeyEvent *event)
@@ -40,14 +44,45 @@ void nivel::key_event(QKeyEvent *event)
     else if(unsigned(event->key()) == prota_keys[2]) isValid = up_movement_is_valid(prota);
     else if(unsigned(event->key()) == prota_keys[3]) isValid = down_movement_is_valid(prota);
 
-    if (prota->obtenerRectangulo().intersects(murcielago->obtenerRectangulo()))
-    {
-        prota->setPos(prota->x()+ 30, prota->y()+ 30);
-    }
-
+    if(prota->y()>= 2000 && prota->y()<2100) murcielago->empezarPerseguir();
     prota->move(event->key(), isValid);
+    salud->setText(prota->obtenerSalud());
 
     if(focus && (prota->y()<(700) || prota->y()>(30))) set_focus_element(prota,16, 16 * 4);
+}
+
+void nivel::detectarAtaque()
+{
+
+    if(prota->obtenerRectangulo().intersects(murcielago->obtenerRectangulo())){
+        prota->recibir_dagno(1);
+        if ((murcielago->x() < prota->x()) && (((prota->y() > murcielago->y()) && (prota->y() < (murcielago->y() + 32 * 3)))
+                                               || ((murcielago->y() > prota->y()) && (murcielago->y() < prota->y() + 16 * 4))) ){
+            for (int i = 0; i < 7; ++i) {
+                prota->move(Qt::Key_D,up_movement_is_valid(prota));
+                set_focus_element(prota,16, 16 * 4);
+            }
+        }
+        else if ((prota->x() < murcielago->x()) && (((prota->y() > murcielago->y()) && (prota->y() < murcielago->y() + 32 * 3))
+                                                      || ((murcielago->y() > prota->y()) && (murcielago->y() < prota->y() + 16 * 4))) ){
+            for (int i = 0; i < 7; ++i) {
+                prota->move(Qt::Key_A,up_movement_is_valid(prota));
+                set_focus_element(prota,16, 16 * 4);
+            }
+        }
+       else if(murcielago->y()<prota->y()){
+            for (int i = 0; i < 7; ++i) {
+                prota->move(Qt::Key_S,up_movement_is_valid(prota));
+                set_focus_element(prota,16, 16 * 4);
+            }
+        }
+        else if (murcielago->y()>prota->y()){
+            for (int i = 0; i < 7; ++i) {
+                prota->move(Qt::Key_W,up_movement_is_valid(prota));
+                set_focus_element(prota,16, 16 * 4);
+            }
+        }
+    }
 }
 
 void nivel::setProta_keys()
@@ -145,7 +180,7 @@ void nivel::setup_prota(unsigned short _numNivel)
 void nivel::setup_murcielago(unsigned short _numNivel)
 {
     setNumsFotogramasMurcielago();
-    murcielago = new Enemigo(completeAnimationsMurcielago(), numsFotogramasMurcielago, ":/imagenes/murcielago.png", anchoMurcielago, alturaMurcielago, scaleMurcielago);
+    murcielago = new Enemigo(completeAnimationsMurcielago(), numsFotogramasMurcielago, ":/imagenes/murcielago.png", anchoMurcielago, alturaMurcielago, scaleMurcielago,0);
 
     if(_numNivel == 1)
     {
@@ -166,6 +201,7 @@ void nivel::setup_murcielago(unsigned short _numNivel)
     murcielago->set_mov_acelerado(murcielago->x(),murcielago->y(),3,-7,-3,0.1);
     murcielago->set_perseguir(prota,100,0.1);
     murcielago->set_mov_circular_parametros(80, 3 , 0.1, murcielago->x(), murcielago->y());
+    murcielago->set_colision(prota);
 
     escena->addItem(murcielago);
 }
@@ -175,10 +211,6 @@ void nivel::setup_Mamut()
     //Mamut = new Enemigo(completeAnimationsMamut(), numsFotogramasMamut, ":/imagenes/mamut.png", )
 }
 
-void nivel::verificarColision()
-{
-    colision = (prota->obtenerRectangulo().intersects(murcielago->obtenerRectangulo()));
-}
 
 bool nivel::left_movement_is_valid(Entidad *item)
 {

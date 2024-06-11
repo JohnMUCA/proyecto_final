@@ -34,7 +34,8 @@ public:
     void establecerVelocidad(QVector2D nuevaVelocidad);
     QVector2D obtenerVelocidad() const;
     QRect obtenerRectangulo() const;
-
+    QString obtenerSalud() const ;
+    unsigned int obtenerUltimaTecla() const;
     int getVelocidad();
 
 
@@ -50,6 +51,7 @@ private:
     unsigned int keys[4];
     QPoint posicion;
     QVector2D velocidadVector;
+    unsigned int ultimaTecla;
     //recurso drop;
 
     QRect setCompleteSpritesProta();

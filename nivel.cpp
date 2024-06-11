@@ -32,7 +32,6 @@ nivel::~nivel()
     delete fondoReferencia;
     delete fondoCompleto;
     delete colorTope;
-    delete salud;
     delete timeColision;
     delete escena;
 }
@@ -70,12 +69,12 @@ void nivel::detectarAtaque()
             if (diffX > 0) {
                 for (int i = 0; i < 9; ++i) {
                     prota->move(Qt::Key_D, up_movement_is_valid(prota));
-                    set_focus_element(prota, 16, 16 * 4);
+                    if(focus && (prota->y()<(700) || prota->y()>(30))) set_focus_element(prota,16, 16 * 4);
                 }
             } else {
                 for (int i = 0; i < 9; ++i) {
                     prota->move(Qt::Key_A, up_movement_is_valid(prota));
-                    set_focus_element(prota, 16, 16 * 4);
+                    if(focus && (prota->y()<(700) || prota->y()>(30))) set_focus_element(prota,16, 16 * 4);
                 }
             }
         } else {
@@ -83,12 +82,12 @@ void nivel::detectarAtaque()
             if (diffY > 0) {
                 for (int i = 0; i < 9; ++i) {
                     prota->move(Qt::Key_S, up_movement_is_valid(prota));
-                    set_focus_element(prota, 16, 16 * 4);
+                    if(focus && (prota->y()<(700) || prota->y()>(30))) set_focus_element(prota,16, 16 * 4);
                 }
             } else {
                 for (int i = 0; i < 9; ++i) {
                     prota->move(Qt::Key_W, up_movement_is_valid(prota));
-                    set_focus_element(prota, 16, 16 * 4);
+                    if(focus && (prota->y()<(700) || prota->y()>(30))) set_focus_element(prota,16, 16 * 4);
                 }
             }
         }

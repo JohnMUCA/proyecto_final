@@ -53,38 +53,41 @@ void nivel::key_event(QKeyEvent *event)
 
 void nivel::detectarAtaque()
 {
-
-    if(prota->obtenerRectangulo().intersects(murcielago->obtenerRectangulo())){
+    if (prota->obtenerRectangulo().intersects(murcielago->obtenerRectangulo())) {
         prota->recibir_dagno(1);
-        if ((murcielago->x() < prota->x()) && (((prota->y() > murcielago->y()) && (prota->y() < (murcielago->y() + 32 * 3)))
-                                               || ((murcielago->y() > prota->y()) && (murcielago->y() < prota->y() + 16 * 4))) ){
-            for (int i = 0; i < 7; ++i) {
-                prota->move(Qt::Key_D,up_movement_is_valid(prota));
-                set_focus_element(prota,16, 16 * 4);
+
+        int diffX = prota->x() - murcielago->x();
+        int diffY = prota->y() - murcielago->y();
+
+        if (abs(diffX) > abs(diffY)) {
+            // Rebote horizontal
+            if (diffX > 0) {
+                for (int i = 0; i < 7; ++i) {
+                    prota->move(Qt::Key_D, up_movement_is_valid(prota));
+                    set_focus_element(prota, 16, 16 * 4);
+                }
+            } else {
+                for (int i = 0; i < 7; ++i) {
+                    prota->move(Qt::Key_A, up_movement_is_valid(prota));
+                    set_focus_element(prota, 16, 16 * 4);
+                }
             }
-        }
-        else if ((prota->x() < murcielago->x()) && (((prota->y() > murcielago->y()) && (prota->y() < murcielago->y() + 32 * 3))
-                                                      || ((murcielago->y() > prota->y()) && (murcielago->y() < prota->y() + 16 * 4))) ){
-            for (int i = 0; i < 7; ++i) {
-                prota->move(Qt::Key_A,up_movement_is_valid(prota));
-                set_focus_element(prota,16, 16 * 4);
-            }
-        }
-       else if(murcielago->y()<prota->y()){
-            for (int i = 0; i < 7; ++i) {
-                prota->move(Qt::Key_S,up_movement_is_valid(prota));
-                set_focus_element(prota,16, 16 * 4);
-            }
-        }
-        else if (murcielago->y()>prota->y()){
-            for (int i = 0; i < 7; ++i) {
-                prota->move(Qt::Key_W,up_movement_is_valid(prota));
-                set_focus_element(prota,16, 16 * 4);
+        } else {
+            // Rebote vertical
+            if (diffY > 0) {
+                for (int i = 0; i < 7; ++i) {
+                    prota->move(Qt::Key_S, up_movement_is_valid(prota));
+                    set_focus_element(prota, 16, 16 * 4);
+                }
+            } else {
+                for (int i = 0; i < 7; ++i) {
+                    prota->move(Qt::Key_W, up_movement_is_valid(prota));
+                    set_focus_element(prota, 16, 16 * 4);
+                }
             }
         }
     }
 }
-
 void nivel::setProta_keys()
 {
     prota_keys[0] = Qt::Key_A;

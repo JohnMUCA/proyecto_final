@@ -1,16 +1,11 @@
 #include "enemigo.h"
 
-Enemigo::Enemigo(QVector<QRect> rectangulosAnimaciones, unsigned int *numsFotogramas, QString name, unsigned int ancho, unsigned int alto, unsigned int scale,
-                bool tipoM) :
+Enemigo::Enemigo(QVector<QRect> rectangulosAnimaciones, unsigned int *numsFotogramas, QString name, unsigned int ancho, unsigned int alto,
+                 unsigned int scale, bool tipoM) :
     Entidad(rectangulosAnimaciones, numsFotogramas, name, ancho, alto, scale), Fisicas()
 {
 
     time = new QTimer;
-    /*
-    timeColision = new QTimer;
-    connect(timeColision,SIGNAL(timeout()),this,SLOT(realizarcolision()));
-    timeColision->start(190);
-    */
     if (name == ":/imagenes/murcielago.png" ) {
         if (tipoM){
             connect(time,SIGNAL(timeout()),this,SLOT(realizarMovimientoCircular()));
@@ -36,21 +31,28 @@ Enemigo::Enemigo(QVector<QRect> rectangulosAnimaciones, unsigned int *numsFotogr
 
 }
 
+//----------------------------------------------------------------------------------------------------------------------------------------------
+
 Enemigo::~Enemigo()
 {
     delete time;
-    delete timeColision;
 }
+
+//----------------------------------------------------------------------------------------------------------------------------------------------
 
 void Enemigo::realizarMovimientoCircular()
 {
     this->aplicarMovimientoCircularUniforme(this, centroX, centroY, radio, velocidadAngular, deltaTiempo);
 }
 
+//----------------------------------------------------------------------------------------------------------------------------------------------
+
 void Enemigo::realizarMovimientoAcelerado()
 {
     this->aplicarMovimientoConAceleracion(this,direccionX,direccionY,velocidad_Inicial,aceleracionX,aceleracionY,deltaTiempo);
 }
+
+//----------------------------------------------------------------------------------------------------------------------------------------------
 
 void Enemigo::realizarPerseguir()
 {
@@ -58,21 +60,14 @@ void Enemigo::realizarPerseguir()
     this->perseguirObjetivo(this, objetivo, velocidad,deltaTiempo);
 }
 
-/*
-void Enemigo::realizarcolision()
-{
-    this->detectarColision(this,objetivo);
-}
-*/
+//----------------------------------------------------------------------------------------------------------------------------------------------
+
 void Enemigo::empezarPerseguir()
 {
     if (!(time->isActive())) time->start(100);
 }
 
-void Enemigo::empujar()
-{
-    this->aplicarMovimientoLinealUniforme(objetivo,direccionX,direccionY,velocidad,deltaTiempo);
-}
+//----------------------------------------------------------------------------------------------------------------------------------------------
 
 void Enemigo::set_mov_circular_parametros(float radio, float velocidadAngular, float deltaTiempo, float centrox, float centroy)
 {
@@ -83,6 +78,7 @@ void Enemigo::set_mov_circular_parametros(float radio, float velocidadAngular, f
     this->centroY = centroy;
 }
 
+//----------------------------------------------------------------------------------------------------------------------------------------------
 
 void Enemigo::set_mov_acelerado(float direccionX, float direccionY, float velocidad_Inicial, float aceleracionX, float aceleracionY, float deltaTiempo)
 {
@@ -101,11 +97,5 @@ void Enemigo::set_perseguir(Entidad *objetivo, float velocidad,float deltaTiempo
     this->velocidad = velocidad;
     this->deltaTiempo = deltaTiempo;
 }
-//---------------------------------------------------------------------------------------------
-void Enemigo::set_colision(Entidad *objetivo)
-{
-    this->objetivo = objetivo;
-}
-
 
 

@@ -38,15 +38,13 @@ void MainWindow::setup_nivel3()
     nivelActual = new nivel(ui->graphicsView, ":/imagenes/savannah.png", ":/imagenes/savannah_reference.png", 1.5, 544, 574, 0, 939, 3, 0, ui->label);
 }
 
-
-
-void MainWindow::on_pushButton_clicked()
+void MainWindow::on_pushButton_released()
 {
     setup_nivel2();
 }
 
 
-void MainWindow::on_pushButton_2_clicked()
+void MainWindow::on_pushButton_2_released()
 {
     setup_nivel3();
 }

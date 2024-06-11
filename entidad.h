@@ -22,40 +22,28 @@ public:
     void move(unsigned int key, bool is_valid);
     void setAnimations(QVector<QRect> rectangulosAnimaciones, unsigned int* numsFotogramas);
     void setKeys(unsigned int* Keys);
+    void setDagno(short int _dagno);
+    void setSalud(int _salud);
 
-    void recibir_dagno(int cantidad);
-    //void hacer_dagno(Entidad* otraEntidad);
-    //void establecer_posicion(Qpoint punto);
-    //void agregarAnimacion(QRect rentanguloAnimacion, unsigned int numFotogramas);
-
-    void establecer_posicion(QPoint punto);
-    QPoint obtenerPosicion() const;
-
-    void establecerVelocidad(QVector2D nuevaVelocidad);
-    QVector2D obtenerVelocidad() const;
+    void recibir_dagno(short int cantidad);
     QRect obtenerRectangulo() const;
-    QString obtenerSalud() const ;
+    int obtenerSalud() const ;
     unsigned int obtenerUltimaTecla() const;
     int getVelocidad();
-
-
-
+    short int getdagno();
 
 private:
     int salud;
     sprites* mainPixmap;
     unsigned int width;
     unsigned int height;
-    unsigned int dagno;
+    short int dagno;
     unsigned int scale;
     unsigned int keys[4];
-    QPoint posicion;
-    QVector2D velocidadVector;
     unsigned int ultimaTecla;
-    //recurso drop;
 
-    QRect setCompleteSpritesProta();
-    QRect setCompleteSpritesMurcielago();
+    QRect getCompleteSpritesProta();
+    QRect getCompleteSpritesMurcielago();
 };
 
 #endif // ENTIDAD_H

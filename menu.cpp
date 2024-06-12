@@ -26,8 +26,8 @@ void menu::setup_scene(QString image_Background, float nivel_Scale, unsigned int
     //----------------------------------------------- Botones ----------------------------------------------
 
     grupoBotones->setGeometry(0, 0, graph->width(), graph->height());
-    botones.value(0)->setGeometry((graph->width() / 2) - 70, (graph->height() / 2) - 30, 140, 60);
-    botones.value(1)->setGeometry((graph->width() / 2) - 80, (graph->height() / 2) + 60, 160, 60);
+    botones.value(0)->setGeometry((graph->width() / 2) - 150, (graph->height() / 2) + 86, 300, 60);
+    botones.value(1)->setGeometry((graph->width() / 2) - 235, (graph->height() / 2) + 198, 470, 90);
 
     //------------------------------------------creacion fondoCompleto-----------------------------------------------
     fondoCompleto = new QPixmap();

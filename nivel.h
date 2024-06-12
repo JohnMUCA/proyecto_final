@@ -45,10 +45,10 @@ private:
     QGraphicsView *graph;
     QGraphicsScene *escena;
     Entidad *prota;
-    Enemigo *murcielago;
+    Enemigo **murcielagos;
     Enemigo *mamut;
-    Enemigo *tigre;
-    Enemigo *lobo;
+    Enemigo **tigres;
+    Enemigo **lobos;
 
     //Enemigo *Mamut;
     unsigned int prota_keys[4];

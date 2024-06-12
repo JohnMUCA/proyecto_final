@@ -65,7 +65,7 @@
      <string>NIVEL 3</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label">
+   <widget class="QLabel" name="salud">
     <property name="geometry">
      <rect>
       <x>770</x>
@@ -82,6 +82,161 @@
     <property name="text">
      <string>TextLabel</string>
     </property>
+   </widget>
+   <widget class="QGroupBox" name="BotMenuPrincipal">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>1001</width>
+      <height>701</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string/>
+    </property>
+    <widget class="QPushButton" name="Play">
+     <property name="geometry">
+      <rect>
+       <x>390</x>
+       <y>380</y>
+       <width>201</width>
+       <height>61</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Bauhaus 93</family>
+       <pointsize>18</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>play</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="cargarPartida">
+     <property name="geometry">
+      <rect>
+       <x>390</x>
+       <y>480</y>
+       <width>201</width>
+       <height>61</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Bauhaus 93</family>
+       <pointsize>18</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>cargarPartida</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="BotonesFinNivel">
+    <property name="geometry">
+     <rect>
+      <x>1029</x>
+      <y>499</y>
+      <width>211</width>
+      <height>191</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string/>
+    </property>
+    <widget class="QPushButton" name="siguienteNivel">
+     <property name="geometry">
+      <rect>
+       <x>70</x>
+       <y>90</y>
+       <width>83</width>
+       <height>29</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>siguienteNivel</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="menuPrincipal">
+     <property name="geometry">
+      <rect>
+       <x>70</x>
+       <y>140</y>
+       <width>83</width>
+       <height>29</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>menuPrincipal</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="BotonesCargarNivel">
+    <property name="geometry">
+     <rect>
+      <x>1060</x>
+      <y>50</y>
+      <width>191</width>
+      <height>191</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string/>
+    </property>
+    <widget class="QPushButton" name="nivel1">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>70</y>
+       <width>83</width>
+       <height>29</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>nievel1</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="nivel2">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>110</y>
+       <width>83</width>
+       <height>29</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>nivel2</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="nivel3">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>140</y>
+       <width>83</width>
+       <height>29</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>nivel3</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="atras">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>30</y>
+       <width>83</width>
+       <height>29</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>atras</string>
+     </property>
+    </widget>
    </widget>
   </widget>
  </widget>

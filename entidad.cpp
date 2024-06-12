@@ -37,8 +37,8 @@ Entidad::Entidad(QVector<QRect> rectangulosAnimaciones, unsigned int *numsFotogr
     setAnimations(rectangulosAnimaciones, numsFotogramas);
     setPixmap(mainPixmap->get_current_pixmap(0));
 
-    if(name == ":/imagenes/wolfsheet6.png"){
-        setPixmap(mainPixmap->get_current_pixmap(1));
+    if(name == ":/imagenes/mamut.png"){
+        setPixmap(mainPixmap->get_current_pixmap(5));
     }
 }
 
@@ -73,6 +73,27 @@ void Entidad::move(unsigned int key, bool is_valid)
     ultimaTecla = key;
 
 }
+void Entidad::atack(unsigned int key, bool is_valid)
+{
+    if(key == keys[4]){
+        setPixmap(mainPixmap->get_current_pixmap(4));
+        if(is_valid) setX(x() - entidadSpeed);
+    }
+    else if(key == keys[5]){
+        setPixmap(mainPixmap->get_current_pixmap(5));
+        if(is_valid) setX(x() + entidadSpeed);
+    }
+    else if(key == keys[6]){
+        setPixmap(mainPixmap->get_current_pixmap(6));
+        if(is_valid) setY(y() - entidadSpeed);
+    }
+    else if(key == keys[7]){
+        setPixmap(mainPixmap->get_current_pixmap(7));
+        if(is_valid) setY(y() + entidadSpeed);
+    }
+
+    ultimaTecla = key;
+}
 
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -88,7 +109,7 @@ void Entidad::setAnimations(QVector<QRect> rectangulosAnimaciones, unsigned int 
 
 void Entidad::setKeys(unsigned int *Keys)
 {
-    for(unsigned int i=0;i<4;i++) this->keys[i] = Keys[i];
+    for(unsigned int i=0;i<8;i++) this->keys[i] = Keys[i];
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -21,6 +21,7 @@ public:
     ~Entidad();
 
     void move(unsigned int key, bool is_valid);
+    void atack(unsigned int key, bool is_valid);
     void setAnimations(QVector<QRect> rectangulosAnimaciones, unsigned int* numsFotogramas);
     void setKeys(unsigned int* Keys);
     void setDagno(short int _dagno);
@@ -40,7 +41,7 @@ private:
     unsigned int height;
     short int dagno;
     unsigned int scale;
-    unsigned int keys[4];
+    unsigned int keys[8];
     unsigned int ultimaTecla;
 
     QRect getCompleteSpritesProta();

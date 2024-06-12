@@ -55,7 +55,7 @@ void MainWindow::setup_nivel2()
         delete nivelActual;
         nivelActual = nullptr;
     }
-    nivelActual = new nivel(ui->graphicsView, ":/imagenes/Yermo.png", ":/imagenes/Yermo_reference.png", 1, 982, 2387, 0, 0, 2, 0, ui->salud);
+    nivelActual = new nivel(ui->graphicsView, ":/imagenes/Yermo.png", ":/imagenes/Yermo_reference.png", 1, 800, 1500, 0, 0, 2, 0, ui->salud);
 }
 
 void MainWindow::setup_nivel3()
@@ -70,7 +70,7 @@ void MainWindow::setup_nivel3()
         delete nivelActual;
         nivelActual = nullptr;
     }
-    nivelActual = new nivel(ui->graphicsView, ":/imagenes/savannah.png", ":/imagenes/savannah_reference.png", 1.5, 544, 574, 0, 939, 3, 0, ui->salud);
+    nivelActual = new nivel(ui->graphicsView, ":/imagenes/savannah.png", ":/imagenes/savannah_reference.png", 1, 800, 1500, 0, 0, 3, 0, ui->salud);
 }
 
 void MainWindow::setup_menuPrincipal()

@@ -40,12 +40,12 @@ QPixmap sprites::get_current_pixmap(unsigned int animation)
     if(tipoSprite){
         return character_pixmap->copy(animations[animation]).copy(animation_counter*width,0,width,height).scaled(width*scale,height*scale);
     }
-    else if(animation > 1){
+    else if(animation == 2 || animation == 3 || animation == 6 || animation == 7){
 
         return character_pixmap->copy(animations[animation]).copy(animation_counter*width,0,width,height).scaled(width*scale,height*scale);
 
     }
-    else if (animation <= 1){
+    else if (animation == 0 || animation == 1 ||animation == 4 || animation == 5){
         return character_pixmap->copy(animations[animation]).copy(animation_counter*height,0,height,width).scaled(height*scale,width*scale);
     }
 }

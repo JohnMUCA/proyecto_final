@@ -7,8 +7,10 @@
 #include <QKeyEvent>
 #include <QTimer>
 #include <QVector>
+#include <QPushButton>
 
 #include "nivel.h"
+#include "menu.h"
 
 #define nivel1Scale
 #define nivel2Scale
@@ -36,13 +38,23 @@ private slots:
     void on_pushButton_released();
     void on_pushButton_2_released();
 
+    void on_Play_released();
+
 private:
     Ui::MainWindow *ui;
     nivel *nivelActual;
+    menu *menuActual;
 
     void setup_nivel1();
     void setup_nivel2();
     void setup_nivel3();
+    void setup_menuPrincipal();
+    void setup_menuCargarPartida();
+    void setup_menuFinNivel();
+
+    QVector<QPushButton*> setup_botonesMenuP();
+    QVector<QPushButton*> setup_botonesMenuCargarNivel();
+    QVector<QPushButton*> setup_botonesMenuPasoNivel();
 
 };
 #endif // MAINWINDOW_H

@@ -7,10 +7,11 @@
 #include <QVector>
 #include <QTimer>
 #include <QObject>
+#include <qlabel.h>
 
 #include "entidad.h"
 #include "enemigo.h"
-#include "qlabel.h"
+
 
 #define alturaProta 16
 #define anchoProta 16
@@ -33,7 +34,8 @@ class nivel : public QObject
 {
     Q_OBJECT
 public:
-    nivel(QGraphicsView *graphicsV, QString imageBackground, QString imageReference, float nivelScale, unsigned int height, unsigned int width, unsigned int x, unsigned int y, unsigned short numNivel, bool setFocus, QLabel* salud);
+    nivel(QGraphicsView *graphicsV, QString imageBackground, QString imageReference, float nivelScale, unsigned int height,
+          unsigned int width,unsigned int x, unsigned int y, unsigned short numNivel, bool setFocus, QLabel* salud);
     ~nivel();
     void key_event(QKeyEvent *event);
 
@@ -61,7 +63,6 @@ private:
     QImage *fondoReferencia;
     QColor *colorTope;
     bool focus;
-    bool colision;
     QLabel* salud;
     QTimer* timeColision;
 
@@ -72,7 +73,8 @@ private:
     void setNumsFotogramasTigre();
     void setNumsFotogramasLobo();
 
-    void setup_scene(QString image_Background, QString image_Reference, float nivel_Scale, unsigned int _heightMap, unsigned int _widthMap, unsigned int _x, unsigned int _y);
+    void setup_scene(QString image_Background, QString image_Reference, float nivel_Scale, unsigned int _heightMap, unsigned int _widthMap,
+                     unsigned int _x, unsigned int _y);
     void setup_prota(unsigned short _numNivel);
     void setup_murcielago(unsigned short _numNivel);
     void setup_Mamut(unsigned short _numNivel);

@@ -14,6 +14,7 @@ SOURCES += \
     fisicas.cpp \
     main.cpp \
     mainwindow.cpp \
+    menu.cpp \
     nivel.cpp \
     sprites.cpp \
 
@@ -22,6 +23,7 @@ HEADERS += \
     entidad.h \
     fisicas.h \
     mainwindow.h \
+    menu.h \
     nivel.h \
     sprites.h \
 

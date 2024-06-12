@@ -14,6 +14,7 @@ nivel::nivel(QGraphicsView *graphicsV, QString imageBackground, QString imageRef
     setup_Tigre(numNivel);
     setup_Lobo(numNivel);
     colision = 0;
+
     this->salud = salud;
     timeColision = new QTimer;
     QObject::connect(timeColision,SIGNAL(timeout()),this,SLOT(detectarAtaque()));

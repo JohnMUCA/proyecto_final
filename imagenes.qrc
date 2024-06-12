@@ -21,5 +21,8 @@
         <file>imagenes/Yermo_reference.png</file>
         <file>imagenes/kati-eloranta-tiger.png</file>
         <file>imagenes/wolfsheet6.png</file>
+        <file>imagenes/fondoMenuPrincipal.jpg</file>
+        <file>imagenes/menuPrincipal.png</file>
+
     </qresource>
 </RCC>

@@ -25,10 +25,10 @@ nivel::nivel(QGraphicsView *graphicsV, QString imageBackground, QString imageRef
 nivel::~nivel()
 {
     delete prota;
-    delete murcielago;
+    delete[] murcielagos;
     delete mamut;
-    delete tigre;
-    delete lobo;
+    delete[] tigres;
+    delete[] lobos;
     delete[] numsFotogramasProta;
     delete[] numsFotogramasMurcielago;
     delete[] numsFotogramasMamut;
@@ -51,7 +51,7 @@ void nivel::key_event(QKeyEvent *event)
     else if(unsigned(event->key()) == prota_keys[2]) isValid = up_movement_is_valid(prota);
     else if(unsigned(event->key()) == prota_keys[3]) isValid = down_movement_is_valid(prota);
 
-    if(prota->y()>= 2000 && prota->y()<2100) murcielago->empezarPerseguir();
+    if(prota->y()>= 2000 && prota->y()<2100) murcielagos[2]->empezarPerseguir();
     prota->move(event->key(), isValid);
 
     if(focus && (prota->y()<(700) || prota->y()>(30))) set_focus_element(prota,16, 16 * 4);
@@ -61,12 +61,70 @@ void nivel::key_event(QKeyEvent *event)
 
 void nivel::detectarAtaque()
 {
-    salud->setText(QString::number(prota->obtenerSalud()));
-    if (prota->obtenerRectangulo().intersects(murcielago->obtenerRectangulo())) {
-        prota->recibir_dagno(murcielago->getdagno());
+    bool colision = 0;
+    short int numEnemigo;
+    char enemigo;
 
-        int diffX = prota->x() - murcielago->x();
-        int diffY = prota->y() - murcielago->y();
+    if (prota->obtenerRectangulo().intersects(mamut->obtenerRectangulo()))
+    {
+        colision = 1;
+        prota->recibir_dagno(mamut->getdagno());
+        enemigo = 'M';
+    }
+
+    for (int j = 0; j < 3; j++)
+    {
+        if (prota->obtenerRectangulo().intersects(tigres[j]->obtenerRectangulo()))
+        {
+            colision = 1;
+            prota->recibir_dagno(tigres[j]->getdagno());
+            numEnemigo = j;
+            enemigo = 't';
+            break;
+        }
+        else if (prota->obtenerRectangulo().intersects(murcielagos[j]->obtenerRectangulo()))
+        {
+            colision = 1;
+            prota->recibir_dagno(murcielagos[j]->getdagno());
+            numEnemigo = j;
+            enemigo = 'm';
+            break;
+        }
+
+        else if (prota->obtenerRectangulo().intersects(lobos[j]->obtenerRectangulo()))
+        {
+            colision = 1;
+            prota->recibir_dagno(lobos[j]->getdagno());
+            numEnemigo = j;
+            enemigo = 'l';
+            break;
+        }
+    }
+
+    salud->setText(QString::number(prota->obtenerSalud()));
+    if (colision) {
+        int diffX;
+        int diffY;
+        if (enemigo == 'm')
+        {
+            diffX = prota->x() - murcielagos[numEnemigo]->x();
+            diffY = prota->y() - murcielagos[numEnemigo]->y();
+        }
+        else if (enemigo == 'M')
+        {
+            diffX = prota->x() - mamut->x();
+            diffY = prota->y() - mamut->y();
+        }
+        else if (enemigo == 't')
+        {
+            diffX = prota->x() - tigres[numEnemigo]->x();
+            diffY = prota->y() - tigres[numEnemigo]->y();
+        }
+        else if (enemigo == 'l')
+        {
+            diffX = prota->x() - lobos[numEnemigo]->x();
+            diffY = prota->y() - lobos[numEnemigo]->y();
+        }
 
         if (abs(diffX) > abs(diffY)) {
             // Rebote horizontal
@@ -212,34 +270,40 @@ void nivel::setup_prota(unsigned short _numNivel)
 void nivel::setup_murcielago(unsigned short _numNivel)
 {
     setNumsFotogramasMurcielago();
-    murcielago = new Enemigo(completeAnimationsMurcielago(), numsFotogramasMurcielago, ":/imagenes/murcielago.png",
-                             anchoMurcielago, alturaMurcielago, scaleMurcielago,1,1);
+    murcielagos = new Enemigo*[3];
+    for (int i = 0; i < 3; i++)
+    {
+        murcielagos[i] = new Enemigo(completeAnimationsMurcielago(), numsFotogramasMurcielago, ":/imagenes/murcielago.png",
+                                 anchoMurcielago, alturaMurcielago, scaleMurcielago,1,1);
 
-    if(_numNivel == 1)
-    {
-        murcielago->setX(18.5 * anchoMurcielago * scaleMurcielago);
-        murcielago->setY(15 * alturaMurcielago * scaleMurcielago);
+        if(_numNivel == 1)
+        {
+            murcielagos[i]->setX(18.5 * anchoMurcielago * scaleMurcielago);
+            murcielagos[i]->setY((i + 1) * 15 * alturaMurcielago * scaleMurcielago);
+        }
+        else if(_numNivel == 2)
+        {
+            murcielagos[i]->setX(2 * anchoMurcielago * scaleMurcielago);
+            murcielagos[i]->setY((i + 1) * 2 * alturaMurcielago * scaleMurcielago);
+        }
+        else if(_numNivel == 3)
+        {
+            murcielagos[i]->setX(8 * anchoMurcielago * scaleMurcielago);
+            murcielagos[i]->setY((i + 1) * 8 * alturaMurcielago * scaleMurcielago);
+        }
+
+        murcielagos[i]->setDagno(20);
+        murcielagos[i]->setSalud(60);
+        murcielagos[i]->set_mov_acelerado(murcielagos[i]->x(),murcielagos[i]->y(),3,-7,-3,0.1);
+        murcielagos[i]->set_perseguir(prota,100,0.1);
+        murcielagos[i]->set_mov_circular_parametros(80, 3 , 0.1, murcielagos[i]->x(), murcielagos[i]->y());
+        escena->addItem(murcielagos[i]);
     }
-    else if(_numNivel == 2)
-    {
-        murcielago->setX(2 * anchoMurcielago * scaleMurcielago);
-        murcielago->setY(2 * alturaMurcielago * scaleMurcielago);
-    }
-    else if(_numNivel == 3)
-    {
-        murcielago->setX(8 * anchoMurcielago * scaleMurcielago);
-        murcielago->setY(8 * alturaMurcielago * scaleMurcielago);
-    }
-    murcielago->setDagno(20);
-    murcielago->setSalud(60);
-    murcielago->set_mov_acelerado(murcielago->x(),murcielago->y(),3,-7,-3,0.1);
-    murcielago->set_perseguir(prota,100,0.1);
-    murcielago->set_mov_circular_parametros(80, 3 , 0.1, murcielago->x(), murcielago->y());
-    escena->addItem(murcielago);
 }
 void nivel::setup_Mamut(unsigned short _numNivel)
 {
     setNumsFotogramasMamut();
+
     mamut = new Enemigo(completeAnimationsMamut(), numsFotogramasMamut, ":/imagenes/mamut.png",
                         anchoMamut, alturaMamut, scaleMamut,1,1);
     if(_numNivel == 1)
@@ -260,64 +324,66 @@ void nivel::setup_Mamut(unsigned short _numNivel)
     mamut->setDagno(20);
     mamut->setSalud(100);
     escena->addItem(mamut);
-    //murcielago->set_mov_acelerado(murcielago->x(),murcielago->y(),3,-7,-3,0.1);
-    //murcielago->set_perseguir(prota,100,0.1);
-    //murcielago->set_mov_circular_parametros(80, 3 , 0.1, murcielago->x(), murcielago->y());
-    //escena->addItem(murcielago);
 }
 
 void nivel::setup_Tigre(unsigned short _numNivel)
 {
     setNumsFotogramasTigre();
-    tigre = new Enemigo(completeAnimationsTigre(), numsFotogramasTigre, ":/imagenes/kati-eloranta-tiger.png",
-                        anchoTigre, alturaTigre, scaleTigre,1,0);
-    if(_numNivel == 1)
+    tigres = new Enemigo*[3];
+    for (int i = 0; i < 3; i++)
     {
-        tigre->setX(10 * anchoTigre * scaleTigre);
-        tigre->setY(10 * alturaTigre * scaleTigre);
+        tigres[i] = new Enemigo(completeAnimationsTigre(), numsFotogramasTigre, ":/imagenes/kati-eloranta-tiger.png",
+                            anchoTigre, alturaTigre, scaleTigre,1,0);
+        if(_numNivel == 1)
+        {
+            tigres[i]->setX(30 * anchoTigre * scaleTigre);
+            tigres[i]->setY((i + 1) * 16 * alturaTigre * scaleTigre);
+        }
+        else if(_numNivel == 2)
+        {
+            tigres[i]->setX(1 * anchoTigre * scaleTigre);
+            tigres[i]->setY((i + 1) * 1 * alturaTigre * scaleTigre);
+        }
+        else if(_numNivel == 3)
+        {
+            tigres[i]->setX(1 * anchoTigre * scaleTigre);
+            tigres[i]->setY((i + 1) * 1 * alturaTigre * scaleTigre);
+        }
+        tigres[i]->setDagno(20);
+        tigres[i]->setSalud(60);
+        escena->addItem(tigres[i]);
+
     }
-    else if(_numNivel == 2)
-    {
-        tigre->setX(1 * anchoTigre * scaleTigre);
-        tigre->setY(1 * alturaTigre * scaleTigre);
-    }
-    else if(_numNivel == 3)
-    {
-        tigre->setX(1 * anchoTigre * scaleTigre);
-        tigre->setY(1 * alturaTigre * scaleTigre);
-    }
-    tigre->setDagno(20);
-    tigre->setSalud(60);
-    escena->addItem(tigre);
-    //murcielago->set_mov_acelerado(murcielago->x(),murcielago->y(),3,-7,-3,0.1);
-    //murcielago->set_perseguir(prota,100,0.1);
-    //murcielago->set_mov_circular_parametros(80, 3 , 0.1, murcielago->x(), murcielago->y());
-    //escena->addItem(murcielago);
 }
 
 void nivel::setup_Lobo(unsigned short _numNivel)
 {
     setNumsFotogramasLobo();
-    lobo = new Enemigo(completeAnimationsLobo(), numsFotogramasLobo, ":/imagenes/wolfsheet6.png",
-                        anchoLobo, alturaLobo, scaleLobo,1,0);
-    if(_numNivel == 1)
+    lobos = new Enemigo*[3];
+    for (int i = 0; i < 3; i++)
     {
-        lobo->setX(10 * anchoLobo * scaleLobo);
-        lobo->setY(10 * alturaLobo * scaleLobo);
+        lobos[i] = new Enemigo(completeAnimationsLobo(), numsFotogramasLobo, ":/imagenes/wolfsheet6.png",
+                           anchoLobo, alturaLobo, scaleLobo,1,0);
+        if(_numNivel == 1)
+        {
+            lobos[i]->setX(30 * anchoLobo * scaleLobo);
+            lobos[i]->setY((i + 1) * 16 * alturaLobo * scaleLobo);
+        }
+        else if(_numNivel == 2)
+        {
+            lobos[i]->setX(1 * anchoLobo * scaleLobo);
+            lobos[i]->setY((i + 1) * 1 * alturaLobo * scaleLobo);
+        }
+        else if(_numNivel == 3)
+        {
+            lobos[i]->setX(1 * anchoLobo * scaleLobo);
+            lobos[i]->setY((i + 1) * 1 * alturaLobo * scaleLobo);
+        }
+        lobos[i]->setDagno(20);
+        lobos[i]->setSalud(60);
+        escena->addItem(lobos[i]);
     }
-    else if(_numNivel == 2)
-    {
-        lobo->setX(3 * anchoLobo * scaleLobo);
-        lobo->setY(3 * alturaLobo * scaleLobo);
-    }
-    else if(_numNivel == 3)
-    {
-        lobo->setX(1 * anchoLobo * scaleLobo);
-        lobo->setY(1 * alturaLobo * scaleLobo);
-    }
-    lobo->setDagno(20);
-    lobo->setSalud(60);
-    escena->addItem(lobo);
+
 }
 
 

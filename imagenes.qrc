@@ -23,6 +23,7 @@
         <file>imagenes/wolfsheet6.png</file>
         <file>imagenes/fondoMenuPrincipal.jpg</file>
         <file>imagenes/menuPrincipal.png</file>
-
+        <file>imagenes/botonCargarPartida.png</file>
+        <file>imagenes/botonPlay.png</file>
     </qresource>
 </RCC>

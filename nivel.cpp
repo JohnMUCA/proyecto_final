@@ -13,7 +13,6 @@ nivel::nivel(QGraphicsView *graphicsV, QString imageBackground, QString imageRef
     setup_Mamut(numNivel);
     setup_Tigre(numNivel);
     setup_Lobo(numNivel);
-    colision = 0;
 
     this->salud = salud;
     timeColision = new QTimer;

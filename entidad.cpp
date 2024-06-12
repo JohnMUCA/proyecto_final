@@ -73,23 +73,19 @@ void Entidad::move(unsigned int key, bool is_valid)
     ultimaTecla = key;
 
 }
-void Entidad::atack(unsigned int key, bool is_valid)
+void Entidad::atack(unsigned int key)
 {
     if(key == keys[4]){
         setPixmap(mainPixmap->get_current_pixmap(4));
-        if(is_valid) setX(x() - entidadSpeed);
     }
     else if(key == keys[5]){
         setPixmap(mainPixmap->get_current_pixmap(5));
-        if(is_valid) setX(x() + entidadSpeed);
     }
     else if(key == keys[6]){
         setPixmap(mainPixmap->get_current_pixmap(6));
-        if(is_valid) setY(y() - entidadSpeed);
     }
     else if(key == keys[7]){
         setPixmap(mainPixmap->get_current_pixmap(7));
-        if(is_valid) setY(y() + entidadSpeed);
     }
 
     ultimaTecla = key;

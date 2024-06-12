@@ -53,10 +53,10 @@ void nivel::key_event(QKeyEvent *event)
 
     if(prota->y()>= 2000 && prota->y()<2100) murcielagos[2]->empezarPerseguir();
     prota->move(event->key(), isValid);
-    mamut->atack(event->key(),1);
+    mamut->atack(event->key());
     mamut->move(event->key(), 1);
-    tigre->atack(event->key(),1);
-    tigre->move(event->key(), 1);
+    tigres[0]->atack(event->key());
+    tigres[0]->move(event->key(), 1);
 
 
     if(focus && (prota->y()<(700) || prota->y()>(30))) set_focus_element(prota,16, 16 * 4);
@@ -95,7 +95,6 @@ void nivel::detectarAtaque()
             enemigo = 'm';
             break;
         }
-
         else if (prota->obtenerRectangulo().intersects(lobos[j]->obtenerRectangulo()))
         {
             colision = 1;

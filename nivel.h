@@ -16,16 +16,18 @@
 #define anchoProta 16
 #define alturaMurcielago 32
 #define anchoMurcielago 32
-#define alturaTigre 32
-#define anchoTigre 32
-#define alturaLobo 32
-#define anchoLobo 32
+#define alturaTigre 65
+#define anchoTigre 33
+#define alturaLobo 65
+#define anchoLobo 24
 #define alturaMamut 65
-#define anchoMamut 65
-
+#define anchoMamut 75
 
 #define scaleMurcielago 3
 #define scaleProta 4
+#define scaleMamut 3
+#define scaleTigre 2
+#define scaleLobo 2
 
 class nivel : public QObject
 {
@@ -42,12 +44,17 @@ private:
     QGraphicsScene *escena;
     Entidad *prota;
     Enemigo *murcielago;
+    Enemigo *mamut;
+    Enemigo *tigre;
+    Enemigo *lobo;
 
     //Enemigo *Mamut;
     unsigned int prota_keys[4];
     unsigned int* numsFotogramasProta;
     unsigned int* numsFotogramasMurcielago;
     unsigned int* numsFotogramasMamut;
+    unsigned int* numsFotogramasTigre;
+    unsigned int* numsFotogramasLobo;
 
     QBrush *brocha;
     QPixmap *fondoCompleto;
@@ -62,11 +69,15 @@ private:
     void setNumsFotogramasProta();
     void setNumsFotogramasMurcielago();
     void setNumsFotogramasMamut();
+    void setNumsFotogramasTigre();
+    void setNumsFotogramasLobo();
 
     void setup_scene(QString image_Background, QString image_Reference, float nivel_Scale, unsigned int _heightMap, unsigned int _widthMap, unsigned int _x, unsigned int _y);
     void setup_prota(unsigned short _numNivel);
     void setup_murcielago(unsigned short _numNivel);
-    void setup_Mamut();
+    void setup_Mamut(unsigned short _numNivel);
+    void setup_Tigre(unsigned short _numNivel);
+    void setup_Lobo(unsigned short _numNivel);
 
     bool left_movement_is_valid(Entidad *item);
     bool right_movement_is_valid(Entidad *item);
@@ -76,8 +87,8 @@ private:
     void set_focus_element(QGraphicsPixmapItem *item, unsigned int scalex, unsigned int scaley);
     QVector<QRect> completeAnimationsProta();
     QVector<QRect> completeAnimationsMurcielago();
-    //QVector<QRect> completeAnimationsTigre();
-    //QVector<QRect> completeAnimationsLobo();
+    QVector<QRect> completeAnimationsTigre();
+    QVector<QRect> completeAnimationsLobo();
     QVector<QRect> completeAnimationsMamut();
 };
 

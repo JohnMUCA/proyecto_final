@@ -10,7 +10,9 @@ nivel::nivel(QGraphicsView *graphicsV, QString imageBackground, QString imageRef
     setup_scene(imageBackground, imageReference, nivelScale, heightMap, widthMap, x, y);
     setup_prota(numNivel);
     setup_murcielago(numNivel);
-    setup_Mamut();
+    setup_Mamut(numNivel);
+    setup_Tigre(numNivel);
+    setup_Lobo(numNivel);
     colision = 0;
     this->salud = salud;
     timeColision = new QTimer;
@@ -24,7 +26,9 @@ nivel::~nivel()
 {
     delete prota;
     delete murcielago;
-    //delete Mamut;
+    delete mamut;
+    delete tigre;
+    delete lobo;
     delete[] numsFotogramasProta;
     delete[] numsFotogramasMurcielago;
     delete[] numsFotogramasMamut;
@@ -126,6 +130,24 @@ void nivel::setNumsFotogramasMamut()
     numsFotogramasMamut[3] = 8;
 }
 
+void nivel::setNumsFotogramasTigre()
+{
+    numsFotogramasTigre = new unsigned int[4];
+    numsFotogramasTigre[0] = 4;
+    numsFotogramasTigre[1] = 4;
+    numsFotogramasTigre[2] = 4;
+    numsFotogramasTigre[3] = 4;
+}
+
+void nivel::setNumsFotogramasLobo()
+{
+    numsFotogramasLobo = new unsigned int[4];
+    numsFotogramasLobo[0] = 4;
+    numsFotogramasLobo[1] = 4;
+    numsFotogramasLobo[2] = 4;
+    numsFotogramasLobo[3] = 4;
+}
+
 void nivel::setup_scene(QString image_Background, QString image_Reference, float nivel_Scale, unsigned int _heightMap,
                         unsigned int _widthMap, unsigned int _x, unsigned int _y)
 {
@@ -163,7 +185,7 @@ void nivel::setup_prota(unsigned short _numNivel)
 {
     setProta_keys();
     setNumsFotogramasProta();
-    prota = new Entidad(completeAnimationsProta(), numsFotogramasProta, ":/imagenes/caveMan.png", anchoProta, alturaProta, scaleProta);
+    prota = new Entidad(completeAnimationsProta(), numsFotogramasProta, ":/imagenes/caveMan.png", anchoProta, alturaProta, scaleProta,1);
     if (_numNivel == 1)
     {
         prota->setX(28 * anchoProta * scaleProta);
@@ -191,7 +213,7 @@ void nivel::setup_murcielago(unsigned short _numNivel)
 {
     setNumsFotogramasMurcielago();
     murcielago = new Enemigo(completeAnimationsMurcielago(), numsFotogramasMurcielago, ":/imagenes/murcielago.png",
-                             anchoMurcielago, alturaMurcielago, scaleMurcielago,1);
+                             anchoMurcielago, alturaMurcielago, scaleMurcielago,1,1);
 
     if(_numNivel == 1)
     {
@@ -215,10 +237,87 @@ void nivel::setup_murcielago(unsigned short _numNivel)
     murcielago->set_mov_circular_parametros(80, 3 , 0.1, murcielago->x(), murcielago->y());
     escena->addItem(murcielago);
 }
-void nivel::setup_Mamut()
+void nivel::setup_Mamut(unsigned short _numNivel)
 {
     setNumsFotogramasMamut();
-    //Mamut = new Enemigo(completeAnimationsMamut(), numsFotogramasMamut, ":/imagenes/mamut.png", )
+    mamut = new Enemigo(completeAnimationsMamut(), numsFotogramasMamut, ":/imagenes/mamut.png",
+                        anchoMamut, alturaMamut, scaleMamut,1,1);
+    if(_numNivel == 1)
+    {
+        mamut->setX(10 * anchoMamut * scaleMamut);
+        mamut->setY(10 * alturaMamut * scaleMamut);
+    }
+    else if(_numNivel == 2)
+    {
+        mamut->setX(1 * anchoMamut * scaleMamut);
+        mamut->setY(1 * alturaMamut * scaleMamut);
+    }
+    else if(_numNivel == 3)
+    {
+        mamut->setX(1 * anchoMamut * scaleMamut);
+        mamut->setY(1 * alturaMamut * scaleMamut);
+    }
+    mamut->setDagno(20);
+    mamut->setSalud(100);
+    escena->addItem(mamut);
+    //murcielago->set_mov_acelerado(murcielago->x(),murcielago->y(),3,-7,-3,0.1);
+    //murcielago->set_perseguir(prota,100,0.1);
+    //murcielago->set_mov_circular_parametros(80, 3 , 0.1, murcielago->x(), murcielago->y());
+    //escena->addItem(murcielago);
+}
+
+void nivel::setup_Tigre(unsigned short _numNivel)
+{
+    setNumsFotogramasTigre();
+    tigre = new Enemigo(completeAnimationsTigre(), numsFotogramasTigre, ":/imagenes/kati-eloranta-tiger.png",
+                        anchoTigre, alturaTigre, scaleTigre,1,0);
+    if(_numNivel == 1)
+    {
+        tigre->setX(10 * anchoTigre * scaleTigre);
+        tigre->setY(10 * alturaTigre * scaleTigre);
+    }
+    else if(_numNivel == 2)
+    {
+        tigre->setX(1 * anchoTigre * scaleTigre);
+        tigre->setY(1 * alturaTigre * scaleTigre);
+    }
+    else if(_numNivel == 3)
+    {
+        tigre->setX(1 * anchoTigre * scaleTigre);
+        tigre->setY(1 * alturaTigre * scaleTigre);
+    }
+    tigre->setDagno(20);
+    tigre->setSalud(60);
+    escena->addItem(tigre);
+    //murcielago->set_mov_acelerado(murcielago->x(),murcielago->y(),3,-7,-3,0.1);
+    //murcielago->set_perseguir(prota,100,0.1);
+    //murcielago->set_mov_circular_parametros(80, 3 , 0.1, murcielago->x(), murcielago->y());
+    //escena->addItem(murcielago);
+}
+
+void nivel::setup_Lobo(unsigned short _numNivel)
+{
+    setNumsFotogramasLobo();
+    lobo = new Enemigo(completeAnimationsLobo(), numsFotogramasLobo, ":/imagenes/wolfsheet6.png",
+                        anchoLobo, alturaLobo, scaleLobo,1,0);
+    if(_numNivel == 1)
+    {
+        lobo->setX(10 * anchoLobo * scaleLobo);
+        lobo->setY(10 * alturaLobo * scaleLobo);
+    }
+    else if(_numNivel == 2)
+    {
+        lobo->setX(3 * anchoLobo * scaleLobo);
+        lobo->setY(3 * alturaLobo * scaleLobo);
+    }
+    else if(_numNivel == 3)
+    {
+        lobo->setX(1 * anchoLobo * scaleLobo);
+        lobo->setY(1 * alturaLobo * scaleLobo);
+    }
+    lobo->setDagno(20);
+    lobo->setSalud(60);
+    escena->addItem(lobo);
 }
 
 
@@ -346,7 +445,7 @@ QVector<QRect> nivel::completeAnimationsMurcielago()
     return animations;
 }
 
-/*QVector<QRect> nivel::completeAnimationsTigre()
+QVector<QRect> nivel::completeAnimationsTigre()
 {
     QVector<QRect> animations;
     QRect dimLeft;
@@ -354,25 +453,25 @@ QVector<QRect> nivel::completeAnimationsMurcielago()
     QRect dimUp;
     QRect dimDown;
 
-    dimLeft.setX(0);
-    dimLeft.setY(1 * alturaProta);
-    dimLeft.setHeight(1 * alturaProta);
-    dimLeft.setWidth(3 * anchoProta);
+    dimLeft.setX(0 * anchoTigre);
+    dimLeft.setY(2 * alturaTigre);
+    dimLeft.setHeight(1 * anchoTigre);
+    dimLeft.setWidth(4 * alturaTigre);
 
-    dimRight.setX(3 * anchoProta);
-    dimRight.setY(1 * alturaProta);
-    dimRight.setHeight(1 * alturaProta);
-    dimRight.setWidth(3 * anchoProta);
+    dimRight.setX(4 * alturaTigre);
+    dimRight.setY(2 * alturaTigre);
+    dimRight.setHeight(1 * anchoTigre);
+    dimRight.setWidth(4 * alturaTigre);
 
-    dimUp.setX(0);
-    dimUp.setY(0);
-    dimUp.setHeight(1 * alturaProta);
-    dimUp.setWidth(3 * anchoProta);
+    dimUp.setX(4 * anchoTigre);
+    dimUp.setY(0 * alturaTigre);
+    dimUp.setHeight(1 * alturaTigre);
+    dimUp.setWidth(4 * anchoTigre);
 
-    dimDown.setX(3 * anchoProta);
-    dimDown.setY(0);
-    dimDown.setHeight(1 * alturaProta);
-    dimDown.setWidth(3 * anchoProta);
+    dimDown.setX(0 * anchoTigre);
+    dimDown.setY(0 * alturaTigre);
+    dimDown.setHeight(1 * alturaTigre);
+    dimDown.setWidth(4 * anchoTigre);
 
     animations.push_back(dimLeft);
     animations.push_back(dimRight);
@@ -389,25 +488,25 @@ QVector<QRect> nivel::completeAnimationsLobo()
     QRect dimUp;
     QRect dimDown;
 
-    dimLeft.setX(0);
-    dimLeft.setY(1 * alturaProta);
-    dimLeft.setHeight(1 * alturaProta);
-    dimLeft.setWidth(3 * anchoProta);
+    dimLeft.setX(0 * anchoLobo);
+    dimLeft.setY(2 * alturaLobo);
+    dimLeft.setHeight(1 * anchoLobo);
+    dimLeft.setWidth(4 * alturaLobo);
 
-    dimRight.setX(3 * anchoProta);
-    dimRight.setY(1 * alturaProta);
-    dimRight.setHeight(1 * alturaProta);
-    dimRight.setWidth(3 * anchoProta);
+    dimRight.setX(4 * alturaLobo);
+    dimRight.setY(2 * alturaLobo);
+    dimRight.setHeight(1 * anchoLobo);
+    dimRight.setWidth(4 * alturaLobo);
 
-    dimUp.setX(0);
-    dimUp.setY(0);
-    dimUp.setHeight(1 * alturaProta);
-    dimUp.setWidth(3 * anchoProta);
+    dimUp.setX(4 * anchoLobo);
+    dimUp.setY(0 * alturaLobo);
+    dimUp.setHeight(1 * alturaLobo);
+    dimUp.setWidth(4 * anchoLobo);
 
-    dimDown.setX(3 * anchoProta);
-    dimDown.setY(0);
-    dimDown.setHeight(1 * alturaProta);
-    dimDown.setWidth(3 * anchoProta);
+    dimDown.setX(0 * anchoLobo);
+    dimDown.setY(0 * alturaLobo);
+    dimDown.setHeight(1 * alturaLobo);
+    dimDown.setWidth(4 * anchoLobo);
 
     animations.push_back(dimLeft);
     animations.push_back(dimRight);
@@ -415,7 +514,6 @@ QVector<QRect> nivel::completeAnimationsLobo()
     animations.push_back(dimDown);
     return animations;
 }
-*/
 
 QVector<QRect> nivel::completeAnimationsMamut()
 {

@@ -8,7 +8,7 @@
 class sprites
 {
 public:
-    sprites(QString main_pixmap, unsigned int scale);
+    sprites(QString main_pixmap, unsigned int scale, bool _tipoSprite);
     ~sprites();
     void set_design_size(unsigned int x, unsigned int y);
     void cut_character_pixmap(QRect size);
@@ -21,6 +21,7 @@ private:
     QVector<QRect> animations;
     QVector<unsigned int> animations_size;
     unsigned int width, height, animation_counter, scale;
+    bool tipoSprite;
 };
 
 #endif // SPRITES_H

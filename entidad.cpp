@@ -1,7 +1,7 @@
 #include "entidad.h"
 
 Entidad::Entidad(QVector<QRect> rectangulosAnimaciones, unsigned int *numsFotogramas, QString name,
-                 unsigned int ancho, unsigned int alto, unsigned int scale)
+                 unsigned int ancho, unsigned int alto, unsigned int scale, bool tipoSprite)
 {
     salud = 100;
     dagno = 20;
@@ -10,7 +10,7 @@ Entidad::Entidad(QVector<QRect> rectangulosAnimaciones, unsigned int *numsFotogr
     width = ancho;
     height = alto;
     this->scale = scale;
-    mainPixmap = new sprites(name, scale);
+    mainPixmap = new sprites(name, scale, tipoSprite);
     mainPixmap->set_design_size(width, height);
 
     if (name == ":/imagenes/caveMan.png")
@@ -21,6 +21,15 @@ Entidad::Entidad(QVector<QRect> rectangulosAnimaciones, unsigned int *numsFotogr
     {
         mainPixmap->cut_character_pixmap(getCompleteSpritesMurcielago());
     }
+    else if(name == ":/imagenes/mamut.png"){
+        mainPixmap->cut_character_pixmap(getCompleteSpritesMamut());
+    }
+    else if(name == ":/imagenes/kati-eloranta-tiger.png"){
+        mainPixmap->cut_character_pixmap(getCompleteSpritesTigre());
+    }
+    else if(name == ":/imagenes/wolfsheet6.png"){
+        mainPixmap->cut_character_pixmap(getCompleteSpritesLobo());
+    }
 
     setX(0 * width * scale);
     setY(0 * height * scale);
@@ -28,6 +37,9 @@ Entidad::Entidad(QVector<QRect> rectangulosAnimaciones, unsigned int *numsFotogr
     setAnimations(rectangulosAnimaciones, numsFotogramas);
     setPixmap(mainPixmap->get_current_pixmap(0));
 
+    if(name == ":/imagenes/wolfsheet6.png"){
+        setPixmap(mainPixmap->get_current_pixmap(1));
+    }
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -161,4 +173,38 @@ QRect Entidad::getCompleteSpritesMurcielago()
 
     return dim;
 }
+//---------------------------------------------------------------------------
+QRect Entidad::getCompleteSpritesMamut()
+{
+    QRect dim;
+    dim.setX(0 * height);
+    dim.setY(0 * width);
+    dim.setHeight(9 * height);
+    dim.setWidth(8 * width);
+
+    return dim;
+}
+
+QRect Entidad::getCompleteSpritesTigre()
+{
+    QRect dim;
+    dim.setX(0 * height);
+    dim.setY(0 * width);
+    dim.setHeight(2 * height + 2 * width);
+    dim.setWidth(8 * height);
+
+    return dim;
+}
+
+QRect Entidad::getCompleteSpritesLobo()
+{
+    QRect dim;
+    dim.setX(0 * height);
+    dim.setY(0 * width);
+    dim.setHeight(2 * height + 2 * width);
+    dim.setWidth(8 * height);
+
+    return dim;
+}
+
 

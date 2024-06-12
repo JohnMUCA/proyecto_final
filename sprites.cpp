@@ -1,7 +1,8 @@
 #include "sprites.h"
 
-sprites::sprites(QString main_pixmap, unsigned int scale)
+sprites::sprites(QString main_pixmap, unsigned int scale, bool _tipoSprite)
 {
+    tipoSprite = _tipoSprite;
     this->main_pixmap = new QPixmap;
     character_pixmap = new QPixmap;
     this->main_pixmap->load(main_pixmap);
@@ -36,8 +37,17 @@ QPixmap sprites::get_current_pixmap(unsigned int animation)
 {
     animation_counter++;
     if(animation_counter>=animations_size[animation]) animation_counter = 0;
+    if(tipoSprite){
+        return character_pixmap->copy(animations[animation]).copy(animation_counter*width,0,width,height).scaled(width*scale,height*scale);
+    }
+    else if(animation > 1){
 
-    return character_pixmap->copy(animations[animation]).copy(animation_counter*width,0,width,height).scaled(width*scale,height*scale);
+        return character_pixmap->copy(animations[animation]).copy(animation_counter*width,0,width,height).scaled(width*scale,height*scale);
+
+    }
+    else if (animation <= 1){
+        return character_pixmap->copy(animations[animation]).copy(animation_counter*height,0,height,width).scaled(height*scale,width*scale);
+    }
 }
 
 QPixmap sprites::get_fixed_image(QRect size)

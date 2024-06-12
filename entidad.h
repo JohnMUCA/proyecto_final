@@ -16,7 +16,8 @@ class Entidad : public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
 public:
-    Entidad(QVector<QRect> rectangulosAnimaciones, unsigned int* numsFotogramas, QString name, unsigned int ancho, unsigned int alto, unsigned int scale);
+    Entidad(QVector<QRect> rectangulosAnimaciones, unsigned int* numsFotogramas, QString name, unsigned int ancho, unsigned int alto,
+            unsigned int scale, bool tipoSprite);
     ~Entidad();
 
     void move(unsigned int key, bool is_valid);
@@ -44,6 +45,9 @@ private:
 
     QRect getCompleteSpritesProta();
     QRect getCompleteSpritesMurcielago();
+    QRect getCompleteSpritesMamut();
+    QRect getCompleteSpritesTigre();
+    QRect getCompleteSpritesLobo();
 };
 
 #endif // ENTIDAD_H

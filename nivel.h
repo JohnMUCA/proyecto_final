@@ -52,6 +52,8 @@ private:
 
     //Enemigo *Mamut;
     unsigned int prota_keys[4];
+    unsigned int mamut_keys[8];
+    unsigned int tigre_keys[8];
     unsigned int* numsFotogramasProta;
     unsigned int* numsFotogramasMurcielago;
     unsigned int* numsFotogramasMamut;
@@ -67,6 +69,8 @@ private:
     QTimer* timeColision;
 
     void setProta_keys();
+    void setMamut_keys();
+    void setTigre_keys();
     void setNumsFotogramasProta();
     void setNumsFotogramasMurcielago();
     void setNumsFotogramasMamut();

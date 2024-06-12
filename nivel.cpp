@@ -53,6 +53,11 @@ void nivel::key_event(QKeyEvent *event)
 
     if(prota->y()>= 2000 && prota->y()<2100) murcielagos[2]->empezarPerseguir();
     prota->move(event->key(), isValid);
+    mamut->atack(event->key(),1);
+    mamut->move(event->key(), 1);
+    tigre->atack(event->key(),1);
+    tigre->move(event->key(), 1);
+
 
     if(focus && (prota->y()<(700) || prota->y()>(30))) set_focus_element(prota,16, 16 * 4);
 }
@@ -163,6 +168,30 @@ void nivel::setProta_keys()
     prota_keys[3] = Qt::Key_S;
 }
 
+void nivel::setMamut_keys()
+{
+    mamut_keys[0] = Qt::Key_Z;
+    mamut_keys[1] = Qt::Key_X;
+    mamut_keys[2] = Qt::Key_C;
+    mamut_keys[3] = Qt::Key_V;
+    mamut_keys[4] = Qt::Key_J;
+    mamut_keys[5] = Qt::Key_L;
+    mamut_keys[6] = Qt::Key_I;
+    mamut_keys[7] = Qt::Key_K;
+}
+
+void nivel::setTigre_keys()
+{
+   tigre_keys[0] = Qt::Key_4;
+   tigre_keys[1] = Qt::Key_6;
+   tigre_keys[2] = Qt::Key_8;
+   tigre_keys[3] = Qt::Key_2;
+   tigre_keys[4] = Qt::Key_B;
+   tigre_keys[5] = Qt::Key_N;
+   tigre_keys[6] = Qt::Key_M;
+   tigre_keys[7] = Qt::Key_G;
+}
+
 void nivel::setNumsFotogramasProta()
 {
     numsFotogramasProta = new unsigned int[4];
@@ -181,29 +210,43 @@ void nivel::setNumsFotogramasMurcielago()
 
 void nivel::setNumsFotogramasMamut()
 {
-    numsFotogramasMamut = new unsigned int[4];
+    numsFotogramasMamut = new unsigned int[8];
     numsFotogramasMamut[0] = 8;
     numsFotogramasMamut[1] = 8;
     numsFotogramasMamut[2] = 8;
     numsFotogramasMamut[3] = 8;
+    numsFotogramasMamut[4] = 6;
+    numsFotogramasMamut[5] = 6;
+    numsFotogramasMamut[6] = 6;
+    numsFotogramasMamut[7] = 6;
+
 }
 
 void nivel::setNumsFotogramasTigre()
 {
-    numsFotogramasTigre = new unsigned int[4];
+    numsFotogramasTigre = new unsigned int[8];
     numsFotogramasTigre[0] = 4;
     numsFotogramasTigre[1] = 4;
     numsFotogramasTigre[2] = 4;
     numsFotogramasTigre[3] = 4;
+    numsFotogramasTigre[4] = 4;
+    numsFotogramasTigre[5] = 4;
+    numsFotogramasTigre[6] = 4;
+    numsFotogramasTigre[7] = 4;
+
 }
 
 void nivel::setNumsFotogramasLobo()
 {
-    numsFotogramasLobo = new unsigned int[4];
+    numsFotogramasLobo = new unsigned int[8];
     numsFotogramasLobo[0] = 4;
     numsFotogramasLobo[1] = 4;
     numsFotogramasLobo[2] = 4;
     numsFotogramasLobo[3] = 4;
+    numsFotogramasLobo[4] = 4;
+    numsFotogramasLobo[5] = 4;
+    numsFotogramasLobo[6] = 4;
+    numsFotogramasLobo[7] = 4;
 }
 
 void nivel::setup_scene(QString image_Background, QString image_Reference, float nivel_Scale, unsigned int _heightMap,
@@ -302,6 +345,7 @@ void nivel::setup_murcielago(unsigned short _numNivel)
 }
 void nivel::setup_Mamut(unsigned short _numNivel)
 {
+    setMamut_keys();
     setNumsFotogramasMamut();
 
     mamut = new Enemigo(completeAnimationsMamut(), numsFotogramasMamut, ":/imagenes/mamut.png",
@@ -323,11 +367,13 @@ void nivel::setup_Mamut(unsigned short _numNivel)
     }
     mamut->setDagno(20);
     mamut->setSalud(100);
+    mamut->setKeys(mamut_keys);
     escena->addItem(mamut);
 }
 
 void nivel::setup_Tigre(unsigned short _numNivel)
 {
+    setTigre_keys();
     setNumsFotogramasTigre();
     tigres = new Enemigo*[3];
     for (int i = 0; i < 3; i++)
@@ -469,6 +515,10 @@ QVector<QRect> nivel::completeAnimationsProta()
     QRect dimRight;
     QRect dimUp;
     QRect dimDown;
+    QRect dimLeftAtaque;
+    QRect dimRightAtaque;
+    QRect dimUpAtaque;
+    QRect dimDownAtaque;
 
     dimLeft.setX(0);
     dimLeft.setY(1 * alturaProta);
@@ -490,10 +540,19 @@ QVector<QRect> nivel::completeAnimationsProta()
     dimDown.setHeight(1 * alturaProta);
     dimDown.setWidth(3 * anchoProta);
 
+    dimLeftAtaque.setX(0);
+    dimLeftAtaque.setY(1 * alturaProta);
+    dimLeftAtaque.setHeight(1 * alturaProta);
+    dimLeftAtaque.setWidth(3* anchoProta);
+
+
+
     animations.push_back(dimLeft);
     animations.push_back(dimRight);
     animations.push_back(dimUp);
     animations.push_back(dimDown);
+    animations.push_back(dimLeftAtaque);
+
     return animations;
 }
 
@@ -518,6 +577,10 @@ QVector<QRect> nivel::completeAnimationsTigre()
     QRect dimRight;
     QRect dimUp;
     QRect dimDown;
+    QRect dimLeftAtaque;
+    QRect dimRightAtaque;
+    QRect dimUpAtaque;
+    QRect dimDownAtaque;
 
     dimLeft.setX(0 * anchoTigre);
     dimLeft.setY(2 * alturaTigre);
@@ -539,10 +602,34 @@ QVector<QRect> nivel::completeAnimationsTigre()
     dimDown.setHeight(1 * alturaTigre);
     dimDown.setWidth(4 * anchoTigre);
 
+    dimLeftAtaque.setX(0 * anchoTigre);
+    dimLeftAtaque.setY(2 * alturaTigre +  1 * anchoTigre);
+    dimLeftAtaque.setHeight(1 * anchoTigre);
+    dimLeftAtaque.setWidth(4 * alturaTigre);
+
+    dimRightAtaque.setX(4 * alturaTigre);
+    dimRightAtaque.setY(2 * alturaTigre + 1 * anchoTigre);
+    dimRightAtaque.setHeight(1 * anchoTigre);
+    dimRightAtaque.setWidth(4 * alturaTigre);
+
+    dimUpAtaque.setX(4 * anchoTigre);
+    dimUpAtaque.setY(1 * alturaTigre);
+    dimUpAtaque.setHeight(1 * alturaTigre);
+    dimUpAtaque.setWidth(4 * anchoTigre);
+
+    dimDownAtaque.setX(0 * anchoTigre);
+    dimDownAtaque.setY(1 * alturaTigre);
+    dimDownAtaque.setHeight(1 * alturaTigre);
+    dimDownAtaque.setWidth(4 * anchoTigre);
+
     animations.push_back(dimLeft);
     animations.push_back(dimRight);
     animations.push_back(dimUp);
     animations.push_back(dimDown);
+    animations.push_back(dimLeftAtaque);
+    animations.push_back(dimRightAtaque);
+    animations.push_back(dimUpAtaque);
+    animations.push_back(dimDownAtaque);
     return animations;
 }
 
@@ -553,6 +640,10 @@ QVector<QRect> nivel::completeAnimationsLobo()
     QRect dimRight;
     QRect dimUp;
     QRect dimDown;
+    QRect dimLeftAtaque;
+    QRect dimRightAtaque;
+    QRect dimUpAtaque;
+    QRect dimDownAtaque;
 
     dimLeft.setX(0 * anchoLobo);
     dimLeft.setY(2 * alturaLobo);
@@ -574,10 +665,34 @@ QVector<QRect> nivel::completeAnimationsLobo()
     dimDown.setHeight(1 * alturaLobo);
     dimDown.setWidth(4 * anchoLobo);
 
+    dimLeftAtaque.setX(0 * anchoLobo);
+    dimLeftAtaque.setY(2 * alturaLobo +  1 * anchoLobo);
+    dimLeftAtaque.setHeight(1 * anchoLobo);
+    dimLeftAtaque.setWidth(4 * alturaLobo);
+
+    dimRightAtaque.setX(4 * alturaLobo);
+    dimRightAtaque.setY(2 * alturaLobo + 1 * anchoLobo);
+    dimRightAtaque.setHeight(1 * anchoLobo);
+    dimRightAtaque.setWidth(4 * alturaLobo);
+
+    dimUpAtaque.setX(4 * anchoLobo);
+    dimUpAtaque.setY(1 * alturaLobo);
+    dimUpAtaque.setHeight(1 * alturaLobo);
+    dimUpAtaque.setWidth(4 * anchoLobo);
+
+    dimDownAtaque.setX(0 * anchoLobo);
+    dimDownAtaque.setY(1 * alturaLobo);
+    dimDownAtaque.setHeight(1 * alturaLobo);
+    dimDownAtaque.setWidth(4 * anchoLobo);
+
     animations.push_back(dimLeft);
     animations.push_back(dimRight);
     animations.push_back(dimUp);
     animations.push_back(dimDown);
+    animations.push_back(dimLeftAtaque);
+    animations.push_back(dimRightAtaque);
+    animations.push_back(dimUpAtaque);
+    animations.push_back(dimDownAtaque);
     return animations;
 }
 
@@ -588,6 +703,11 @@ QVector<QRect> nivel::completeAnimationsMamut()
     QRect dimRight;
     QRect dimUp;
     QRect dimDown;
+    QRect dimLeftAtaque;
+    QRect dimRightAtaque;
+    QRect dimUpAtaque;
+    QRect dimDownAtaque;
+
 
     dimLeft.setX(0);
     dimLeft.setY(2 * alturaMamut);
@@ -609,9 +729,34 @@ QVector<QRect> nivel::completeAnimationsMamut()
     dimDown.setHeight(1 * alturaMamut);
     dimDown.setWidth(8 * anchoMamut);
 
+    dimLeftAtaque.setX(0 * anchoMamut);
+    dimLeftAtaque.setY(7 * alturaMamut);
+    dimLeftAtaque.setHeight(1 * alturaMamut);
+    dimLeftAtaque.setWidth(6 * anchoMamut);
+
+    dimRightAtaque.setX(0 * anchoMamut);
+    dimRightAtaque.setY(8 * alturaMamut);
+    dimRightAtaque.setHeight(1 * alturaMamut);
+    dimRightAtaque.setWidth(6 * anchoMamut);
+
+    dimUpAtaque.setX(0 * anchoMamut);
+    dimUpAtaque.setY(6 * alturaMamut);
+    dimUpAtaque.setHeight(1 * alturaMamut);
+    dimUpAtaque.setWidth(6 * anchoMamut);
+
+    dimDownAtaque.setX(0 * anchoMamut);
+    dimDownAtaque.setY(5 * alturaMamut);
+    dimDownAtaque.setHeight(1 * alturaMamut);
+    dimDownAtaque.setWidth(6 * anchoMamut);
+
+
     animations.push_back(dimLeft);
     animations.push_back(dimRight);
     animations.push_back(dimUp);
     animations.push_back(dimDown);
+    animations.push_back(dimLeftAtaque);
+    animations.push_back(dimRightAtaque);
+    animations.push_back(dimUpAtaque);
+    animations.push_back(dimDownAtaque);
     return animations;
 }

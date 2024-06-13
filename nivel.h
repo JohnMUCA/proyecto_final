@@ -39,6 +39,9 @@ public:
     ~nivel();
     void key_event(QKeyEvent *event);
 
+signals:
+    void heTerminado();
+
 public slots:
     void detectarAtaque();
 private:

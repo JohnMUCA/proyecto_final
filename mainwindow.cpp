@@ -3,7 +3,7 @@
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
-    nivelActual->key_event(event);
+    if (nivelActual != nullptr) nivelActual->key_event(event);
 }
 
 
@@ -27,6 +27,11 @@ MainWindow::~MainWindow()
     if (menuActual != nullptr) delete menuActual;
 }
 
+void MainWindow::terminarNivel()
+{
+    setup_menuPrincipal();
+}
+
 void MainWindow::setup_nivel1()
 {
     if (menuActual != nullptr)
@@ -40,6 +45,7 @@ void MainWindow::setup_nivel1()
         nivelActual = nullptr;
     }
     nivelActual = new nivel(ui->graphicsView, ":/imagenes/caves.png", ":/imagenes/caves_reference.png", 8, 800, 468, 0, 0, 1, 1, ui->salud);
+    connect(nivelActual, SIGNAL(heTerminado()), this, SLOT(terminarNivel()));
 }
 
 void MainWindow::setup_nivel2()
@@ -55,7 +61,7 @@ void MainWindow::setup_nivel2()
         delete nivelActual;
         nivelActual = nullptr;
     }
-    nivelActual = new nivel(ui->graphicsView, ":/imagenes/Yermo.png", ":/imagenes/Yermo_reference.png", 1, 800, 1500, 0, 0, 2, 0, ui->salud);
+    nivelActual = new nivel(ui->graphicsView, ":/imagenes/Yermo.png", ":/imagenes/Yermo_reference.png", 1, 800, 1500, 0, 0, 2, 0, ui->salud);    
 }
 
 void MainWindow::setup_nivel3()

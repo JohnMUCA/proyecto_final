@@ -91,6 +91,13 @@ void Entidad::atack(unsigned int key)
     ultimaTecla = key;
 }
 
+void Entidad::muerte(unsigned int key)
+{
+    if(key == keys[4]){
+        setPixmap(mainPixmap->get_current_pixmap(4));
+    }
+}
+
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 void Entidad::setAnimations(QVector<QRect> rectangulosAnimaciones, unsigned int *numsFotogramas)

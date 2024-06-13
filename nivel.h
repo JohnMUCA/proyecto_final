@@ -54,7 +54,7 @@ private:
     Enemigo **lobos;
 
     //Enemigo *Mamut;
-    unsigned int prota_keys[4];
+    unsigned int prota_keys[5];
     unsigned int mamut_keys[8];
     unsigned int tigre_keys[8];
     unsigned int* numsFotogramasProta;

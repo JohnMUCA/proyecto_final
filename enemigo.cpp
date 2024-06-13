@@ -6,7 +6,7 @@ Enemigo::Enemigo(QVector<QRect> rectangulosAnimaciones, unsigned int *numsFotogr
 {
 
     time = new QTimer;
-    if (name == ":/imagenes/murcielago.png" ) {
+    if (name == ":/imagenes/murcielago.png") {
         if (tipoM){
             connect(time,SIGNAL(timeout()),this,SLOT(realizarMovimientoCircular()));
             time->start(100);

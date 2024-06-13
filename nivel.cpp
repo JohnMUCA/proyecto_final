@@ -51,6 +51,7 @@ void nivel::key_event(QKeyEvent *event)
     else if(unsigned(event->key()) == prota_keys[2]) isValid = up_movement_is_valid(prota);
     else if(unsigned(event->key()) == prota_keys[3]) isValid = down_movement_is_valid(prota);
 
+
     if(prota->y()>= 2000 && prota->y()<2100) murcielagos[2]->empezarPerseguir();
     prota->move(event->key(), isValid);
     mamut->atack(event->key());
@@ -58,8 +59,8 @@ void nivel::key_event(QKeyEvent *event)
     tigres[0]->atack(event->key());
     tigres[0]->move(event->key(), 1);
 
-
     if(focus && (prota->y()<(700) || prota->y()>(30))) set_focus_element(prota,16, 16 * 4);
+    if((prota->x() >= 2560 && prota->x() <= 2680) && (prota->y() >= 4480 && prota->y() <= 4600)) emit heTerminado();
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -396,6 +397,7 @@ void nivel::setup_Tigre(unsigned short _numNivel)
         }
         tigres[i]->setDagno(20);
         tigres[i]->setSalud(60);
+        tigres[i]->setKeys(tigre_keys);
         escena->addItem(tigres[i]);
 
     }

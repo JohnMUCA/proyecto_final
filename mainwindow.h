@@ -33,6 +33,7 @@ public:
 
 public slots:
 
+    void terminarNivel();
 private slots:
 
     void on_pushButton_released();

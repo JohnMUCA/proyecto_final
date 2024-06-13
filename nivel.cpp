@@ -7,6 +7,16 @@ nivel::nivel(QGraphicsView *graphicsV, QString imageBackground, QString imageRef
 {
     focus = setFocus;
     graph = graphicsV;
+    prota = nullptr;
+    mamut = nullptr;
+    murcielagos = nullptr;
+    tigres = nullptr;
+    lobos = nullptr;
+    numsFotogramasProta = nullptr;
+    numsFotogramasMurcielago = nullptr;
+    numsFotogramasMamut = nullptr;
+    numsFotogramasTigre = nullptr;
+    numsFotogramasLobo = nullptr;
     setup_scene(imageBackground, imageReference, nivelScale, heightMap, widthMap, x, y);
     setup_prota(numNivel);
     setup_murcielago(numNivel);
@@ -24,14 +34,16 @@ nivel::nivel(QGraphicsView *graphicsV, QString imageBackground, QString imageRef
 
 nivel::~nivel()
 {
-    delete prota;
-    delete[] murcielagos;
-    delete mamut;
-    delete[] tigres;
-    delete[] lobos;
-    delete[] numsFotogramasProta;
-    delete[] numsFotogramasMurcielago;
-    delete[] numsFotogramasMamut;
+    if (prota != nullptr) delete prota;
+    if (murcielagos != nullptr) delete[] murcielagos;
+    if (mamut != nullptr) delete mamut;
+    if (tigres != nullptr) delete[] tigres;
+    if (lobos != nullptr) delete[] lobos;
+    if (numsFotogramasProta != nullptr)delete[] numsFotogramasProta;
+    if (numsFotogramasMurcielago != nullptr)delete[] numsFotogramasMurcielago;
+    if (numsFotogramasMamut != nullptr)delete[] numsFotogramasMamut;
+    if (numsFotogramasTigre != nullptr)delete[] numsFotogramasTigre;
+    if (numsFotogramasLobo != nullptr)delete[] numsFotogramasLobo;
     delete brocha;
     delete fondoReferencia;
     delete fondoCompleto;
@@ -51,12 +63,16 @@ void nivel::key_event(QKeyEvent *event)
     else if(unsigned(event->key()) == prota_keys[2]) isValid = up_movement_is_valid(prota);
     else if(unsigned(event->key()) == prota_keys[3]) isValid = down_movement_is_valid(prota);
 
-    if(prota->y()>= 2000 && prota->y()<2100) murcielagos[2]->empezarPerseguir();
+    if(murcielagos != nullptr && (prota->y()>= 2000 && prota->y()<2100)) murcielagos[2]->empezarPerseguir();
     prota->move(event->key(), isValid);
-    mamut->atack(event->key());
-    mamut->move(event->key(), 1);
-    tigres[0]->atack(event->key());
-    tigres[0]->move(event->key(), 1);
+    prota->muerte(event->key());
+    if(mamut != nullptr)mamut->atack(event->key());
+    if(mamut != nullptr) mamut->move(event->key(), 1);
+
+    for (int i = 0; i < 4; i++){
+        if(tigres != nullptr)tigres[i]->atack(event->key());
+        if(tigres != nullptr)tigres[i]->move(event->key(), 1);
+    }
 
 
     if(focus && (prota->y()<(700) || prota->y()>(30))) set_focus_element(prota,16, 16 * 4);
@@ -70,16 +86,16 @@ void nivel::detectarAtaque()
     short int numEnemigo;
     char enemigo;
 
-    if (prota->obtenerRectangulo().intersects(mamut->obtenerRectangulo()))
+    if (mamut != nullptr && prota->obtenerRectangulo().intersects(mamut->obtenerRectangulo()))
     {
         colision = 1;
         prota->recibir_dagno(mamut->getdagno());
         enemigo = 'M';
     }
 
-    for (int j = 0; j < 3; j++)
+    for (int j = 0; j < 4; j++)
     {
-        if (prota->obtenerRectangulo().intersects(tigres[j]->obtenerRectangulo()))
+        if (tigres != nullptr && prota->obtenerRectangulo().intersects(tigres[j]->obtenerRectangulo()))
         {
             colision = 1;
             prota->recibir_dagno(tigres[j]->getdagno());
@@ -87,7 +103,7 @@ void nivel::detectarAtaque()
             enemigo = 't';
             break;
         }
-        else if (prota->obtenerRectangulo().intersects(murcielagos[j]->obtenerRectangulo()))
+        else if (murcielagos != nullptr && prota->obtenerRectangulo().intersects(murcielagos[j]->obtenerRectangulo()))
         {
             colision = 1;
             prota->recibir_dagno(murcielagos[j]->getdagno());
@@ -95,7 +111,7 @@ void nivel::detectarAtaque()
             enemigo = 'm';
             break;
         }
-        else if (prota->obtenerRectangulo().intersects(lobos[j]->obtenerRectangulo()))
+        else if (lobos != nullptr && prota->obtenerRectangulo().intersects(lobos[j]->obtenerRectangulo()))
         {
             colision = 1;
             prota->recibir_dagno(lobos[j]->getdagno());
@@ -109,22 +125,22 @@ void nivel::detectarAtaque()
     if (colision) {
         int diffX;
         int diffY;
-        if (enemigo == 'm')
+        if (murcielagos != nullptr && enemigo == 'm')
         {
             diffX = prota->x() - murcielagos[numEnemigo]->x();
             diffY = prota->y() - murcielagos[numEnemigo]->y();
         }
-        else if (enemigo == 'M')
+        else if (mamut != nullptr && enemigo == 'M')
         {
             diffX = prota->x() - mamut->x();
             diffY = prota->y() - mamut->y();
         }
-        else if (enemigo == 't')
+        else if (tigres != nullptr && enemigo == 't')
         {
             diffX = prota->x() - tigres[numEnemigo]->x();
             diffY = prota->y() - tigres[numEnemigo]->y();
         }
-        else if (enemigo == 'l')
+        else if (lobos != nullptr && enemigo == 'l')
         {
             diffX = prota->x() - lobos[numEnemigo]->x();
             diffY = prota->y() - lobos[numEnemigo]->y();
@@ -165,6 +181,7 @@ void nivel::setProta_keys()
     prota_keys[1] = Qt::Key_D;
     prota_keys[2] = Qt::Key_W;
     prota_keys[3] = Qt::Key_S;
+    prota_keys[4] = Qt::Key_Space;
 }
 
 void nivel::setMamut_keys()
@@ -193,11 +210,12 @@ void nivel::setTigre_keys()
 
 void nivel::setNumsFotogramasProta()
 {
-    numsFotogramasProta = new unsigned int[4];
+    numsFotogramasProta = new unsigned int[5];
     numsFotogramasProta[0] = 3;
     numsFotogramasProta[1] = 3;
     numsFotogramasProta[2] = 3;
     numsFotogramasProta[3] = 3;
+    numsFotogramasProta[4] = 4;
 }
 
 void nivel::setNumsFotogramasMurcielago()
@@ -293,13 +311,13 @@ void nivel::setup_prota(unsigned short _numNivel)
     }
     else if(_numNivel == 2)
     {
-        prota->setX(2 * anchoProta * scaleProta);
-        prota->setY(2 * alturaProta * scaleProta);
+        prota->setX(11.5 * anchoProta * scaleProta);
+        prota->setY(5.5 * alturaProta * scaleProta);
     }
     else if(_numNivel == 3)
     {
-        prota->setX(8 * anchoProta * scaleProta);
-        prota->setY(8 * alturaProta * scaleProta);
+        prota->setX(10.5 * anchoProta * scaleProta);
+        prota->setY(7 * alturaProta * scaleProta);
     }
     prota->setDagno(50);
     prota->setSalud(100);
@@ -311,124 +329,145 @@ void nivel::setup_prota(unsigned short _numNivel)
 
 void nivel::setup_murcielago(unsigned short _numNivel)
 {
-    setNumsFotogramasMurcielago();
-    murcielagos = new Enemigo*[3];
-    for (int i = 0; i < 3; i++)
-    {
-        murcielagos[i] = new Enemigo(completeAnimationsMurcielago(), numsFotogramasMurcielago, ":/imagenes/murcielago.png",
-                                 anchoMurcielago, alturaMurcielago, scaleMurcielago,1,1);
-
-        if(_numNivel == 1)
+    if (_numNivel == 1){
+        setNumsFotogramasMurcielago();
+        murcielagos = new Enemigo*[4];
+        for (int i = 0; i < 4; i++)
         {
-            murcielagos[i]->setX(18.5 * anchoMurcielago * scaleMurcielago);
-            murcielagos[i]->setY((i + 1) * 15 * alturaMurcielago * scaleMurcielago);
-        }
-        else if(_numNivel == 2)
-        {
-            murcielagos[i]->setX(2 * anchoMurcielago * scaleMurcielago);
-            murcielagos[i]->setY((i + 1) * 2 * alturaMurcielago * scaleMurcielago);
-        }
-        else if(_numNivel == 3)
-        {
-            murcielagos[i]->setX(8 * anchoMurcielago * scaleMurcielago);
-            murcielagos[i]->setY((i + 1) * 8 * alturaMurcielago * scaleMurcielago);
+            murcielagos[i] = new Enemigo(completeAnimationsMurcielago(), numsFotogramasMurcielago, ":/imagenes/murcielago.png",
+                                     anchoMurcielago, alturaMurcielago, scaleMurcielago,1,1);
         }
 
-        murcielagos[i]->setDagno(20);
-        murcielagos[i]->setSalud(60);
-        murcielagos[i]->set_mov_acelerado(murcielagos[i]->x(),murcielagos[i]->y(),3,-7,-3,0.1);
-        murcielagos[i]->set_perseguir(prota,100,0.1);
-        murcielagos[i]->set_mov_circular_parametros(80, 3 , 0.1, murcielagos[i]->x(), murcielagos[i]->y());
-        escena->addItem(murcielagos[i]);
+        murcielagos[0]->setX(18.5 * anchoMurcielago * scaleMurcielago);
+        murcielagos[0]->setY(15 * alturaMurcielago * scaleMurcielago);
+        murcielagos[0]->set_mov_circular_parametros(80, 3 , 0.1, murcielagos[0]->x(), murcielagos[0]->y());
+
+        murcielagos[1]->setX(19 * anchoMurcielago * scaleMurcielago);
+        murcielagos[1]->setY(52.5 * alturaMurcielago * scaleMurcielago);
+        murcielagos[1]->set_mov_circular_parametros(80, 3 , 0.1, murcielagos[1]->x(), murcielagos[1]->y());
+
+        murcielagos[2]->setX(22.5 * anchoMurcielago * scaleMurcielago);
+        murcielagos[2]->setY(31 * alturaMurcielago * scaleMurcielago);
+        murcielagos[2]->set_mov_circular_parametros(80, 3 , 0.1, murcielagos[2]->x(), murcielagos[2]->y());
+
+        murcielagos[3]->setX(16 * anchoMurcielago * scaleMurcielago);
+        murcielagos[3]->setY(37  * alturaMurcielago * scaleMurcielago);
+        murcielagos[3]->set_mov_circular_parametros(80, 3 , 0.1, murcielagos[3]->x(), murcielagos[3]->y());
+
+        for (int i = 0; i < 4; i++)
+        {
+            murcielagos[i]->setDagno(20);
+            murcielagos[i]->setSalud(60);
+            murcielagos[i]->set_mov_acelerado(murcielagos[i]->x(),murcielagos[i]->y(),3,-7,-3,0.1);
+            murcielagos[i]->set_perseguir(prota,100,0.1);
+            //murcielagos[i]->set_mov_circular_parametros(80, 3 , 0.1, murcielagos[i]->x(), murcielagos[i]->y());
+            escena->addItem(murcielagos[i]);
+        }
     }
 }
 void nivel::setup_Mamut(unsigned short _numNivel)
 {
-    setMamut_keys();
-    setNumsFotogramasMamut();
+    if(_numNivel == 2 || _numNivel == 3){
+        setMamut_keys();
+        setNumsFotogramasMamut();
 
-    mamut = new Enemigo(completeAnimationsMamut(), numsFotogramasMamut, ":/imagenes/mamut.png",
-                        anchoMamut, alturaMamut, scaleMamut,1,1);
-    if(_numNivel == 1)
-    {
-        mamut->setX(10 * anchoMamut * scaleMamut);
-        mamut->setY(10 * alturaMamut * scaleMamut);
+        mamut = new Enemigo(completeAnimationsMamut(), numsFotogramasMamut, ":/imagenes/mamut.png",
+                            anchoMamut, alturaMamut, scaleMamut,1,1);
+
+
+        mamut->setX(5.5 * anchoMamut * scaleMamut);
+        mamut->setY(3 * alturaMamut * scaleMamut);
+
+        mamut->setDagno(20);
+        mamut->setSalud(100);
+        mamut->setKeys(mamut_keys);
+        escena->addItem(mamut);
     }
-    else if(_numNivel == 2)
-    {
-        mamut->setX(1 * anchoMamut * scaleMamut);
-        mamut->setY(1 * alturaMamut * scaleMamut);
-    }
-    else if(_numNivel == 3)
-    {
-        mamut->setX(1 * anchoMamut * scaleMamut);
-        mamut->setY(1 * alturaMamut * scaleMamut);
-    }
-    mamut->setDagno(20);
-    mamut->setSalud(100);
-    mamut->setKeys(mamut_keys);
-    escena->addItem(mamut);
 }
 
 void nivel::setup_Tigre(unsigned short _numNivel)
 {
-    setTigre_keys();
-    setNumsFotogramasTigre();
-    tigres = new Enemigo*[3];
-    for (int i = 0; i < 3; i++)
-    {
-        tigres[i] = new Enemigo(completeAnimationsTigre(), numsFotogramasTigre, ":/imagenes/kati-eloranta-tiger.png",
-                            anchoTigre, alturaTigre, scaleTigre,1,0);
-        if(_numNivel == 1)
+    if(_numNivel == 2 || _numNivel == 3){
+        setTigre_keys();
+        setNumsFotogramasTigre();
+        tigres = new Enemigo*[4];
+        for (int i = 0; i < 4; i++)
         {
-            tigres[i]->setX(30 * anchoTigre * scaleTigre);
-            tigres[i]->setY((i + 1) * 16 * alturaTigre * scaleTigre);
+            tigres[i] = new Enemigo(completeAnimationsTigre(), numsFotogramasTigre, ":/imagenes/kati-eloranta-tiger.png",
+                                anchoTigre, alturaTigre, scaleTigre,1,0);
+
         }
-        else if(_numNivel == 2)
-        {
-            tigres[i]->setX(1 * anchoTigre * scaleTigre);
-            tigres[i]->setY((i + 1) * 1 * alturaTigre * scaleTigre);
+        tigres[0]->setX(9 * anchoTigre * scaleTigre);
+        tigres[0]->setY(0 * alturaTigre * scaleTigre);
+
+        tigres[1]->setX(21 * anchoTigre * scaleTigre);
+        tigres[1]->setY(2.4 * alturaTigre * scaleTigre);
+
+        tigres[2]->setX(9 * anchoTigre * scaleTigre);
+        tigres[2]->setY(5.7 * alturaTigre * scaleTigre);
+
+        tigres[3]->setX(0 * anchoTigre * scaleTigre);
+        tigres[3]->setY(2.4 * alturaTigre * scaleTigre);
+
+        for (int i = 0; i < 4; i++){
+            tigres[i]->setDagno(20);
+            tigres[i]->setSalud(60);
+            tigres[i]->setKeys(tigre_keys);
+            escena->addItem(tigres[i]);
         }
-        else if(_numNivel == 3)
-        {
-            tigres[i]->setX(1 * anchoTigre * scaleTigre);
-            tigres[i]->setY((i + 1) * 1 * alturaTigre * scaleTigre);
-        }
-        tigres[i]->setDagno(20);
-        tigres[i]->setSalud(60);
-        escena->addItem(tigres[i]);
 
     }
 }
 
 void nivel::setup_Lobo(unsigned short _numNivel)
 {
-    setNumsFotogramasLobo();
-    lobos = new Enemigo*[3];
-    for (int i = 0; i < 3; i++)
-    {
-        lobos[i] = new Enemigo(completeAnimationsLobo(), numsFotogramasLobo, ":/imagenes/wolfsheet6.png",
-                           anchoLobo, alturaLobo, scaleLobo,1,0);
-        if(_numNivel == 1)
+    if(_numNivel == 1 || _numNivel == 2 ){
+        setNumsFotogramasLobo();
+        lobos = new Enemigo*[4];
+        for (int i = 0; i < 4; i++)
         {
-            lobos[i]->setX(30 * anchoLobo * scaleLobo);
-            lobos[i]->setY((i + 1) * 16 * alturaLobo * scaleLobo);
-        }
-        else if(_numNivel == 2)
-        {
-            lobos[i]->setX(1 * anchoLobo * scaleLobo);
-            lobos[i]->setY((i + 1) * 1 * alturaLobo * scaleLobo);
-        }
-        else if(_numNivel == 3)
-        {
-            lobos[i]->setX(1 * anchoLobo * scaleLobo);
-            lobos[i]->setY((i + 1) * 1 * alturaLobo * scaleLobo);
-        }
-        lobos[i]->setDagno(20);
-        lobos[i]->setSalud(60);
-        escena->addItem(lobos[i]);
-    }
+            lobos[i] = new Enemigo(completeAnimationsLobo(), numsFotogramasLobo, ":/imagenes/wolfsheet6.png",
+                               anchoLobo, alturaLobo, scaleLobo,1,0);
 
+        }
+            if(_numNivel == 1)
+            {
+                lobos[0]->setX(27 * anchoLobo * scaleLobo);
+                lobos[0]->setY(19 * alturaLobo * scaleLobo);
+
+                lobos[1]->setX(56 * anchoLobo * scaleLobo);
+                lobos[1]->setY(25 * alturaLobo * scaleLobo);
+
+                lobos[2]->setX(40.5 * anchoLobo * scaleLobo);
+                lobos[2]->setY(31.3 * alturaLobo * scaleLobo);
+
+                lobos[3]->setX(2 * anchoLobo * scaleLobo);
+                lobos[3]->setY(23 * alturaLobo * scaleLobo);
+
+            }
+            else
+            {
+                lobos[0]->setX(17 * anchoLobo * scaleLobo);
+                lobos[0]->setY(0 * alturaLobo * scaleLobo);
+
+                lobos[1]->setX(28 * anchoLobo * scaleLobo);
+                lobos[1]->setY(3.1 * alturaLobo * scaleLobo);
+
+                lobos[2]->setX(17 * anchoLobo * scaleLobo);
+                lobos[2]->setY(3 * alturaLobo * scaleLobo);
+
+                lobos[3]->setX(0 * anchoLobo * scaleLobo);
+                lobos[3]->setY(4 * alturaLobo * scaleLobo);
+            }
+
+        for (int i = 0; i < 4; i++)
+        {
+                lobos[i]->setDagno(20);
+                lobos[i]->setSalud(60);
+                escena->addItem(lobos[i]);
+        }
+
+    }
 }
 
 
@@ -514,10 +553,7 @@ QVector<QRect> nivel::completeAnimationsProta()
     QRect dimRight;
     QRect dimUp;
     QRect dimDown;
-    QRect dimLeftAtaque;
-    QRect dimRightAtaque;
-    QRect dimUpAtaque;
-    QRect dimDownAtaque;
+    QRect dimMuerte;
 
     dimLeft.setX(0);
     dimLeft.setY(1 * alturaProta);
@@ -539,18 +575,17 @@ QVector<QRect> nivel::completeAnimationsProta()
     dimDown.setHeight(1 * alturaProta);
     dimDown.setWidth(3 * anchoProta);
 
-    dimLeftAtaque.setX(0);
-    dimLeftAtaque.setY(1 * alturaProta);
-    dimLeftAtaque.setHeight(1 * alturaProta);
-    dimLeftAtaque.setWidth(3* anchoProta);
-
+    dimMuerte.setX(0 * anchoProta);
+    dimMuerte.setY(2 * alturaProta);
+    dimMuerte.setHeight(1 * alturaProta);
+    dimMuerte.setWidth(4 * anchoProta);
 
 
     animations.push_back(dimLeft);
     animations.push_back(dimRight);
     animations.push_back(dimUp);
     animations.push_back(dimDown);
-    animations.push_back(dimLeftAtaque);
+    animations.push_back(dimMuerte);
 
     return animations;
 }

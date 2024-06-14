@@ -50,12 +50,13 @@ class nivel : public QObject
     Q_OBJECT
 public:
     nivel(QGraphicsView *graphicsV, QString imageBackground, QString imageReference, float nivelScale, unsigned int height,
-          unsigned int width,unsigned int x, unsigned int y, unsigned short numNivel, bool setFocus, QLabel* salud);
+          unsigned int width,unsigned int x, unsigned int y, unsigned short numNivel, bool setFocus, QLabel* salud, int dificultad);
     ~nivel();
     void key_event(QKeyEvent *event);
+    QString getPuntaje() const;
 
 signals:
-    void heTerminado();
+    void heTerminado(char);
     void renaudarEnemigo();
     void pausarEnemigo();
 public slots:
@@ -75,7 +76,9 @@ private:
     recursos **trigos;
     recursos **zanahorias;
     recursos **tomates;
-    //recursos *lanza;
+    QString puntaje;
+    char numeroSigNivel;
+    int dificultadNivel;
     Enemigo **cavernicolas;
 
     //Enemigo *Mamut;

@@ -13,10 +13,16 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     numNivel = '0';
+    dificultadJuego = 1;
+    puntuaciones = new QString[3];
+    puntuaciones[0] = "0";
+    puntuaciones[1] = "0";
+    puntuaciones[2] = "0";
     ui->BotMenuPrincipal->setVisible(false);
     ui->BotonesContinuar->setVisible(false);
     ui->BotonesFinNivel->setVisible(false);
     ui->BotonesPausa->setVisible(false);
+    ui->dificultItems->setVisible(false);
     nivelActual = nullptr;
     menuActual = nullptr;
     setup_menuPrincipal();
@@ -29,8 +35,10 @@ MainWindow::~MainWindow()
     if (menuActual != nullptr) delete menuActual;
 }
 
-void MainWindow::terminarNivel()
+void MainWindow::terminarNivel(char sigNivel)
 {
+    puntuaciones[int(numNivel - '1')] = nivelActual->getPuntaje();
+    numNivel = sigNivel;
     setup_menuFinNivel();
 }
 
@@ -46,10 +54,12 @@ void MainWindow::setup_nivel1()
         delete nivelActual;
         nivelActual = nullptr;
     }
-    nivelActual = new nivel(ui->graphicsView, ":/imagenes/caves.png", ":/imagenes/caves_reference.png", 8, 800, 468, 0, 0, 1, 1, ui->salud);
-    connect(nivelActual, SIGNAL(heTerminado()), this, SLOT(terminarNivel()));
+    nivelActual = new nivel(ui->graphicsView, ":/imagenes/caves.png", ":/imagenes/caves_reference.png", 8, 800, 468, 0, 0, 1, 1,
+                            ui->salud, dificultadJuego);
+    connect(nivelActual, SIGNAL(heTerminado(char)), this, SLOT(terminarNivel(char)));
+    ui->dificultItems->setVisible(false);
     ui->botonPausa->setVisible(true);
-    numNivel = '1';
+    if (numNivel == '0') numNivel = '1';
 }
 
 void MainWindow::setup_nivel2()
@@ -65,9 +75,11 @@ void MainWindow::setup_nivel2()
         delete nivelActual;
         nivelActual = nullptr;
     }
-    nivelActual = new nivel(ui->graphicsView, ":/imagenes/Yermo.png", ":/imagenes/Yermo_reference.png", 1, 800, 1500, 0, 0, 2, 0, ui->salud);
+    nivelActual = new nivel(ui->graphicsView, ":/imagenes/Yermo.png", ":/imagenes/Yermo_reference.png", 1, 800, 1500, 0, 0, 2, 0,
+                            ui->salud, dificultadJuego);
+    connect(nivelActual, SIGNAL(heTerminado(char)), this, SLOT(terminarNivel(char)));
+    ui->dificultItems->setVisible(false);
     ui->botonPausa->setVisible(true);
-    numNivel = '2';
 }
 
 void MainWindow::setup_nivel3()
@@ -82,9 +94,11 @@ void MainWindow::setup_nivel3()
         delete nivelActual;
         nivelActual = nullptr;
     }
-    nivelActual = new nivel(ui->graphicsView, ":/imagenes/savannah.png", ":/imagenes/savannah_reference.png", 1, 800, 1500, 0, 0, 3, 0, ui->salud);
+    nivelActual = new nivel(ui->graphicsView, ":/imagenes/savannah.png", ":/imagenes/savannah_reference.png", 1, 800, 1500, 0, 0, 3, 0,
+                            ui->salud, dificultadJuego);
+    connect(nivelActual, SIGNAL(heTerminado(char)), this, SLOT(terminarNivel(char)));
+    ui->dificultItems->setVisible(false);
     ui->botonPausa->setVisible(true);
-    numNivel = '3';
 }
 
 void MainWindow::setup_menuPrincipal()
@@ -101,6 +115,8 @@ void MainWindow::setup_menuPrincipal()
     }
     menuActual = new menu(ui->graphicsView, ":/imagenes/menuPrincipal.png", 1, 800, 1500, 0, 0, setup_botonesMenuP(),
                           ui->BotMenuPrincipal, 'P');
+    if (numNivel == '4') numNivel = '3';
+    ui->dificultItems->setVisible(true);
     ui->botonPausa->setVisible(false);
 }
 
@@ -118,6 +134,7 @@ void MainWindow::setup_menuContinuar()
     }
     menuActual = new menu(ui->graphicsView, ":/imagenes/continuarJuego.png", 1, 800, 1500, 0, 0, setup_botonesMenuContinuar(),
                           ui->BotonesContinuar, 'C');
+    ui->dificultItems->setVisible(false);
     ui->botonPausa->setVisible(false);
 }
 
@@ -145,6 +162,31 @@ void MainWindow::setup_menuPausa()
     ui->botonPausa->setVisible(false);
 }
 
+void MainWindow::guardarPartida()
+{
+    std::ofstream file("datos.txt");
+    short int cantidadNivelesCompletados = numNivel - '0';
+    for (short int i = 0; i < cantidadNivelesCompletados; i++)
+    {
+        file << std::string(1, char(i + '1')) << " " << puntuaciones[i].toStdString() << '\n';
+    }
+    file.close();
+}
+
+void MainWindow::cargarPartida()
+{
+    std::ifstream file("datos.txt");
+    int cont = 0;
+    std::string linea;
+    while (std::getline(file, linea))
+    {
+        numNivel = linea[0];
+        puntuaciones[cont] = QString::fromStdString(linea.substr(2));
+        cont++;
+    }
+    file.close();
+}
+
 
 
 QVector<QPushButton*> MainWindow::setup_botonesMenuP()
@@ -153,6 +195,7 @@ QVector<QPushButton*> MainWindow::setup_botonesMenuP()
     botones.push_back(ui->jugar);
     botones.push_back(ui->continuar);
     botones.push_back(ui->cargarPartida);
+    botones.push_back(ui->salir);
     return botones;
 }
 
@@ -185,6 +228,7 @@ QVector<QPushButton *> MainWindow::setup_botonesMenuPausa()
 
 void MainWindow::on_jugar_released()
 {
+    numNivel = '1';
     setup_nivel1();
 }
 
@@ -209,18 +253,19 @@ void MainWindow::on_nivel1_released()
 
 void MainWindow::on_nivel2_released()
 {
-    setup_nivel2();
+    if(numNivel == '2' || numNivel == '3') setup_nivel2();
 }
 
 
 void MainWindow::on_nivel3_released()
 {
-    setup_nivel3();
+    if(numNivel == '3') setup_nivel3();
 }
 
 
 void MainWindow::on_menuPrincipal_released()
 {
+
     setup_menuPrincipal();
 }
 
@@ -266,8 +311,31 @@ void MainWindow::on_menuPrincipalP_released()
 
 void MainWindow::on_siguienteNivel_released()
 {
-    if(numNivel == '1') setup_nivel2();
-    else if(numNivel == '2') setup_nivel3();
-    else if(numNivel == '3') setup_menuPrincipal();
+    if(numNivel == '2') setup_nivel2();
+    else if(numNivel == '3') setup_nivel3();
+    else if(numNivel == '4')
+    {
+        numNivel = '3';
+        setup_menuPrincipal();
+    }
+}
+
+
+void MainWindow::on_cargarPartida_released()
+{
+    cargarPartida();
+}
+
+
+void MainWindow::on_dificultSelector_valueChanged(int value)
+{
+    dificultadJuego = value + 1;
+}
+
+
+void MainWindow::on_salir_released()
+{
+    guardarPartida();
+    this->close();
 }
 

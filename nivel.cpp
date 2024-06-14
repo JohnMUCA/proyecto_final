@@ -3,11 +3,14 @@
 
 nivel::nivel(QGraphicsView *graphicsV, QString imageBackground, QString imageReference, float nivelScale,
              unsigned int heightMap, unsigned int widthMap, unsigned int x, unsigned int y, unsigned short numNivel,
-             bool setFocus, QLabel* salud)
+             bool setFocus, QLabel* salud, int dificultad)
 {
     focus = setFocus;
     graph = graphicsV;
     pausaN = 0;
+    puntaje = "0";
+    numeroSigNivel = numNivel + '1';
+    dificultadNivel = dificultad;
     prota = nullptr;
     mamut = nullptr;
     murcielagos = nullptr;
@@ -125,8 +128,17 @@ void nivel::key_event(QKeyEvent *event)
         }
 
         if(focus && (prota->y()<(700) || prota->y()>(30))) set_focus_element(prota,16, 16 * 4);
-        if((prota->x() >= 2560 && prota->x() <= 2680) && (prota->y() >= 4480 && prota->y() <= 4600)) emit heTerminado();
+        if((prota->x() >= 2560 && prota->x() <= 2680) && (prota->y() >= 4480 && prota->y() <= 4600))
+        {
+            puntaje = "10";
+            emit heTerminado(numeroSigNivel);
+        }
     }
+}
+
+QString nivel::getPuntaje() const
+{
+    return puntaje;
 }
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -238,6 +250,11 @@ void nivel::detectarAtaque()
                     }
                 }
             }
+        }
+        if (prota->obtenerSalud() == 0)
+        {
+            puntaje = "10";
+            emit heTerminado(numeroSigNivel);
         }
     }
 }
@@ -459,7 +476,7 @@ void nivel::setup_prota(unsigned short _numNivel)
         prota->setX(10.5 * anchoProta * scaleProta);
         prota->setY(6 * alturaProta * scaleProta);
     }
-    prota->setDagno(50);
+    prota->setDagno(20);
     prota->setSalud(100);
     prota->setKeys(prota_keys);
     escena->addItem(prota);
@@ -503,7 +520,7 @@ void nivel::setup_murcielago(unsigned short _numNivel)
 
         for (int i = 0; i < 4; i++)
         {
-            murcielagos[i]->setDagno(20);
+            murcielagos[i]->setDagno(int((dificultadNivel / 3.0) * 40));
             murcielagos[i]->setSalud(60);
             //murcielagos[i]->set_mov_acelerado(murcielagos[i]->x(),murcielagos[i]->y(),3,-7,-3,0.1);
             //murcielagos[i]->set_perseguir(prota,100,0.1);
@@ -525,7 +542,7 @@ void nivel::setup_Mamut(unsigned short _numNivel)
         mamut->setX(5.5 * anchoMamut * scaleMamut);
         mamut->setY(3 * alturaMamut * scaleMamut);
 
-        mamut->setDagno(20);
+        mamut->setDagno(int((dificultadNivel / 3.0) * 50));
         mamut->setSalud(100);
         mamut->set_perseguir(prota,100,0.1);
         mamut->setKeys(mamut_keys);
@@ -570,7 +587,7 @@ void nivel::setup_Tigre(unsigned short _numNivel)
 
 
         for (int i = 0; i < 4; i++){
-            tigres[i]->setDagno(20);
+            tigres[i]->setDagno(int((dificultadNivel / 3.0) * 40));
             tigres[i]->setSalud(60);
             tigres[i]->setKeys(tigre_keys);
             escena->addItem(tigres[i]);
@@ -637,7 +654,7 @@ void nivel::setup_Lobo(unsigned short _numNivel)
 
         for (int i = 0; i < 4; i++)
         {
-                lobos[i]->setDagno(20);
+                lobos[i]->setDagno(int((dificultadNivel / 3) * 40));
                 lobos[i]->setSalud(60);
                 lobos[i]->setKeys(lobo_keys);
                 escena->addItem(lobos[i]);

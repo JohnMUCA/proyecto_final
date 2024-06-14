@@ -2,12 +2,10 @@
     <qresource prefix="/">
         <file>imagenes/avalanche.png</file>
         <file>imagenes/caveMan.png</file>
-        <file>imagenes/cavemanGood.png</file>
         <file>imagenes/caves.png</file>
         <file>imagenes/farming.png</file>
         <file>imagenes/fire.png</file>
         <file>imagenes/food.png</file>
-        <file>imagenes/monkey.png</file>
         <file>imagenes/savannah.png</file>
         <file>imagenes/snowMap1.png</file>
         <file>imagenes/snowMap2.png</file>

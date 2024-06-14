@@ -7,6 +7,7 @@ nivel::nivel(QGraphicsView *graphicsV, QString imageBackground, QString imageRef
 {
     focus = setFocus;
     graph = graphicsV;
+    pausaN = 0;
     prota = nullptr;
     mamut = nullptr;
     murcielagos = nullptr;
@@ -23,11 +24,19 @@ nivel::nivel(QGraphicsView *graphicsV, QString imageBackground, QString imageRef
     setup_Mamut(numNivel);
     setup_Tigre(numNivel);
     setup_Lobo(numNivel);
-
     this->salud = salud;
     timeColision = new QTimer;
     QObject::connect(timeColision,SIGNAL(timeout()),this,SLOT(detectarAtaque()));
     timeColision->start(200);
+    if (murcielagos != nullptr)
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            connect(this, SIGNAL(pausarEnemigo()), murcielagos[i], SLOT(pausa()));
+            connect(this, SIGNAL(renaudarEnemigo()), murcielagos[i], SLOT(renaudar()));
+        }
+    }
+
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -56,124 +65,142 @@ nivel::~nivel()
 
 void nivel::key_event(QKeyEvent *event)
 {
-    bool isValid = 1;
+    if (!pausaN)
+    {
+        bool isValid = 1;
 
-    if(unsigned(event->key()) == prota_keys[0]) isValid = left_movement_is_valid(prota);
-    else if(unsigned(event->key()) == prota_keys[1]) isValid = right_movement_is_valid(prota);
-    else if(unsigned(event->key()) == prota_keys[2]) isValid = up_movement_is_valid(prota);
-    else if(unsigned(event->key()) == prota_keys[3]) isValid = down_movement_is_valid(prota);
+        if(unsigned(event->key()) == prota_keys[0]) isValid = left_movement_is_valid(prota);
+        else if(unsigned(event->key()) == prota_keys[1]) isValid = right_movement_is_valid(prota);
+        else if(unsigned(event->key()) == prota_keys[2]) isValid = up_movement_is_valid(prota);
+        else if(unsigned(event->key()) == prota_keys[3]) isValid = down_movement_is_valid(prota);
 
-    if(murcielagos != nullptr && (prota->y()>= 2000 && prota->y()<2100)) murcielagos[2]->empezarPerseguir();
-    prota->move(event->key(), isValid);
-    prota->muerte(event->key());
-    if(mamut != nullptr)mamut->atack(event->key());
-    if(mamut != nullptr) mamut->move(event->key(), 1);
+        if(murcielagos != nullptr && (prota->y()>= 2000 && prota->y()<2100)) murcielagos[2]->empezarPerseguir();
+        prota->move(event->key(), isValid);
+        prota->muerte(event->key());
+        if(mamut != nullptr)mamut->atack(event->key());
+        if(mamut != nullptr) mamut->move(event->key(), 1);
 
-    for (int i = 0; i < 4; i++){
-        if(tigres != nullptr)tigres[i]->atack(event->key());
-        if(tigres != nullptr)tigres[i]->move(event->key(), 1);
+        for (int i = 0; i < 4; i++){
+            if(tigres != nullptr)tigres[i]->atack(event->key());
+            if(tigres != nullptr)tigres[i]->move(event->key(), 1);
+        }
+
+        if(focus && (prota->y()<(700) || prota->y()>(30))) set_focus_element(prota,16, 16 * 4);
+        if((prota->x() >= 2560 && prota->x() <= 2680) && (prota->y() >= 4480 && prota->y() <= 4600)) emit heTerminado();
     }
-
-    if(focus && (prota->y()<(700) || prota->y()>(30))) set_focus_element(prota,16, 16 * 4);
-    if((prota->x() >= 2560 && prota->x() <= 2680) && (prota->y() >= 4480 && prota->y() <= 4600)) emit heTerminado();
 }
-
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 void nivel::detectarAtaque()
 {
-    bool colision = 0;
-    short int numEnemigo;
-    char enemigo;
-
-    if (mamut != nullptr && prota->obtenerRectangulo().intersects(mamut->obtenerRectangulo()))
+    if (!pausaN)
     {
-        colision = 1;
-        prota->recibir_dagno(mamut->getdagno());
-        enemigo = 'M';
-    }
+        bool colision = 0;
+        short int numEnemigo;
+        char enemigo;
 
-    for (int j = 0; j < 4; j++)
-    {
-        if (tigres != nullptr && prota->obtenerRectangulo().intersects(tigres[j]->obtenerRectangulo()))
+        if (mamut != nullptr && prota->obtenerRectangulo().intersects(mamut->obtenerRectangulo()))
         {
             colision = 1;
-            prota->recibir_dagno(tigres[j]->getdagno());
-            numEnemigo = j;
-            enemigo = 't';
-            break;
-        }
-        else if (murcielagos != nullptr && prota->obtenerRectangulo().intersects(murcielagos[j]->obtenerRectangulo()))
-        {
-            colision = 1;
-            prota->recibir_dagno(murcielagos[j]->getdagno());
-            numEnemigo = j;
-            enemigo = 'm';
-            break;
-        }
-        else if (lobos != nullptr && prota->obtenerRectangulo().intersects(lobos[j]->obtenerRectangulo()))
-        {
-            colision = 1;
-            prota->recibir_dagno(lobos[j]->getdagno());
-            numEnemigo = j;
-            enemigo = 'l';
-            break;
-        }
-    }
-
-    salud->setText(QString::number(prota->obtenerSalud()));
-    if (colision) {
-        int diffX;
-        int diffY;
-        if (murcielagos != nullptr && enemigo == 'm')
-        {
-            diffX = prota->x() - murcielagos[numEnemigo]->x();
-            diffY = prota->y() - murcielagos[numEnemigo]->y();
-        }
-        else if (mamut != nullptr && enemigo == 'M')
-        {
-            diffX = prota->x() - mamut->x();
-            diffY = prota->y() - mamut->y();
-        }
-        else if (tigres != nullptr && enemigo == 't')
-        {
-            diffX = prota->x() - tigres[numEnemigo]->x();
-            diffY = prota->y() - tigres[numEnemigo]->y();
-        }
-        else if (lobos != nullptr && enemigo == 'l')
-        {
-            diffX = prota->x() - lobos[numEnemigo]->x();
-            diffY = prota->y() - lobos[numEnemigo]->y();
+            prota->recibir_dagno(mamut->getdagno());
+            enemigo = 'M';
         }
 
-        if (abs(diffX) > abs(diffY)) {
-            // Rebote horizontal
-            if (diffX > 0) {
-                for (int i = 0; i < 9; ++i) {
-                    prota->move(Qt::Key_D, up_movement_is_valid(prota));
-                    if(focus && (prota->y()<(700) || prota->y()>(30))) set_focus_element(prota,16, 16 * 4);
-                }
-            } else {
-                for (int i = 0; i < 9; ++i) {
-                    prota->move(Qt::Key_A, up_movement_is_valid(prota));
-                    if(focus && (prota->y()<(700) || prota->y()>(30))) set_focus_element(prota,16, 16 * 4);
-                }
+        for (int j = 0; j < 4; j++)
+        {
+            if (tigres != nullptr && prota->obtenerRectangulo().intersects(tigres[j]->obtenerRectangulo()))
+            {
+                colision = 1;
+                prota->recibir_dagno(tigres[j]->getdagno());
+                numEnemigo = j;
+                enemigo = 't';
+                break;
             }
-        } else {
-            // Rebote vertical
-            if (diffY > 0) {
-                for (int i = 0; i < 9; ++i) {
-                    prota->move(Qt::Key_S, up_movement_is_valid(prota));
-                    if(focus && (prota->y()<(700) || prota->y()>(30))) set_focus_element(prota,16, 16 * 4);
-                }
-            } else {
-                for (int i = 0; i < 9; ++i) {
-                    prota->move(Qt::Key_W, up_movement_is_valid(prota));
-                    if(focus && (prota->y()<(700) || prota->y()>(30))) set_focus_element(prota,16, 16 * 4);
-                }
+            else if (murcielagos != nullptr && prota->obtenerRectangulo().intersects(murcielagos[j]->obtenerRectangulo()))
+            {
+                colision = 1;
+                prota->recibir_dagno(murcielagos[j]->getdagno());
+                numEnemigo = j;
+                enemigo = 'm';
+                break;
+            }
+            else if (lobos != nullptr && prota->obtenerRectangulo().intersects(lobos[j]->obtenerRectangulo()))
+            {
+                colision = 1;
+                prota->recibir_dagno(lobos[j]->getdagno());
+                numEnemigo = j;
+                enemigo = 'l';
+                break;
             }
         }
+
+        salud->setText(QString::number(prota->obtenerSalud()));
+        if (colision) {
+            int diffX;
+            int diffY;
+            if (murcielagos != nullptr && enemigo == 'm')
+            {
+                diffX = prota->x() - murcielagos[numEnemigo]->x();
+                diffY = prota->y() - murcielagos[numEnemigo]->y();
+            }
+            else if (mamut != nullptr && enemigo == 'M')
+            {
+                diffX = prota->x() - mamut->x();
+                diffY = prota->y() - mamut->y();
+            }
+            else if (tigres != nullptr && enemigo == 't')
+            {
+                diffX = prota->x() - tigres[numEnemigo]->x();
+                diffY = prota->y() - tigres[numEnemigo]->y();
+            }
+            else if (lobos != nullptr && enemigo == 'l')
+            {
+                diffX = prota->x() - lobos[numEnemigo]->x();
+                diffY = prota->y() - lobos[numEnemigo]->y();
+            }
+
+            if (abs(diffX) > abs(diffY)) {
+                // Rebote horizontal
+                if (diffX > 0) {
+                    for (int i = 0; i < 9; ++i) {
+                        prota->move(Qt::Key_D, up_movement_is_valid(prota));
+                        if(focus && (prota->y()<(700) || prota->y()>(30))) set_focus_element(prota,16, 16 * 4);
+                    }
+                } else {
+                    for (int i = 0; i < 9; ++i) {
+                        prota->move(Qt::Key_A, up_movement_is_valid(prota));
+                        if(focus && (prota->y()<(700) || prota->y()>(30))) set_focus_element(prota,16, 16 * 4);
+                    }
+                }
+            } else {
+                // Rebote vertical
+                if (diffY > 0) {
+                    for (int i = 0; i < 9; ++i) {
+                        prota->move(Qt::Key_S, up_movement_is_valid(prota));
+                        if(focus && (prota->y()<(700) || prota->y()>(30))) set_focus_element(prota,16, 16 * 4);
+                    }
+                } else {
+                    for (int i = 0; i < 9; ++i) {
+                        prota->move(Qt::Key_W, up_movement_is_valid(prota));
+                        if(focus && (prota->y()<(700) || prota->y()>(30))) set_focus_element(prota,16, 16 * 4);
+                    }
+                }
+            }
+        }
     }
+}
+
+void nivel::recuperaEscena()
+{
+    pausaN = 0;
+    emit renaudarEnemigo();
+    graph->setScene(escena);
+}
+
+void nivel::pausarNivel()
+{
+    emit pausarEnemigo();
+    pausaN = 1;
 }
 void nivel::setProta_keys()
 {

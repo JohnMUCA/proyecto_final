@@ -17,6 +17,10 @@ public:
     void set_perseguir(Entidad *objetivo, float velocidad, float deltaTiempo);
     void empezarPerseguir();
 
+public slots:
+    void pausa();
+    void renaudar();
+
 private:
     float radio, velocidadAngular, deltaTiempo, centroX, centroY;
     float direccionX,direccionY,velocidad_Inicial,aceleracionX, aceleracionY;

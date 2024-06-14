@@ -25,5 +25,6 @@
         <file>imagenes/menuPrincipal.png</file>
         <file>imagenes/botonCargarPartida.png</file>
         <file>imagenes/botonPlay.png</file>
+        <file>imagenes/prueba_lanza.png</file>
     </qresource>
 </RCC>

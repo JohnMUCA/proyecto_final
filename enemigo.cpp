@@ -10,6 +10,7 @@ Enemigo::Enemigo(QVector<QRect> rectangulosAnimaciones, unsigned int *numsFotogr
         if (tipoM){
             connect(time,SIGNAL(timeout()),this,SLOT(realizarMovimientoCircular()));
             time->start(100);
+
         }
         else {
             connect(time,SIGNAL(timeout()),this,SLOT(realizarPerseguir()));
@@ -63,6 +64,16 @@ void Enemigo::realizarPerseguir()
 void Enemigo::empezarPerseguir()
 {
     if (!(time->isActive())) time->start(100);
+}
+
+void Enemigo::pausa()
+{
+    time->stop();
+}
+
+void Enemigo::renaudar()
+{
+    time->start();
 }
 
 //----------------------------------------------------------------------------------------------------------------------------------------------

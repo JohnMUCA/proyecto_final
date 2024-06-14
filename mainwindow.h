@@ -36,26 +36,38 @@ public slots:
     void terminarNivel();
 private slots:
 
-    void on_pushButton_released();
-    void on_pushButton_2_released();
+    void on_jugar_released();
+    void on_continuar_released();
+    void on_atras_released();
+    void on_nivel1_released();
+    void on_nivel2_released();
+    void on_nivel3_released();
+    void on_menuPrincipal_released();
+    void on_botonPausa_released();
+    void on_continuarNivel_released();
+    void on_reiniciar_released();
+    void on_menuPrincipalP_released();
 
-    void on_Play_released();
+    void on_siguienteNivel_released();
 
 private:
     Ui::MainWindow *ui;
     nivel *nivelActual;
     menu *menuActual;
+    char numNivel;
 
     void setup_nivel1();
     void setup_nivel2();
     void setup_nivel3();
     void setup_menuPrincipal();
-    void setup_menuCargarPartida();
+    void setup_menuContinuar();
     void setup_menuFinNivel();
+    void setup_menuPausa();
 
     QVector<QPushButton*> setup_botonesMenuP();
-    QVector<QPushButton*> setup_botonesMenuCargarNivel();
+    QVector<QPushButton*> setup_botonesMenuContinuar();
     QVector<QPushButton*> setup_botonesMenuPasoNivel();
+    QVector<QPushButton*> setup_botonesMenuPausa();
 
 };
 #endif // MAINWINDOW_H

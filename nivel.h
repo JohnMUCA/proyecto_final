@@ -54,9 +54,12 @@ public:
 
 signals:
     void heTerminado();
-
+    void renaudarEnemigo();
+    void pausarEnemigo();
 public slots:
     void detectarAtaque();
+    void recuperaEscena();
+    void pausarNivel();
 private:
     QGraphicsView *graph;
     QGraphicsScene *escena;
@@ -93,6 +96,7 @@ private:
     QImage *fondoReferencia;
     QColor *colorTope;
     bool focus;
+    bool pausaN;
     QLabel* salud;
     QTimer* timeColision;
 

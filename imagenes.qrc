@@ -23,8 +23,21 @@
         <file>imagenes/wolfsheet6.png</file>
         <file>imagenes/fondoMenuPrincipal.jpg</file>
         <file>imagenes/menuPrincipal.png</file>
-        <file>imagenes/botonCargarPartida.png</file>
-        <file>imagenes/botonPlay.png</file>
         <file>imagenes/prueba_lanza.png</file>
+        <file>imagenes/botonContinuar.png</file>
+        <file>imagenes/botonCargarPArtida.png</file>
+        <file>imagenes/botonJugar.png</file>
+        <file>imagenes/continuarJuego.png</file>
+        <file>imagenes/finNivel.png</file>
+        <file>imagenes/botonAtras.png</file>
+        <file>imagenes/botonNivel1.png</file>
+        <file>imagenes/botonNivel2.png</file>
+        <file>imagenes/botonNivel3.png</file>
+        <file>imagenes/botonMenuPrincipal.png</file>
+        <file>imagenes/botonSiguienteNivel.png</file>
+        <file>imagenes/botonContinuarNivel.png</file>
+        <file>imagenes/botonMenuPrincipalP.png</file>
+        <file>imagenes/botonReiniciar.png</file>
+        <file>imagenes/menuPausa.png</file>
     </qresource>
 </RCC>

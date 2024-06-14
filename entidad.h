@@ -50,6 +50,7 @@ private:
     QRect getCompleteSpritesMamut();
     QRect getCompleteSpritesTigre();
     QRect getCompleteSpritesLobo();
+
 };
 
 #endif // ENTIDAD_H

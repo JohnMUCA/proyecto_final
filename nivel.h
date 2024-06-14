@@ -30,6 +30,8 @@
 #define anchofuego 32
 #define alturaTrigo 35
 #define anchoTrigo 28
+#define alturaLanza 66
+#define anchoLanza 15
 
 #define scaleMurcielago 3
 #define scaleProta 4
@@ -41,7 +43,7 @@
 #define scaleTrigo 1
 #define scaleZanahoria 1
 #define scaleTomate 1
-
+#define scaleLanza 1
 
 class nivel : public QObject
 {
@@ -73,22 +75,25 @@ private:
     recursos **trigos;
     recursos **zanahorias;
     recursos **tomates;
+    //recursos *lanza;
+    Enemigo **cavernicolas;
 
     //Enemigo *Mamut;
     unsigned int prota_keys[5];
     unsigned int mamut_keys[8];
     unsigned int tigre_keys[8];
     unsigned int lobo_keys[8];
+    unsigned int cavernicola_keys[5];
     unsigned int* numsFotogramasProta;
     unsigned int* numsFotogramasMurcielago;
     unsigned int* numsFotogramasMamut;
     unsigned int* numsFotogramasTigre;
     unsigned int* numsFotogramasLobo;
     unsigned int* numsFotogramasComida;
-    unsigned int* numsFotogramasFuego;
     unsigned int* numsFotogramasTrigo;
     unsigned int* numsFotogramasZanahoria;
     unsigned int* numsFotogramasTomate;
+    unsigned int* numsFotogramasCavernicola;
 
 
     QBrush *brocha;
@@ -104,16 +109,18 @@ private:
     void setMamut_keys();
     void setTigre_keys();
     void setLobo_keys();
+    void setCavernicola_keys();
+
     void setNumsFotogramasProta();
     void setNumsFotogramasMurcielago();
     void setNumsFotogramasMamut();
     void setNumsFotogramasTigre();
     void setNumsFotogramasLobo();
     void setNumsFotogramasComida();
-    void setNumsFotogramasFuego();
     void setNumsFotogramasTrigo();
     void setNumsFotogramasZanahoria();
     void setNumsFotogramasTomate();
+    void setNumsFotogramasCavernicolas();
 
 
 
@@ -125,10 +132,10 @@ private:
     void setup_Tigre(unsigned short _numNivel);
     void setup_Lobo(unsigned short _numNivel);
     void setup_Comida(unsigned short _numNivel);
-    void setup_Fuego(unsigned short _numNivel);
     void setup_Trigo(unsigned short _numNivel);
     void setup_Zanahoria(unsigned short _numNivel);
     void setup_Tomate(unsigned short _numNivel);
+    void setup_cavernicola(unsigned short _numNivel);
 
 
     bool left_movement_is_valid(Entidad *item);
@@ -146,6 +153,7 @@ private:
     QRect completeAnimationtrigo();
     QRect completeAnimationzanahoria();
     QRect completeAnimationtomates();
+    QVector<QRect> completeAnimationsCavernicola();
 };
 
 #endif // NIVEL_H

@@ -13,7 +13,7 @@ class recursos : public QObject, public QGraphicsPixmapItem
     Q_OBJECT
 public:
     recursos(QRect rectanguloAnimacion, unsigned int numFotogramas, unsigned int width,
-             unsigned int height, unsigned int scale, bool type, QString name, char tipoCultivo);
+             unsigned int height, unsigned int scale, bool type, QString name, char tipoCultivo, bool tipoSprites);
     ~recursos();
 
     QRect obtenerRectangulo() const;
@@ -26,9 +26,8 @@ private:
     unsigned int scale;
     bool type;
     void set_type_recurso(QString name, char tipoCultivo);
-    QRect getCompleteSpritesFuego();
+
     QRect getCompleteSpritesComida();
-    QRect getCompleteSpritesLanza();
     QRect getCompleteSpritesTrigo();
     QRect getCompleteSpritesZanahoria();
     QRect getCompleteSpritesTomate();

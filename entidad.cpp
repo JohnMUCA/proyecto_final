@@ -13,7 +13,7 @@ Entidad::Entidad(QVector<QRect> rectangulosAnimaciones, unsigned int *numsFotogr
     mainPixmap = new sprites(name, scale, tipoSprite);
     mainPixmap->set_design_size(width, height);
 
-    if (name == ":/imagenes/caveMan.png")
+    if (name == ":/imagenes/caveMan.png" || name == ":/imagenes/caveMan_Enemigo.png")
     {
        mainPixmap->cut_character_pixmap(getCompleteSpritesProta());
     }

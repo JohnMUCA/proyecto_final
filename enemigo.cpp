@@ -28,8 +28,6 @@ Enemigo::Enemigo(QVector<QRect> rectangulosAnimaciones, unsigned int *numsFotogr
     aceleracionX = 1;
     aceleracionY = 1;
     aceleracion = 1;
-
-
 }
 
 //----------------------------------------------------------------------------------------------------------------------------------------------

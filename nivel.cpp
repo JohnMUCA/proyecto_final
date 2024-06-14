@@ -13,17 +13,33 @@ nivel::nivel(QGraphicsView *graphicsV, QString imageBackground, QString imageRef
     murcielagos = nullptr;
     tigres = nullptr;
     lobos = nullptr;
+    comidas = nullptr;
+    fuegos = nullptr;
+    trigos = nullptr;
+    zanahorias = nullptr;
+    tomates = nullptr;
+
     numsFotogramasProta = nullptr;
     numsFotogramasMurcielago = nullptr;
     numsFotogramasMamut = nullptr;
     numsFotogramasTigre = nullptr;
     numsFotogramasLobo = nullptr;
+    numsFotogramasComida = nullptr;
+    numsFotogramasFuego = nullptr;
+    numsFotogramasTrigo = nullptr;
+    numsFotogramasZanahoria = nullptr;
+    numsFotogramasTomate = nullptr,
+
     setup_scene(imageBackground, imageReference, nivelScale, heightMap, widthMap, x, y);
     setup_prota(numNivel);
     setup_murcielago(numNivel);
     setup_Mamut(numNivel);
     setup_Tigre(numNivel);
     setup_Lobo(numNivel);
+    setup_Trigo(numNivel);
+    setup_Zanahoria(numNivel);
+    setup_Tomate(numNivel);
+
     this->salud = salud;
     timeColision = new QTimer;
     QObject::connect(timeColision,SIGNAL(timeout()),this,SLOT(detectarAtaque()));
@@ -48,11 +64,24 @@ nivel::~nivel()
     if (mamut != nullptr) delete mamut;
     if (tigres != nullptr) delete[] tigres;
     if (lobos != nullptr) delete[] lobos;
+    if (comidas != nullptr) delete[] comidas;
+    if (fuegos != nullptr) delete[] fuegos;
+    if (trigos != nullptr) delete[] trigos;
+    if (zanahorias != nullptr) delete[] zanahorias;
+    if (tomates != nullptr) delete[] tomates;
+
+
     if (numsFotogramasProta != nullptr)delete[] numsFotogramasProta;
-    if (numsFotogramasMurcielago != nullptr)delete[] numsFotogramasMurcielago;
+    if (numsFotogramasMurcielago != nullptr)delete numsFotogramasMurcielago;
     if (numsFotogramasMamut != nullptr)delete[] numsFotogramasMamut;
     if (numsFotogramasTigre != nullptr)delete[] numsFotogramasTigre;
     if (numsFotogramasLobo != nullptr)delete[] numsFotogramasLobo;
+    if (numsFotogramasComida != nullptr)delete numsFotogramasComida;
+    if (numsFotogramasFuego != nullptr)delete numsFotogramasFuego;
+    if (numsFotogramasTrigo != nullptr)delete numsFotogramasTrigo;
+    if (numsFotogramasZanahoria != nullptr)delete numsFotogramasZanahoria;
+    if (numsFotogramasTomate != nullptr)delete numsFotogramasTomate;
+
     delete brocha;
     delete fondoReferencia;
     delete fondoCompleto;
@@ -235,6 +264,19 @@ void nivel::setTigre_keys()
    tigre_keys[7] = Qt::Key_G;
 }
 
+void nivel::setLobo_keys()
+{
+    lobo_keys[0] = Qt::Key_0;
+    lobo_keys[1] = Qt::Key_1;
+    lobo_keys[2] = Qt::Key_3;
+    lobo_keys[3] = Qt::Key_5;
+    lobo_keys[4] = Qt::Key_7;
+    lobo_keys[5] = Qt::Key_9;
+    lobo_keys[6] = Qt::Key_T;
+    lobo_keys[7] = Qt::Key_Y;
+}
+
+
 void nivel::setNumsFotogramasProta()
 {
     numsFotogramasProta = new unsigned int[5];
@@ -293,6 +335,39 @@ void nivel::setNumsFotogramasLobo()
     numsFotogramasLobo[7] = 4;
 }
 
+
+void nivel::setNumsFotogramasComida()
+{
+    numsFotogramasComida = new unsigned int;
+    *numsFotogramasComida = 1;
+}
+
+void nivel::setNumsFotogramasFuego()
+{
+    numsFotogramasFuego = new unsigned int;
+    *numsFotogramasFuego = 5;
+
+}
+
+void nivel::setNumsFotogramasTrigo()
+{
+    numsFotogramasTrigo = new unsigned int;
+    *numsFotogramasTrigo = 1;
+}
+
+void nivel::setNumsFotogramasZanahoria()
+{
+    numsFotogramasZanahoria = new unsigned int;
+    *numsFotogramasZanahoria = 1;
+}
+
+void nivel::setNumsFotogramasTomate()
+{
+    numsFotogramasTomate = new unsigned int;
+    *numsFotogramasTomate = 1;
+}
+
+
 void nivel::setup_scene(QString image_Background, QString image_Reference, float nivel_Scale, unsigned int _heightMap,
                         unsigned int _widthMap, unsigned int _x, unsigned int _y)
 {
@@ -344,7 +419,7 @@ void nivel::setup_prota(unsigned short _numNivel)
     else if(_numNivel == 3)
     {
         prota->setX(10.5 * anchoProta * scaleProta);
-        prota->setY(7 * alturaProta * scaleProta);
+        prota->setY(6 * alturaProta * scaleProta);
     }
     prota->setDagno(50);
     prota->setSalud(100);
@@ -476,14 +551,14 @@ void nivel::setup_Lobo(unsigned short _numNivel)
                 lobos[0]->setX(17 * anchoLobo * scaleLobo);
                 lobos[0]->setY(0 * alturaLobo * scaleLobo);
 
-                lobos[1]->setX(28 * anchoLobo * scaleLobo);
+                lobos[1]->setX(28.8 * anchoLobo * scaleLobo);
                 lobos[1]->setY(3.1 * alturaLobo * scaleLobo);
 
                 lobos[2]->setX(17 * anchoLobo * scaleLobo);
-                lobos[2]->setY(3 * alturaLobo * scaleLobo);
+                lobos[2]->setY(5.7 * alturaLobo * scaleLobo);
 
                 lobos[3]->setX(0 * anchoLobo * scaleLobo);
-                lobos[3]->setY(4 * alturaLobo * scaleLobo);
+                lobos[3]->setY(3.1 * alturaLobo * scaleLobo);
             }
 
         for (int i = 0; i < 4; i++)
@@ -493,6 +568,170 @@ void nivel::setup_Lobo(unsigned short _numNivel)
                 escena->addItem(lobos[i]);
         }
 
+    }
+}
+
+void nivel::setup_Comida(unsigned short _numNivel)
+{
+    if (_numNivel == 1 || _numNivel == 2 || _numNivel == 3){
+        setNumsFotogramasComida();
+        comidas = new recursos*[8];
+        for (int i = 0; i < 8; i++) //------
+        {
+            comidas[i] = new recursos(completeAnimationcomida(), *numsFotogramasComida, anchocomida,
+                                      alturacomida, scaleComida, 1, ":/imagenes/food.png",'k');
+        }
+
+        if(_numNivel == 1)
+        {
+            comidas[0]->setX(27 * anchocomida * scaleLobo);
+            comidas[0]->setY(19 * alturaLobo * scaleLobo);
+
+            comidas[1]->setX(27 * anchoLobo * scaleLobo);
+            comidas[1]->setY(19 * alturaLobo * scaleLobo);
+
+            comidas[2]->setX(27 * anchoLobo * scaleLobo);
+            comidas[2]->setY(19 * alturaLobo * scaleLobo);
+
+            comidas[3]->setX(27 * anchoLobo * scaleLobo);
+            comidas[3]->setY(19 * alturaLobo * scaleLobo);
+
+            comidas[4]->setX(27 * anchoLobo * scaleLobo);
+            comidas[4]->setY(19 * alturaLobo * scaleLobo);
+
+            comidas[5]->setX(27 * anchoLobo * scaleLobo);
+            comidas[5]->setY(19 * alturaLobo * scaleLobo);
+
+            comidas[6]->setX(27 * anchoLobo * scaleLobo);
+            comidas[6]->setY(19 * alturaLobo * scaleLobo);
+
+            comidas[7]->setX(27 * anchoLobo * scaleLobo);
+            comidas[7]->setY(19 * alturaLobo * scaleLobo);
+
+        }
+        else
+        {
+            lobos[0]->setX(17 * anchoLobo * scaleLobo);
+            lobos[0]->setY(0 * alturaLobo * scaleLobo);
+
+            lobos[1]->setX(28.8 * anchoLobo * scaleLobo);
+            lobos[1]->setY(3.1 * alturaLobo * scaleLobo);
+
+            lobos[2]->setX(17 * anchoLobo * scaleLobo);
+            lobos[2]->setY(5.7 * alturaLobo * scaleLobo);
+
+            lobos[3]->setX(0 * anchoLobo * scaleLobo);
+            lobos[3]->setY(3.1 * alturaLobo * scaleLobo);
+        }
+        for (int i = 0; i < 4; i++)
+        {
+            murcielagos[i]->setDagno(20);
+            murcielagos[i]->setSalud(60);
+            murcielagos[i]->set_mov_acelerado(murcielagos[i]->x(),murcielagos[i]->y(),3,-7,-3,0.1);
+            murcielagos[i]->set_perseguir(prota,100,0.1);
+            //murcielagos[i]->set_mov_circular_parametros(80, 3 , 0.1, murcielagos[i]->x(), murcielagos[i]->y());
+            escena->addItem(murcielagos[i]);
+        }
+    }
+}
+
+void nivel::setup_Trigo(unsigned short _numNivel)
+{
+    if (_numNivel == 3){
+        setNumsFotogramasTrigo();
+        trigos = new recursos*[4];
+
+        for (int i = 0; i < 4; i++){
+            trigos[i] = new recursos(completeAnimationtrigo(), *numsFotogramasTrigo, anchoTrigo,
+                                     alturaTrigo,scaleTrigo,1,":/imagenes/farming.png",'T');
+        }
+        //trigos[0]->setX(1 * anchoTrigo * scaleTrigo);
+        //trigos[0]->setY(1 * alturaTrigo * scaleTrigo);
+
+        trigos[0]->setX(22.5 * anchoTrigo * scaleTrigo);
+        trigos[0]->setY(13.3 * alturaTrigo * scaleTrigo);
+
+        trigos[1]->setX(24.5 * anchoTrigo * scaleTrigo);
+        trigos[1]->setY(13.3 * alturaTrigo * scaleTrigo);
+
+        trigos[2]->setX(26.3 * anchoTrigo * scaleTrigo);
+        trigos[2]->setY(13.3 * alturaTrigo * scaleTrigo);
+
+        trigos[3]->setX(28* anchoTrigo * scaleTrigo);
+        trigos[3]->setY(13.3 * alturaTrigo * scaleTrigo);
+
+
+
+        for (int i = 0; i < 4; i++)
+        {
+            escena->addItem(trigos[i]);
+        }
+    }
+}
+
+void nivel::setup_Zanahoria(unsigned short _numNivel)
+{
+    if (_numNivel == 3){
+        setNumsFotogramasZanahoria();
+        zanahorias = new recursos*[4];
+
+        for (int i = 0; i < 4; i++){
+            zanahorias[i] = new recursos(completeAnimationzanahoria(), *numsFotogramasZanahoria, anchoTrigo,
+                                     alturaTrigo,scaleTrigo,1,":/imagenes/farming.png",'z');
+        }
+
+
+        zanahorias[0]->setX(22.5 * anchoTrigo * scaleTrigo);
+        zanahorias[0]->setY(14.5 * alturaTrigo * scaleTrigo);
+
+        zanahorias[1]->setX(24.5 * anchoTrigo * scaleTrigo);
+        zanahorias[1]->setY(14.5 * alturaTrigo * scaleTrigo);
+
+        zanahorias[2]->setX(26.3 * anchoTrigo * scaleTrigo);
+        zanahorias[2]->setY(14.5 * alturaTrigo * scaleTrigo);
+
+        zanahorias[3]->setX(28* anchoTrigo * scaleTrigo);
+        zanahorias[3]->setY(14.5 * alturaTrigo * scaleTrigo);
+
+
+
+        for (int i = 0; i < 4; i++)
+        {
+            escena->addItem(zanahorias[i]);
+        }
+    }
+}
+
+void nivel::setup_Tomate(unsigned short _numNivel)
+{
+    if (_numNivel == 3){
+        setNumsFotogramasTomate();
+        tomates = new recursos*[4];
+
+        for (int i = 0; i < 4; i++){
+            tomates[i] = new recursos(completeAnimationtomates(), *numsFotogramasTomate, anchoTrigo,
+                                         alturaTrigo,scaleTrigo,1,":/imagenes/farming.png",'t');
+        }
+
+
+        tomates[0]->setX(22.5 * anchoTrigo * scaleTrigo);
+        tomates[0]->setY(16 * alturaTrigo * scaleTrigo);
+
+        tomates[1]->setX(24.5 * anchoTrigo * scaleTrigo);
+        tomates[1]->setY(16 * alturaTrigo * scaleTrigo);
+
+        tomates[2]->setX(26.3 * anchoTrigo * scaleTrigo);
+        tomates[2]->setY(16 * alturaTrigo * scaleTrigo);
+
+        tomates[3]->setX(28* anchoTrigo * scaleTrigo);
+        tomates[3]->setY(16 * alturaTrigo * scaleTrigo);
+
+
+
+        for (int i = 0; i < 4; i++)
+        {
+            escena->addItem(tomates[i]);
+        }
     }
 }
 
@@ -819,4 +1058,52 @@ QVector<QRect> nivel::completeAnimationsMamut()
     animations.push_back(dimUpAtaque);
     animations.push_back(dimDownAtaque);
     return animations;
+}
+
+QRect nivel::completeAnimationcomida()
+{
+    QRect animation;
+
+    animation.setX(0 * anchocomida);
+    animation.setY(0);
+    animation.setHeight(1 * alturacomida);
+    animation.setWidth(0 * anchocomida);
+
+    return animation;
+}
+
+QRect nivel::completeAnimationtrigo()
+{
+    QRect animation;
+
+    animation.setX(0 * anchoTrigo);
+    animation.setY(0 * alturaTrigo);
+    animation.setHeight(1 * alturaTrigo);
+    animation.setWidth(1 * anchoTrigo);
+
+    return animation;
+}
+
+QRect nivel::completeAnimationzanahoria()
+{
+    QRect animation;
+
+    animation.setX(1 * anchoTrigo);
+    animation.setY(0 * alturaTrigo);
+    animation.setHeight(1 * alturaTrigo);
+    animation.setWidth(1 * anchoTrigo);
+
+    return animation;
+}
+
+QRect nivel::completeAnimationtomates()
+{
+    QRect animation;
+
+    animation.setX(2 * anchoTrigo);
+    animation.setY(0 * alturaTrigo);
+    animation.setHeight(1 * alturaTrigo);
+    animation.setWidth(1 * anchoTrigo);
+
+    return animation;
 }

@@ -36,10 +36,6 @@ Entidad::Entidad(QVector<QRect> rectangulosAnimaciones, unsigned int *numsFotogr
 
     setAnimations(rectangulosAnimaciones, numsFotogramas);
     setPixmap(mainPixmap->get_current_pixmap(0));
-
-    if(name == ":/imagenes/mamut.png"){
-        setPixmap(mainPixmap->get_current_pixmap(5));
-    }
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------

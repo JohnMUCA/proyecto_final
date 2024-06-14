@@ -11,6 +11,7 @@
 
 #include "entidad.h"
 #include "enemigo.h"
+#include "recursos.h"
 
 
 #define alturaProta 16
@@ -23,12 +24,24 @@
 #define anchoLobo 24
 #define alturaMamut 65
 #define anchoMamut 75
+#define alturacomida 16
+#define anchocomida 16
+#define alturafuego 39
+#define anchofuego 32
+#define alturaTrigo 35
+#define anchoTrigo 28
 
 #define scaleMurcielago 3
 #define scaleProta 4
 #define scaleMamut 3
 #define scaleTigre 2
 #define scaleLobo 2
+#define scaleComida 1
+#define scaleFuego 1
+#define scaleTrigo 1
+#define scaleZanahoria 1
+#define scaleTomate 1
+
 
 class nivel : public QObject
 {
@@ -55,16 +68,28 @@ private:
     Enemigo *mamut;
     Enemigo **tigres;
     Enemigo **lobos;
+    recursos **comidas;
+    recursos **fuegos;
+    recursos **trigos;
+    recursos **zanahorias;
+    recursos **tomates;
 
     //Enemigo *Mamut;
     unsigned int prota_keys[5];
     unsigned int mamut_keys[8];
     unsigned int tigre_keys[8];
+    unsigned int lobo_keys[8];
     unsigned int* numsFotogramasProta;
     unsigned int* numsFotogramasMurcielago;
     unsigned int* numsFotogramasMamut;
     unsigned int* numsFotogramasTigre;
     unsigned int* numsFotogramasLobo;
+    unsigned int* numsFotogramasComida;
+    unsigned int* numsFotogramasFuego;
+    unsigned int* numsFotogramasTrigo;
+    unsigned int* numsFotogramasZanahoria;
+    unsigned int* numsFotogramasTomate;
+
 
     QBrush *brocha;
     QPixmap *fondoCompleto;
@@ -78,11 +103,19 @@ private:
     void setProta_keys();
     void setMamut_keys();
     void setTigre_keys();
+    void setLobo_keys();
     void setNumsFotogramasProta();
     void setNumsFotogramasMurcielago();
     void setNumsFotogramasMamut();
     void setNumsFotogramasTigre();
     void setNumsFotogramasLobo();
+    void setNumsFotogramasComida();
+    void setNumsFotogramasFuego();
+    void setNumsFotogramasTrigo();
+    void setNumsFotogramasZanahoria();
+    void setNumsFotogramasTomate();
+
+
 
     void setup_scene(QString image_Background, QString image_Reference, float nivel_Scale, unsigned int _heightMap, unsigned int _widthMap,
                      unsigned int _x, unsigned int _y);
@@ -91,6 +124,12 @@ private:
     void setup_Mamut(unsigned short _numNivel);
     void setup_Tigre(unsigned short _numNivel);
     void setup_Lobo(unsigned short _numNivel);
+    void setup_Comida(unsigned short _numNivel);
+    void setup_Fuego(unsigned short _numNivel);
+    void setup_Trigo(unsigned short _numNivel);
+    void setup_Zanahoria(unsigned short _numNivel);
+    void setup_Tomate(unsigned short _numNivel);
+
 
     bool left_movement_is_valid(Entidad *item);
     bool right_movement_is_valid(Entidad *item);
@@ -103,6 +142,10 @@ private:
     QVector<QRect> completeAnimationsTigre();
     QVector<QRect> completeAnimationsLobo();
     QVector<QRect> completeAnimationsMamut();
+    QRect completeAnimationcomida();
+    QRect completeAnimationtrigo();
+    QRect completeAnimationzanahoria();
+    QRect completeAnimationtomates();
 };
 
 #endif // NIVEL_H

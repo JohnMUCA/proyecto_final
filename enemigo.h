@@ -9,8 +9,7 @@ class Enemigo : public Entidad, public Fisicas
 {  
     Q_OBJECT
 public:
-    Enemigo(QVector<QRect> rectangulosAnimaciones, unsigned int *numsFotogramas, QString name, unsigned int ancho, unsigned int alto,
-            unsigned int scale, bool tipoM, bool tipoSprite);
+    Enemigo(QVector<QRect> rectangulosAnimaciones, unsigned int *numsFotogramas, QString name, unsigned int ancho, unsigned int alto,unsigned int scale, bool tipoM, bool tipoSprite);
     ~Enemigo();
     void set_mov_circular_parametros(float radio, float velocidadAngular, float deltaTiempo,float centrox, float centroy);
     void set_mov_acelerado(float direccionX, float direccionY, float velocidad_Inicial, float aceleracionX, float aceleracionY, float deltaTiempo);

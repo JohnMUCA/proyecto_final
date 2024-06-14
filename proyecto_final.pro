@@ -16,6 +16,7 @@ SOURCES += \
     mainwindow.cpp \
     menu.cpp \
     nivel.cpp \
+    recursos.cpp \
     sprites.cpp \
 
 HEADERS += \
@@ -25,6 +26,7 @@ HEADERS += \
     mainwindow.h \
     menu.h \
     nivel.h \
+    recursos.h \
     sprites.h \
 
 FORMS += \

@@ -38,5 +38,6 @@
         <file>imagenes/botonReiniciar.png</file>
         <file>imagenes/menuPausa.png</file>
         <file>imagenes/botonSalir.png</file>
+        <file>imagenes/caveMan_Enemigo.png</file>
     </qresource>
 </RCC>

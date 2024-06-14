@@ -1,9 +1,9 @@
 #include "recursos.h"
 
 recursos::recursos(QRect rectanguloAnimacion, unsigned int numFotogramas, unsigned int width,
-                   unsigned int height, unsigned int scale, bool type, QString name, char tipoCultivo)
+                   unsigned int height, unsigned int scale, bool type, QString name, char tipoCultivo, bool tipoSprites)
 {
-    mainPixmap = new sprites(name,scale,1);
+    mainPixmap = new sprites(name,scale,tipoSprites);
     this->width = width;
     this->height = height;
     this->scale = scale;
@@ -14,10 +14,6 @@ recursos::recursos(QRect rectanguloAnimacion, unsigned int numFotogramas, unsign
     if (name == ":/imagenes/food.png")
     {
         mainPixmap->cut_character_pixmap(getCompleteSpritesComida());
-    }
-    else if(name == ":/imagenes/fire.png")
-    {
-        mainPixmap->cut_character_pixmap(getCompleteSpritesFuego());
     }
     else if (name == ":/imagenes/farming.png")
     {
@@ -58,24 +54,15 @@ void recursos::set_type_recurso(QString name, char tipoCultivo)
             if (tipoCultivo == 'T')setPixmap(mainPixmap->get_fixed_image(getCompleteSpritesTrigo()));
             else if(tipoCultivo == 'z')setPixmap(mainPixmap->get_fixed_image(getCompleteSpritesZanahoria()));
             else if(tipoCultivo == 't')setPixmap(mainPixmap->get_fixed_image(getCompleteSpritesTomate()));
-
         }
+    //else setPixmap(mainPixmap->get_fixed_image(getCompleteSpritesLanza()));
+
     }
 
-    else setPixmap(mainPixmap->get_fixed_image(getCompleteSpritesFuego()));
+    //else setPixmap(mainPixmap->get_fixed_image(getCompleteSpritesFuego()));
 }
 
-QRect recursos::getCompleteSpritesFuego()
-{
-    QRect dim;
 
-    dim.setX(0);
-    dim.setY(0);
-    dim.setHeight(1 * height);
-    dim.setWidth(5 * width);
-
-    return dim;
-}
 
 QRect recursos::getCompleteSpritesComida()
 {
@@ -90,17 +77,6 @@ QRect recursos::getCompleteSpritesComida()
 
 }
 
-QRect recursos::getCompleteSpritesLanza()
-{
-    QRect dim;
-    // pendienteeee
-    dim.setX(0);
-    dim.setY(0);
-    dim.setHeight(0 * height);
-    dim.setWidth(0 * width);
-
-    return dim;
-}
 
 QRect recursos::getCompleteSpritesTrigo()
 {

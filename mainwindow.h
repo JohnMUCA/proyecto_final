@@ -3,11 +3,13 @@
 
 #include <QMainWindow>
 #include <QString>
+#include <string>
 #include <QGraphicsScene>
 #include <QKeyEvent>
 #include <QTimer>
 #include <QVector>
 #include <QPushButton>
+#include <fstream>
 
 #include "nivel.h"
 #include "menu.h"
@@ -33,7 +35,7 @@ public:
 
 public slots:
 
-    void terminarNivel();
+    void terminarNivel(char sigNivel);
 private slots:
 
     void on_jugar_released();
@@ -47,14 +49,18 @@ private slots:
     void on_continuarNivel_released();
     void on_reiniciar_released();
     void on_menuPrincipalP_released();
-
     void on_siguienteNivel_released();
+    void on_cargarPartida_released();
+    void on_dificultSelector_valueChanged(int value);
+    void on_salir_released();
 
 private:
     Ui::MainWindow *ui;
     nivel *nivelActual;
     menu *menuActual;
     char numNivel;
+    QString *puntuaciones;
+    int dificultadJuego;
 
     void setup_nivel1();
     void setup_nivel2();
@@ -63,6 +69,9 @@ private:
     void setup_menuContinuar();
     void setup_menuFinNivel();
     void setup_menuPausa();
+
+    void guardarPartida();
+    void cargarPartida();
 
     QVector<QPushButton*> setup_botonesMenuP();
     QVector<QPushButton*> setup_botonesMenuContinuar();

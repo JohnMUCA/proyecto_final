@@ -42,6 +42,7 @@ void menu::setup_scene(QString image_Background, float nivel_Scale, unsigned int
         botones.value(0)->setGeometry((graph->width() / 2) - 150, (graph->height() / 2) + 86, 300, 60);
         botones.value(1)->setGeometry((graph->width() / 2) - 170, (graph->height() / 2) + 185, 340, 60);
         botones.value(2)->setGeometry((graph->width() / 2) - 130, (graph->height() / 2) + 295, 260, 40);
+        botones.value(3)->setGeometry(27, 62, 295, 65);
     }
     else if (tipoMenu == 'C')
     {
